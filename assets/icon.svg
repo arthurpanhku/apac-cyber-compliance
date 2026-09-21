@@ -9,10 +9,16 @@
   <path d="M32 4.5 L54.8 12.1 Q56.5 12.7 56.5 14.4 V33 C56.5 46.4 46.6 55.9 32.6 59.4
            Q32 59.6 31.4 59.4 C17.4 55.9 7.5 46.4 7.5 33 V14.4 Q7.5 12.7 9.2 12.1 Z"
         fill="url(#hkcc)"/>
-  <!-- 条文：散落的监管条款 -->
-  <g fill="#fff" opacity=".55">
-    <rect x="19.5" y="16" width="25" height="4.6" rx="2.3"/>
-    <rect x="19.5" y="24.2" width="15.5" height="4.6" rx="2.3"/>
+  <!-- 节点网络：多个司法管辖区互联 -->
+  <g stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".55">
+    <line x1="21" y1="17" x2="43" y2="17"/>
+    <line x1="21" y1="17" x2="32" y2="28"/>
+    <line x1="43" y1="17" x2="32" y2="28"/>
+  </g>
+  <g fill="#fff">
+    <circle cx="21" cy="17" r="3.4"/>
+    <circle cx="43" cy="17" r="3.4"/>
+    <circle cx="32" cy="28" r="3.4"/>
   </g>
   <!-- 勾：已核对的控制点 -->
   <path d="M20.8 40.8 L28.4 48.4 L44 32.8" fill="none" stroke="#fff" stroke-width="7"
