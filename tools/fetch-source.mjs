@@ -131,9 +131,14 @@ if (isPdf) {
 } else {
   // 纯文本化只为方便逐条对照阅读，不追求还原排版；
   // 引述条文时仍须回到官方 PDF／网页确认原文与条款编号。
+  // nav/header/footer 先整段去掉：政府网站的全站导航菜单往往比条文正文长得多，
+  // 不去掉的话日志的前 MAX_LOG_LINES 行会被导航菜单占满，看不到正文。
   text = bytes.toString('utf8')
     .replace(/<script\b[\s\S]*?<\/script>/gi, '')
     .replace(/<style\b[\s\S]*?<\/style>/gi, '')
+    .replace(/<nav\b[\s\S]*?<\/nav>/gi, '')
+    .replace(/<header\b[\s\S]*?<\/header>/gi, '')
+    .replace(/<footer\b[\s\S]*?<\/footer>/gi, '')
     .replace(/<\/(p|div|li|tr|h[1-6]|section|article)>/gi, '\n')
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<[^>]+>/g, '')
@@ -141,6 +146,7 @@ if (isPdf) {
     .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/[ \t]+\n/g, '\n')
+    .split('\n').filter(line => line.trim() !== '').join('\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
   const { writeFileSync } = await import('node:fs');
