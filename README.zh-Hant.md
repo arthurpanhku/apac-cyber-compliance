@@ -11,9 +11,9 @@
   <p>
     <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
-    <img src="https://img.shields.io/badge/version-1.7.0-0ea5e9" alt="Version 1.7.0">
-    <img src="https://img.shields.io/badge/控制點-211-16a34a" alt="211 controls">
-    <img src="https://img.shields.io/badge/條文出處-25-64748B" alt="25 sources">
+    <img src="https://img.shields.io/badge/version-1.9.0-0ea5e9" alt="Version 1.9.0">
+    <img src="https://img.shields.io/badge/控制點-270-16a34a" alt="270 controls">
+    <img src="https://img.shields.io/badge/條文出處-29-64748B" alt="29 sources">
     <img src="https://img.shields.io/badge/司法管轄區-HK%20%C2%B7%20SG-0ea5e9" alt="Two jurisdictions">
     <img src="https://img.shields.io/badge/語言-EN%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E7%AE%80-7c3aed" alt="Three languages">
     <img src="https://img.shields.io/badge/零依賴-雙擊即用-7c3aed" alt="Zero dependency">
@@ -55,9 +55,10 @@ git clone https://github.com/arthurpanhku/apac-cyber-compliance.git
 
 | 功能 | 說明 |
 | --- | --- |
-| **按司法管轄區分組** | 側欄的牌照與業務特徵按司法管轄區（香港 / 新加坡）分組顯示，可同時勾選多地牌照 |
-| **按牌照篩選** | 17 種牌照／實體類型：香港 14 種（SFC 各類受規管活動、VASP、認可機構、儲值支付工具、一般企業）+ 新加坡 3 種（銀行、資本市場服務持牌人及相關實體、持牌數字代幣服務提供者） |
-| **按業務特徵細分** | 7 項特徵（互聯網交易、電子銀行、處理個人資料、關鍵基礎設施指定、外判／雲端、使用 AI 模型、透過互聯網提供網上金融服務）決定同一牌照下條文是否適用 |
+| **司法管轄區優先的範圍菜單** | 先切換香港／新加坡，再按監管機構展開實體類型；只顯示與已選實體有關的業務特徵，同時保留多地選擇 |
+| **結果轄區篩選** | 不改變已保存的評估範圍，單獨聚焦香港或新加坡控制點 |
+| **按牌照篩選** | 18 種牌照／實體類型：香港 15 種（SFC 各類受規管活動、VASP、認可機構、儲值支付工具、IA 獲授權保險人、一般企業）+ 新加坡 3 種（銀行、資本市場服務持牌人及相關實體、持牌數字代幣服務提供者） |
+| **按業務特徵細分** | 8 項特徵（互聯網交易、電子銀行、處理個人資料、關鍵基礎設施指定、外判／雲端、使用 AI 模型、IA CRAF 適用範圍、透過互聯網提供網上金融服務）決定同一牌照下條文是否適用 |
 | **控制點去重與交叉映射** | 同一項要求被多個監管機構同時規定時合併為一張卡片，並逐一列出各自的條文出處與條款編號——不論是香港 SFC 與 HKMA 之間，還是新加坡 MAS 致不同實體類型近乎逐字相同的三份《網絡衞生通知》之間 |
 | **條文可追溯** | 每條控制附說明、條款、發佈及核驗日期、官方連結，並標明英文來源文字屬於原文、節錄或說明 |
 | **評估工作記錄** | 每個監管控制可記錄狀態、實施說明、證據引用、負責人及目標完成日期 |
@@ -69,7 +70,7 @@ git clone https://github.com/arthurpanhku/apac-cyber-compliance.git
 
 ## 覆蓋範圍
 
-v1.7.0 共 **211 條控制點**，來自 **25 份**官方文件，涵蓋香港與新加坡兩個司法管轄區。
+v1.9.0 共 **270 條控制點**，來自 **29 份**官方文件，涵蓋香港與新加坡兩個司法管轄區。
 每份出處各有自己的 `verifiedOn`——最近一次實際打開官網核對連結與版本的日期。條文發佈跨
 2001 至 2026 年、複核節奏各不相同，用一個全局日期會讓剛複核過的和多年沒碰的看起來一樣新。
 頁首顯示的是其中**最早**的一個，即以最弱的一環為準；另有每週自動巡檢全部連結的工作流。
@@ -105,6 +106,15 @@ v1.7.0 共 **211 條控制點**，來自 **25 份**官方文件，涵蓋香港�
 | [儲值支付工具持牌人監管指引（G.N. 5043）](https://www.hkma.gov.hk/media/eng/doc/key-functions/financial-infrastructure/Guidelines-on-supervision-of-SVF-licensees_Eng.pdf) | 2016-09 | 《支付系統及儲值支付工具條例》第 54(1A)(b) 條；第 7.2／7.3／7.4 節的科技風險、支付保安與業務連續性要求 |
 | [儲值支付工具持牌人監管實務備考](https://www.hkma.gov.hk/media/eng/doc/key-functions/financial-infrastructure/PN_on_supervision_of_SVF_licensees_eng.pdf) | 2025-10 | 逐段說明達標方式，含反詐騙要求：**訊息不得嵌入超連結** |
 | [SVF 界別關鍵基礎設施實務守則](https://www.occics.gov.hk/filemanager/en/content_19/SCoP_SVF_Licensees_en.pdf) | 2026-06-12 | 適用於被指定為 CI 營運者的 SVF 持牌人 |
+
+### 保險業監管局 IA — 獲授權保險人（59 條）
+
+| 文件 | 日期 | 說明 |
+| --- | --- | --- |
+| [《網絡安全指引》（GL20，含 CRAF）](https://www.ia.org.hk/en/legislative_framework/files/GL20_Eng.pdf) | 2024-12 | **2025-01-01** 生效；GL20 第 5–10 節 19 條、CRAF 評估／呈交程序 13 條，以及覆蓋附錄 B 全部 216 項原則的 27 個組件級控制。相關事故須在發現後 **72 小時**內向 IA 報告 |
+| [GL20 常見問題](https://www.ia.org.hk/en/legislative_framework/files/FAQ_GL20.pdf) | 2024-11 | 澄清評估頻率、臨時評估、整改時限、雲端服務、第三方及抽樣要求 |
+| [固有風險評級評估模板](https://www.ia.org.hk/en/legislative_framework/files/IA_GL20_Inherent_Risk_Rating_Assessment_template.xlsx) | 2024-12 | 官方五類固有風險工作簿及簽署表 |
+| [網絡安全成熟度評估模板](https://www.ia.org.hk/en/legislative_framework/files/IA_GL20_Cybersecurity_Maturity_Assessment_template.xlsx) | 2024-12 | 逐項評估七個領域全部 216 項控制原則的官方工作簿；本應用按 27 個監管組件歸組，正式呈交仍須使用工作簿逐項填寫 |
 
 ### 關鍵基礎設施（13 條）
 
@@ -150,7 +160,7 @@ v1.7.0 共 **211 條控制點**，來自 **25 份**官方文件，涵蓋香港�
 例如把「每日離線備份」和「在嚴重情景下測試關鍵業務交付能力」合併，或把強制的 12 小時法定事故通報
 與《私隱條例》下的自願通報合併。兩者性質不同，合併會造成合規誤讀。
 
-在勾選全部牌照與業務特徵的最大範圍下，211 條條文合併為 **160 項**獨立要求。
+在勾選全部牌照與業務特徵的最大範圍下，270 條條文合併為 **219 項**獨立要求。
 平台營運者若勾選「虛擬資產服務提供者」與「互聯網交易」，90 條適用條文會合併為 **61 項**——
 證監會撰寫《虛擬資產交易平台營運者指引》第 XII 部時顯然以《黑客入侵風險指引》為藍本，
 大部分是同一項要求寫了兩遍，合併正是為了不讓清單虛胖。
@@ -244,10 +254,6 @@ data/
 ```
 
 ## 已知缺口
-
-**保險業監管局（IA）的網絡安全指引尚未納入。** `ia.org.hk` 全站啟用了 Cloudflare 機器人驗證，
-自動化工具無法取得原文 PDF。本項目不接受憑記憶撰寫的條文，因此在取得官方原文前不會加入 IA 相關控制點，
-牌照選項中亦暫未列出保險中介人／授權保險人。歡迎以 PR 形式補充（請附官方 PDF 出處與條款編號）。
 
 **新加坡第一期只覆蓋核心科技風險與網絡衞生。** MAS 就科技風險管理向不同界別（銀行、商人銀行、
 財務公司、保險公司、資本市場服務持牌人等）發出多份近乎相同的通知（FSM-N03/05/07/09/11/13/

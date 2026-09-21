@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>APAC Cyber Compliance Assistant</title>
-<meta name="description" content="Generate the cybersecurity control requirements that apply to your firm across APAC financial regulators — SFC, HKMA, PCPD and the HK Critical Infrastructure Ordinance, MAS — every control cited to its official source.">
+<meta name="description" content="Generate the cybersecurity control requirements that apply to your firm across APAC financial regulators — SFC, HKMA, IA, PCPD and the HK Critical Infrastructure Ordinance, MAS — every control cited to its official source.">
 <link rel="stylesheet" href="css/app.css">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 </head>
@@ -20,16 +20,20 @@
     <!-- 语言按钮由 app.js 依 HKCC.locales 生成 -->
     <div class="lang" id="lang" role="group"></div>
     <button id="export-project" class="primary"></button>
-    <button id="import-project"></button>
+    <button id="header-more-toggle" class="header-more-toggle" type="button" aria-controls="secondary-actions" aria-expanded="false"></button>
+    <div class="secondary-actions" id="secondary-actions">
+      <button id="import-project"></button>
+      <button id="export-csv"></button>
+      <button id="print"></button>
+      <button id="reset"></button>
+      <button id="theme"></button>
+    </div>
     <input id="import-file" type="file" accept=".json,.hkcc.json,application/json" hidden>
-    <button id="export-csv"></button>
-    <button id="print"></button>
-    <button id="reset"></button>
-    <button id="theme"></button>
   </div>
 </header>
 
 <div class="layout">
+  <div class="scope-backdrop" id="scope-backdrop"></div>
   <aside class="panel sidebar" id="sidebar"></aside>
 
   <main>
@@ -41,10 +45,13 @@
       <p id="ph-date"></p>
     </div>
 
+    <button id="scope-open" class="scope-open" type="button" aria-controls="sidebar" aria-expanded="false"></button>
+
     <div class="panel summary" id="summary"></div>
 
     <div class="panel toolbar">
       <input type="search" id="q">
+      <select id="jurisdiction-filter"></select>
       <select id="domain-filter"></select>
       <label class="inline"><input type="checkbox" id="merge"> <span id="merge-label"></span></label>
       <label class="inline"><input type="checkbox" id="gaps"> <span id="gaps-label"></span></label>
@@ -64,6 +71,7 @@
 <script src="data/hk/controls/sfc-internet-trading.js"></script>
 <script src="data/hk/controls/sfc-circulars-2026.js"></script>
 <script src="data/hk/controls/sfc-vatp.js"></script>
+<script src="data/hk/controls/ia-gl20.js"></script>
 <script src="data/hk/controls/hkma.js"></script>
 <script src="data/hk/controls/svf.js"></script>
 <script src="data/hk/controls/pdpo.js"></script>

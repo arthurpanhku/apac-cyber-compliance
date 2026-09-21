@@ -12,7 +12,7 @@
 HKCC.addI18n('en', {
   ui: {
     appTitle: 'APAC Cyber Compliance Assistant',
-    metaDescription: 'Generate the cybersecurity control requirements that apply to your firm across APAC financial regulators — SFC, HKMA, PCPD and the HK Critical Infrastructure Ordinance, MAS — every control cited to its official source.',
+    metaDescription: 'Generate the cybersecurity control requirements that apply to your firm across APAC financial regulators — SFC, HKMA, IA, PCPD and the HK Critical Infrastructure Ordinance, MAS — every control cited to its official source.',
     printTitle: 'APAC Cybersecurity Compliance Control Checklist',
     versionLine: 'v{version} · sources verified {date}',
 
@@ -24,6 +24,9 @@ HKCC.addI18n('en', {
     btnReset: 'Reset',
     btnTheme: 'Theme',
     btnThemeTitle: 'Switch light / dark / follow system',
+    btnMore: 'More',
+    btnEditScope: 'Edit applicable scope',
+    btnClose: 'Close',
 
     searchPlaceholder: 'Search controls, provisions, evidence or owners…',
     searchAria: 'Search controls',
@@ -36,8 +39,25 @@ HKCC.addI18n('en', {
     asOfDate: 'Assessment as-of date',
     secLicenses: '① Licence / entity type',
     secAttributes: '② Business characteristics',
+    scopeTitle: 'Applicable scope',
+    scopeProjectDetails: 'Assessment project',
+    scopeJurisdictions: 'Jurisdictions',
+    scopeConfigured: '{licenses} entities · {attributes} characteristics',
+    scopeNotConfigured: 'Not configured',
+    scopeEntities: 'Licence / entity type',
+    scopeCharacteristics: 'Relevant business characteristics',
+    scopeSelectEntityFirst: 'Select an entity type to see its relevant characteristics.',
+    scopeCurrent: 'Current scope',
+    scopeCurrentEmpty: 'No entity types selected.',
+    scopeControlCount: '{n} applicable controls',
+    scopeClearJurisdiction: 'Clear this jurisdiction',
+    scopeClearAll: 'Clear scope',
+    scopeGroupToggle: 'Configure {name}',
+    scopeJurisdictionTab: 'Configure {name}',
     allDomains: 'All control domains',
     domainFilterAria: 'Filter by control domain',
+    allJurisdictions: 'All jurisdictions',
+    jurisdictionFilterAria: 'Filter by jurisdiction',
 
     emptyNoLicenseTitle: 'Select a licence to begin',
     emptyNoLicenseNote: 'Tick the licences your firm holds and its business characteristics, and the applicable control requirements will be listed here.',
@@ -943,3 +963,94 @@ HKCC.addI18n('en', {
     'MAS-TRMG-15.1': { title: 'Audit function', requirement: 'IT audit should give the board and senior management an independent, objective opinion on the adequacy and effectiveness of risk management, governance and internal controls against existing and emerging technology risk, covering a comprehensive set of auditable areas at a frequency commensurate with criticality and risk, performed by auditors with the requisite competency and skills.' }
   }
 });
+
+/* ---- Insurance Authority GL20 and CRAF ---- */
+(function () {
+  const controls = {
+    'IA-GL20-5.1': { title: 'Board-endorsed cybersecurity strategy and framework', requirement: 'Establish and maintain a cybersecurity strategy and framework tailored to mitigate cyber risks commensurate with the nature, size and complexity of the insurer’s business, and have it endorsed by the board.' },
+    'IA-GL20-5.2': { title: 'Benchmark against appropriate technology and assurance standards', requirement: 'When establishing the cybersecurity strategy and framework, consider relevant best available and practicable technology and quality assurance standards in light of the insurer’s nature, size, complexity and risk profile, such as ISO/IEC 27001, COBIT, the OSFI guidance and the NIST Cybersecurity Framework.' },
+    'IA-GL20-5.3': { title: 'Define objectives, personnel competency and risk-management processes', requirement: 'Clearly define cybersecurity objectives and competency requirements for relevant personnel or system users; include well-defined processes and technology for managing cyber risk; and communicate the strategy to all users in a timely manner.' },
+    'IA-GL20-5.4': { title: 'Review the cybersecurity strategy at least annually and after major change', requirement: 'Review and update the cybersecurity strategy regularly, at least annually and after an insurer cyber incident, a major external cyber event that could affect the insurer, deployment of a new system, or a major system change.' },
+    'IA-GL20-6.1': { title: 'Board accountability for cybersecurity controls', requirement: 'The board holds overall responsibility for cybersecurity controls, establishes clear responsibilities and reporting and escalation lines, and cultivates a strong level of cybersecurity awareness and commitment.' },
+    'IA-GL20-6.2': { title: 'Cyber risk appetite, tolerance and continuing oversight', requirement: 'The board establishes a defined cyber risk appetite and tolerance limit and oversees the design, implementation and effectiveness of cybersecurity programmes. If it establishes a suitably skilled management team, the board and that team continue to oversee and keep the strategy and framework up to date.' },
+    'IA-GL20-7.1': { title: 'Identify, assess and control cyber risk', requirement: 'Maintain an enterprise-wide cyber risk self-assessment that identifies functions, activities, products and services; keeps a current inventory or map of information assets, configurations, interconnections and dependencies and prioritises them; evaluates inherent risk from people, process, technology and data; and conducts business impact analysis covering threats, vulnerabilities, likelihood and impact.' },
+    'IA-GL20-7.2': { title: 'Reassess mitigation after major organisational, operational or system change', requirement: 'Regularly determine whether cyber risk mitigation processes need to change after significant organisational, operational or system changes, with review at least annually or after a major system deployment.' },
+    'IA-GL20-8.1': { title: 'Systematic continuous monitoring', requirement: 'Establish systematic monitoring for early detection of cybersecurity incidents, regularly evaluate the effectiveness of internal controls, and update cyber risk appetite and tolerance as appropriate.' },
+    'IA-GL20-8.2': { title: 'Network monitoring, testing and audit', requirement: 'Maintain effective monitoring measures including network monitoring, testing, internal audit and external audit.' },
+    'IA-GL20-8.3': { title: 'Manage physical and remote access identities and credentials', requirement: 'As part of monitoring, manage identities and credentials for physical and remote access to information assets, recognise indicators of potential cyber risk, and monitor whether an actual breach has occurred.' },
+    'IA-GL20-8.4': { title: 'Test every element of the cybersecurity framework at least annually', requirement: 'Test all elements of the cybersecurity framework at least annually to determine overall effectiveness, using one or more current methods such as vulnerability assessment, scenario-based testing and penetration testing.' },
+    'IA-GL20-9.1': { title: 'Cybersecurity incident response plan', requirement: 'Develop a cybersecurity incident response plan covering incident scenarios, contingency strategies to maintain and restore critical functions and essential activities, and criteria for escalation of response and recovery to the board or its designated management team.' },
+    'IA-GL20-9.2': { title: 'Immediately assess, contain and mitigate an incident', requirement: 'On a cybersecurity incident, assess its nature, scope and impact and take every immediately practicable step to contain it and mitigate its impact.' },
+    'IA-GL20-9.3': { title: 'Stakeholder notification and annual incident response drill', requirement: 'Notify internal stakeholders and, where applicable, external stakeholders; consider joint response actions where necessary; and perform an incident response drill at least annually.' },
+    'IA-GL20-9.4': { title: 'Report a relevant incident to the IA within 72 hours of detection', requirement: 'Report a relevant incident and related information to the Insurance Authority as soon as practicable and in any event no later than 72 hours after detection.' },
+    'IA-GL20-9.5': { title: 'Remediate every exploited vulnerability after stable operations resume', requirement: 'Once stable operations resume, identify and mitigate every exploited vulnerability and remediate it to prevent similar incidents.' },
+    'IA-GL20-10.1': { title: 'Gather, analyse and share cyber risk information', requirement: 'Establish a process to gather and analyse relevant cyber risk information and participate in intelligence-sharing groups so timely information supports spontaneous and appropriate precautions locally and internationally.' },
+    'IA-GL20-10.2': { title: 'Appropriate cybersecurity training for every system user', requirement: 'Provide all system users with adequate training on cybersecurity awareness and current developments, proportionate to the cyber risks they face, and promote professional competence, particularly among cybersecurity and systems staff.' },
+
+    'IA-CRAF-1.2.2': { title: 'CRAF scope covers every supporting element of the Hong Kong insurance business', requirement: 'The assessment scope covers all systems, on-premises and cloud infrastructure, processes and individuals supporting the insurer’s Hong Kong insurance business, with inherent risk and cybersecurity maturity assessed under Annexes A and B respectively.' },
+    'IA-CRAF-1.2.3': { title: 'Assess at least every three years, after major change and when requested', requirement: 'Conduct both inherent risk and cybersecurity maturity assessments at least every three years; consider more frequent assessment and reassess after a major change to business nature or technology; and perform an ad hoc assessment when requested by the Insurance Authority.' },
+    'IA-CRAF-1.2.4a': { title: 'Appoint competent and objective assessors', requirement: 'Engage suitably qualified and experienced people to conduct CRAF assessments objectively and evaluate control robustness and effectiveness. An external validator must hold at least one Annex C qualification and be independent of the insurer and its group.' },
+    'IA-CRAF-1.2.4b': { title: 'Qualification and independent validation for medium/high inherent risk assessment', requirement: 'If an inherent risk rating is medium or high and the original assessor lacks an Annex C qualification, have another assessor with at least one such qualification re-perform it. If internal staff perform or re-perform the assessment, have an eligible external validator independently validate the result.' },
+    'IA-CRAF-1.2.4c': { title: 'Qualification and independent validation for medium/high maturity assessment', requirement: 'For medium or high inherent risk, use an assessor with at least one Annex C qualification for the maturity assessment and independently validate results produced by internal staff. Engage an external consultant to re-perform or independently validate any part when requested by the Insurance Authority.' },
+    'IA-CRAF-1.2.5': { title: 'Test design and operating effectiveness using risk-based sampling', requirement: 'Review control design effectiveness and test operating effectiveness. Samples cover at least the preceding six months for the first assessment and 12 months thereafter; select representative, prudent, risk-based samples and prioritise critical applications.' },
+    'IA-CRAF-1.2.6a': { title: 'Meet the first-submission deadline for the inherent risk rating', requirement: 'Submit first results within 12 months of CRAF taking effect for high inherent risk and 18 months for low or medium inherent risk. As CRAF took effect on 1 January 2025, those deadlines were 1 January 2026 and 1 July 2026 respectively.' },
+    'IA-CRAF-1.2.6b': { title: 'Submit again every three years after the first submission', requirement: 'After the first submission, submit inherent risk and cybersecurity maturity assessment results to the Insurance Authority every three years.' },
+    'IA-CRAF-1.2.6c': { title: 'Submit prescribed templates, evidence and remediation plans', requirement: 'Submit inherent risk and maturity results in the IA-prescribed templates with supporting documents. List every control-principle gap and give each a clear action and target date in an improvement or remediation plan; absent justification, complete actions promptly and no later than the next maturity assessment.' },
+    'IA-CRAF-1.2.6d': { title: 'Medium/high-risk insurers submit TIBAS gaps', requirement: 'For medium or high inherent risk, submit any control-principle gaps identified through the Threat Intelligence Based Attack Simulation exercise, including descriptions and finding risk ratings.' },
+    'IA-CRAF-1.2.6e': { title: 'Senior and assessment-party sign-off', requirement: 'Have results and completed prescribed templates reviewed and signed by the chief executive or a senior executive such as a key person in an internal audit, compliance or risk-management control function, and by the responsible assessor(s) and/or validator(s).' },
+    'IA-CRAF-3.2': { title: 'Implement cumulative maturity controls based on inherent risk', requirement: 'Low inherent risk requires every applicable Baseline principle; medium requires Baseline plus Intermediate; high requires Baseline, Intermediate and Advanced. Record Y, AC, RA, N or NA for each principle; all applicable components must reach 100% at a grade to achieve that overall maturity level.' },
+    'IA-CRAF-3.3': { title: 'Alternative frameworks must be comparable and gaps closed', requirement: 'When using a framework other than CRAF, demonstrate comparability to the Insurance Authority and meet the conditions on scope, scope mapping, gap closure, a qualified independent assessor, submission in the IA-prescribed format, and completion within the year before submission.' }
+  };
+
+  const componentRequirement = scope =>
+    `Implement and assess every Baseline, Intermediate and/or Advanced control principle applicable to the insurer’s inherent risk rating in the IA Cybersecurity Maturity Assessment Matrix, recording Y, AC, RA, N or NA, supporting information and gaps. This component covers ${scope}.`;
+
+  [
+    ['1.1', 'Cyber resilience oversight', 'board and senior-management oversight and at least annual written status reporting'],
+    ['1.2', 'Strategies and policies', 'the cybersecurity strategy and programme and board- or committee-approved policies'],
+    ['1.3', 'Cyber risk management', 'the cyber risk function, social-media policy and risk-management programme'],
+    ['1.4', 'Audit', 'independent, adequately resourced cybersecurity audit and follow-up of findings'],
+    ['1.5', 'Staffing and training', 'cybersecurity roles, resources, competency and training at least annually'],
+    ['2.1', 'IT asset management', 'asset inventory, ownership, classification, configuration and life-cycle management'],
+    ['2.2', 'Cyber risk identification, assessment, treatment and monitoring', 'risk ownership, assessment, mitigation strategies, the risk register and regular reporting'],
+    ['3.1', 'Access control', 'user and privileged accounts, physical, remote, wireless and mobile access, and cryptographic key management'],
+    ['3.2', 'Infrastructure protection control', 'network perimeter and segmentation, secure system configuration and data-centre environmental controls'],
+    ['3.3', 'Data protection', 'endpoint and removable-media controls and the classification, encryption, transmission, retention and destruction of sensitive data'],
+    ['3.4', 'Secure development', 'the secure development life cycle, code review, testing, environment separation and production release controls'],
+    ['3.5', 'Patch and change management', 'the patch programme, risk assessment and testing, and controlled system and configuration changes'],
+    ['3.6', 'Remediation management', 'tracking security findings by risk, owner and due date through completion'],
+    ['4.1', 'Vulnerability detection', 'anti-virus and anti-malware measures, scanning, penetration testing and simulation testing'],
+    ['4.2', 'Anomalies activity detection', 'log review and analysis, SIEM, behavioural anomalies and customer-transaction monitoring'],
+    ['4.3', 'Cyber incident detection', 'event-monitoring responsibilities and detection and alerting before an attacker establishes a foothold or moves laterally'],
+    ['4.4', 'Threat monitoring and analysis', 'continuous monitoring of external threats, vulnerabilities and attack trends and adjustment of defences'],
+    ['5.1', 'Governance and preparation of incident response and recovery', 'cross-functional accountability, playbooks, business impact analysis, continuity, disaster recovery and backup'],
+    ['5.2', 'Analysis, mitigation and restoration', 'incident analysis, containment and eradication, and post-restoration quality assurance testing'],
+    ['5.3', 'Cyber forensics', 'collection, preservation, analysis and protection of digital evidence against unauthorised change or deletion'],
+    ['5.4', 'Communication and improvement', 'employee reporting channels, incident classification and tracking, stakeholder communication and closed-loop lessons learnt'],
+    ['5.5', 'Threat Intelligence Based Attack Simulation', 'design, execution and remediation of TIBAS exercises for medium- and high-inherent-risk insurers'],
+    ['6.1', 'Threat intelligence', 'subscription, collection and analysis of relevant threat intelligence and its use to improve controls'],
+    ['6.2', 'Threat intelligence sharing', 'law-enforcement and regulator contacts and formal, secure and compliant intelligence-sharing processes'],
+    ['7.1', 'External connections', 'identification, approval, protection and periodic review of external connections and network-connected third parties'],
+    ['7.2', 'Third-party management', 'contractual security responsibility, risk-based due diligence, access control and incident notification'],
+    ['7.3', 'Ongoing monitoring of third-party risk', 'continuing risk assessment, service-performance monitoring, audit rights and exit arrangements']
+  ].forEach(([code, title, scope]) => {
+    controls[`IA-CRAF-B-${code}`] = { title, requirement: componentRequirement(scope) };
+  });
+
+  HKCC.addI18n('en', {
+    licenses: {
+      'ia-authorized-insurer': {
+        group: 'IA authorized insurers',
+        label: 'Authorized insurer',
+        note: 'GL20 main body applies; excludes captive insurers and marine mutual insurers'
+      }
+    },
+    attributes: {
+      'ia-craf': {
+        label: 'Subject to the IA Cyber Resilience Assessment Framework (CRAF)',
+        note: 'For authorized insurers carrying on insurance business in or from Hong Kong that do not fall within a GL20 paragraph 3.2 exemption'
+      }
+    },
+    controls
+  });
+})();

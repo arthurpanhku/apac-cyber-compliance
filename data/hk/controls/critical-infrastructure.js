@@ -6,7 +6,8 @@
  */
 (function () {
   const ALL = ['sfc-ra1', 'sfc-ra2', 'sfc-ra3', 'sfc-ra4', 'sfc-ra5', 'sfc-ra6', 'sfc-ra7',
-    'sfc-ra8', 'sfc-ra9', 'sfc-ra13', 'sfc-vasp', 'hkma-ai', 'hkma-svf', 'other'];
+    'sfc-ra8', 'sfc-ra9', 'sfc-ra13', 'sfc-vasp', 'hkma-ai', 'hkma-svf',
+    'ia-authorized-insurer', 'other'];
   const A = ['ci-designated'];
   const src = 'occics-cop';
 

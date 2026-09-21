@@ -1,5 +1,5 @@
 /**
- * 条文出处登记。所有链接与发布日期于 2026-09-08 经官方网站核验。
+ * 条文出处登记。每份文件的 verifiedOn 记录其最近一次官网核验日期。
  * status: current = 现行有效；ref = 背景/参考文件
  */
 HKCC.addSources({
@@ -205,5 +205,45 @@ HKCC.addSources({
     url: 'https://www.sfc.hk/-/media/EN/assets/components/codes/files-current/web/guidelines/Guidelines-for-Virtual-Asset-Trading-Platform-Operators/Guidelines-for-Virtual-Asset-Trading-Platform-Operators.pdf',
     verifiedOn: '2026-09-11',
     status: 'current'
+  },
+  'ia-gl20-2024': {
+    regulator: 'IA',
+    titleEn: 'Guideline on Cybersecurity (GL20), including the Cyber Resilience Assessment Framework',
+    titleZh: '《网络安全指引》（GL20，含网络韧性评估框架）',
+    issued: '2024-12',
+    legalStatus: '保险业监管局根据《保险业条例》发布的指引；不具法律效力，但不遵从可影响董事或控权人的持续适当人选评估，并可用于判断行为或遗漏是否可能损害保单持有人利益',
+    url: 'https://www.ia.org.hk/en/legislative_framework/files/GL20_Eng.pdf',
+    verifiedOn: '2026-09-21',
+    status: 'current'
+  },
+  'ia-gl20-faq-2024': {
+    regulator: 'IA',
+    titleEn: 'Frequently Asked Questions on Guideline on Cybersecurity (GL20)',
+    titleZh: '《网络安全指引》（GL20）常见问题',
+    issued: '2024-11',
+    legalStatus: '保险业监管局就 GL20 与 CRAF 的实施说明',
+    url: 'https://www.ia.org.hk/en/legislative_framework/files/FAQ_GL20.pdf',
+    verifiedOn: '2026-09-21',
+    status: 'ref'
+  },
+  'ia-gl20-ira-template': {
+    regulator: 'IA',
+    titleEn: 'GL20 Inherent Risk Rating Assessment Template',
+    titleZh: 'GL20 固有风险评级评估模板',
+    issued: '2024-12',
+    legalStatus: '保险业监管局指定的 CRAF 固有风险评估及呈交模板',
+    url: 'https://www.ia.org.hk/en/legislative_framework/files/IA_GL20_Inherent_Risk_Rating_Assessment_template.xlsx',
+    verifiedOn: '2026-09-21',
+    status: 'ref'
+  },
+  'ia-gl20-cma-template': {
+    regulator: 'IA',
+    titleEn: 'GL20 Cybersecurity Maturity Assessment Template',
+    titleZh: 'GL20 网络安全成熟度评估模板',
+    issued: '2024-12',
+    legalStatus: '保险业监管局指定的 CRAF 网络安全成熟度评估及呈交模板',
+    url: 'https://www.ia.org.hk/en/legislative_framework/files/IA_GL20_Cybersecurity_Maturity_Assessment_template.xlsx',
+    verifiedOn: '2026-09-21',
+    status: 'ref'
   }
 });

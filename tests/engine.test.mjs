@@ -17,6 +17,12 @@ test('applies uses any licence and all attributes', () => {
   assert.equal(E.applies(controls[0], new Set(['l2']), new Set(['a1'])), false);
 });
 
+test('indexAttributeLicenses derives relevant entity types from controls', () => {
+  const index = E.indexAttributeLicenses(controls);
+  assert.deepEqual([...index.get('a1')].sort(), ['l1']);
+  assert.equal(index.has('missing'), false);
+});
+
 test('cluster merges reciprocal references only', () => {
   assert.deepEqual(E.cluster(controls, byId, true).map(g => g.map(c => c.id)), [['A', 'B'], ['C']]);
   assert.deepEqual(E.cluster(controls, byId, false).map(g => g.map(c => c.id)), [['A'], ['B'], ['C']]);
