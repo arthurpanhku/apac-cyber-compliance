@@ -65,13 +65,20 @@ def dump_base():
     global.window = {};
     require('./data/_registry.js');
     global.HKCC = window.HKCC;
-    require('./data/sources.js');
-    require('./data/taxonomy.js');
+    require('./data/jurisdictions.js');
+    require('./data/domains.js');
     const fs = require('fs');
-    for (const f of fs.readdirSync('data/controls').sort()) require('./data/controls/' + f);
+    for (const j of HKCC.jurisdictions) {
+      require(`./data/${j.id}/sources.js`);
+      require(`./data/${j.id}/taxonomy.js`);
+      for (const f of fs.readdirSync(`data/${j.id}/controls`).sort()) {
+        require(`./data/${j.id}/controls/` + f);
+      }
+    }
     require('./data/i18n/zh-Hans.js');
     process.stdout.write(JSON.stringify({
       ui: HKCC.i18n['zh-Hans'].ui,
+      jurisdictions: HKCC.jurisdictions,
       sources: HKCC.sources,
       licenses: HKCC.licenses,
       attributes: HKCC.attributes,
@@ -110,6 +117,7 @@ def main():
 
     out = {
         'ui': {k: conv(v) for k, v in base['ui'].items()},
+        'jurisdictions': {x['id']: pick(x, ('label',)) for x in base['jurisdictions']},
         'licenses': {x['id']: pick(x, ('group', 'label', 'note')) for x in base['licenses']},
         'attributes': {x['id']: pick(x, ('label', 'note')) for x in base['attributes']},
         'domains': {x['id']: pick(x, ('label', 'desc')) for x in base['domains']},
@@ -128,7 +136,8 @@ def main():
         ' *\n'
         ' * 本檔由 tools/gen-hant.py 以 OpenCC s2hk 從簡體原文自動生成，請勿手動修改：\n'
         ' * 任何改動都會在下次生成時被覆蓋。要改繁體文字，請改簡體原文\n'
-        ' *（data/taxonomy.js、data/sources.js、data/controls/*.js、data/i18n/zh-Hans.js）\n'
+        ' *（data/<jurisdiction>/taxonomy.js、data/<jurisdiction>/sources.js、\n'
+        ' * data/<jurisdiction>/controls/*.js、data/i18n/zh-Hans.js）\n'
         ' * 後重新執行生成指令；個別專有名詞的例外寫法請加入該腳本的 OVERRIDES。\n'
         ' *\n'
         ' * quote 欄位為英文來源文字，quoteStatus 標明原文、節錄或說明；任何語言下均不翻譯。\n'

@@ -1,4 +1,4 @@
-/* HK Cyber Compliance Assistant — practical assessment workspace. */
+/* APAC Cyber Compliance Assistant — practical assessment workspace. */
 (function () {
   'use strict';
 
@@ -49,13 +49,19 @@
     return node;
   };
   const regKey = regulator => regulator === 'SFC' ? 'SFC' :
-    regulator === 'HKMA' ? 'HKMA' : regulator === 'PCPD' ? 'PCPD' : 'CI';
+    regulator === 'HKMA' ? 'HKMA' : regulator === 'PCPD' ? 'PCPD' :
+    regulator === 'MAS' ? 'MAS' : 'CI';
   const t = (key, vars) => HKCC.t(key, vars);
   const trControl = control => HKCC.tr('controls', control.id, control);
   const trSource = id => HKCC.tr('sources', id, HKCC.sources[id]);
   const trLicense = licence => HKCC.tr('licenses', licence.id, licence);
   const trAttribute = attribute => HKCC.tr('attributes', attribute.id, attribute);
   const trDomain = domain => HKCC.tr('domains', domain.id, domain);
+  const trJurisdiction = jurisdiction => HKCC.tr('jurisdictions', jurisdiction.id, jurisdiction);
+  const jurisdictionLabel = id => {
+    const item = HKCC.jurisdictions.find(j => j.id === id);
+    return item ? trJurisdiction(item).label : id;
+  };
 
   function projectData(includeExportTime) {
     return {
@@ -206,9 +212,15 @@
 
     const licences = el('div', 'field-group');
     licences.appendChild(el('h2', null, t('secLicenses')));
+    let lastJurisdiction = null;
     let lastGroup = null;
     for (const rawLicence of HKCC.licenses) {
       const licence = trLicense(rawLicence);
+      if (rawLicence.jurisdiction !== lastJurisdiction) {
+        licences.appendChild(el('div', 'opt-group-jurisdiction', jurisdictionLabel(rawLicence.jurisdiction)));
+        lastJurisdiction = rawLicence.jurisdiction;
+        lastGroup = null;
+      }
       if (licence.group !== lastGroup) {
         licences.appendChild(el('div', 'opt-group-label', licence.group));
         lastGroup = licence.group;
@@ -219,7 +231,12 @@
 
     const attributes = el('div', 'field-group');
     attributes.appendChild(el('h2', null, t('secAttributes')));
+    lastJurisdiction = null;
     for (const rawAttribute of HKCC.attributes) {
+      if (rawAttribute.jurisdiction !== lastJurisdiction) {
+        attributes.appendChild(el('div', 'opt-group-jurisdiction', jurisdictionLabel(rawAttribute.jurisdiction)));
+        lastJurisdiction = rawAttribute.jurisdiction;
+      }
       attributes.appendChild(option(rawAttribute.id, trAttribute(rawAttribute), state.attributes));
     }
     box.appendChild(attributes);
@@ -546,9 +563,15 @@
     return [...licences, ...attributes].join(HKCC.locale === 'en' ? '; ' : '；');
   }
 
+  function controlJurisdiction(control) {
+    const licenceId = control.applicability.licenses[0];
+    const licence = HKCC.licenses.find(item => item.id === licenceId);
+    return licence ? jurisdictionLabel(licence.jurisdiction) : '';
+  }
+
   function toCSV() {
-    const rows = [[t('csvProjectName'), t('csvAsOfDate'), t('csvId'), t('csvDomain'), t('csvTitle'),
-      t('csvRequirement'), t('csvApplicability'), t('csvRegulator'), t('csvSource'), t('csvClause'),
+    const rows = [[t('csvProjectName'), t('csvAsOfDate'), t('csvJurisdiction'), t('csvId'), t('csvDomain'),
+      t('csvTitle'), t('csvRequirement'), t('csvApplicability'), t('csvRegulator'), t('csvSource'), t('csvClause'),
       t('csvIssued'), t('csvVerified'), t('csvDeadline'), t('csvUrl'), t('csvQuoteType'), t('csvQuote'),
       t('csvStatus'), t('csvImplementation'), t('csvEvidence'), t('csvOwner'), t('csvTargetDate'),
       t('csvDueState')]];
@@ -563,12 +586,13 @@
         const due = E.dueState(record.targetDate, state.project.asOfDate);
         const quoteType = control.quoteStatus === 'verbatim' ? t('quoteVerbatim') :
           control.quoteStatus === 'excerpt' ? t('quoteExcerpt') : control.quote ? t('quoteSummaryType') : '';
-        rows.push([state.project.name, state.project.asOfDate, control.id, domain?.label || control.domain,
-          translatedControl.title, translatedControl.requirement, applicabilityText(control), source.regulator,
-          HKCC.sourceTitle(control.sourceId), translatedControl.clause || control.clause, source.issued,
-          source.verifiedOn || '', control.deadline || '', source.url, quoteType, control.quote || '',
-          statusLabel(record.status), record.implementationNote || '', record.evidenceRef || '', record.owner || '',
-          record.targetDate || '', due === 'overdue' ? t('overdue') : due === 'due-soon' ? t('dueSoon') : '']);
+        rows.push([state.project.name, state.project.asOfDate, controlJurisdiction(control), control.id,
+          domain?.label || control.domain, translatedControl.title, translatedControl.requirement,
+          applicabilityText(control), source.regulator, HKCC.sourceTitle(control.sourceId),
+          translatedControl.clause || control.clause, source.issued, source.verifiedOn || '', control.deadline || '',
+          source.url, quoteType, control.quote || '', statusLabel(record.status), record.implementationNote || '',
+          record.evidenceRef || '', record.owner || '', record.targetDate || '',
+          due === 'overdue' ? t('overdue') : due === 'due-soon' ? t('dueSoon') : '']);
       }
     }
     return '\ufeff' + rows.map(row => row.map(E.csvCell).join(',')).join('\r\n');
@@ -587,7 +611,7 @@
   }
 
   function safeFileName(value) {
-    return (value || 'hk-compliance').trim().replace(/[^\p{L}\p{N}._-]+/gu, '-').slice(0, 80) || 'hk-compliance';
+    return (value || 'apac-compliance').trim().replace(/[^\p{L}\p{N}._-]+/gu, '-').slice(0, 80) || 'apac-compliance';
   }
 
   function exportProject() {

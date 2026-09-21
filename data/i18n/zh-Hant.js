@@ -3,16 +3,17 @@
  *
  * 本檔由 tools/gen-hant.py 以 OpenCC s2hk 從簡體原文自動生成，請勿手動修改：
  * 任何改動都會在下次生成時被覆蓋。要改繁體文字，請改簡體原文
- *（data/taxonomy.js、data/sources.js、data/controls/*.js、data/i18n/zh-Hans.js）
+ *（data/<jurisdiction>/taxonomy.js、data/<jurisdiction>/sources.js、
+ * data/<jurisdiction>/controls/*.js、data/i18n/zh-Hans.js）
  * 後重新執行生成指令；個別專有名詞的例外寫法請加入該腳本的 OVERRIDES。
  *
  * quote 欄位為英文來源文字，quoteStatus 標明原文、節錄或說明；任何語言下均不翻譯。
  */
 HKCC.addI18n('zh-Hant', {
   "ui": {
-    "appTitle": "香港網絡安全合規助手",
-    "metaDescription": "按牌照與業務特徵生成 SFC、HKMA、PCPD 及關鍵基礎設施條例的網絡安全控制點要求，每條均標註官方條文出處。",
-    "printTitle": "香港網絡安全合規控制點清單",
+    "appTitle": "亞太網絡安全合規助手",
+    "metaDescription": "按司法管轄區、牌照與業務特徵生成 SFC、HKMA、PCPD、關鍵基礎設施條例及 MAS 的網絡安全控制點要求，每條均標註官方條文出處。",
+    "printTitle": "亞太網絡安全合規控制點清單",
     "versionLine": "v{version} · 條文核驗於 {date}",
     "langLabel": "語言",
     "btnExportProject": "匯出項目",
@@ -120,6 +121,7 @@ HKCC.addI18n('zh-Hant', {
     "diagLegacyNotObject": "舊版本地狀態不是有效對象。",
     "csvProjectName": "項目名稱",
     "csvAsOfDate": "評估基準日期",
+    "csvJurisdiction": "司法管轄區",
     "csvId": "控制點 ID",
     "csvDomain": "控制域",
     "csvTitle": "控制點",
@@ -144,6 +146,14 @@ HKCC.addI18n('zh-Hant', {
     "disclaimerBody": "本工具為開源參考工具，不構成法律或合規意見。所列控制點為對公開監管條文的結構化整理，不能取代對條文原文的閱讀，亦不能取代具備資格的法律或合規專業人士的判斷。監管要求會持續更新，請以各監管機構官方網站發佈的最新版本為準。",
     "langNoteLabel": "關於條文語言：",
     "langNoteBody": "控制點說明提供英文、繁體中文與簡體中文三個版本，僅為便於閱讀；英文來源文字按原文、節錄或說明標示且一律不翻譯，每項均附官方連結。如任何語言的說明與官方原文有出入，概以官方原文為準。"
+  },
+  "jurisdictions": {
+    "hk": {
+      "label": "香港"
+    },
+    "sg": {
+      "label": "新加坡"
+    }
   },
   "licenses": {
     "sfc-ra1": {
@@ -282,7 +292,7 @@ HKCC.addI18n('zh-Hant', {
     },
     "assurance": {
       "label": "評估、審計與測試",
-      "desc": "自我評估、滲透測試、獨立審計、C-RAF"
+      "desc": "自我評估、滲透測試、獨立審計"
     },
     "awareness": {
       "label": "意識與培訓",
@@ -389,6 +399,31 @@ HKCC.addI18n('zh-Hant', {
       "titleZh": "《虛擬資產交易平台營運者指引》",
       "legalStatus": "根據《證券及期貨條例》第 399 條及《打擊洗錢及恐怖分子資金籌集條例》第 53ZTK 條發佈的指引；適用於所有平台營運者。不遵從本身不會令任何人負上法律責任，但在《證券及期貨條例》／《打擊洗錢條例》的法律程序中可獲接納為證據，證監會亦會考慮該不遵從是否反映其不再是適當人選",
       "regulator": "SFC"
+    },
+    "mas-cyber-hygiene": {
+      "titleZh": "FSM-N06《網絡衞生通知》",
+      "legalStatus": "待核對：據檢索摘要為具法定約束力的通知（原 Notice 655，2024 年因《金融服務與市場法》改革重新編號）",
+      "regulator": "MAS"
+    },
+    "mas-cyber-hygiene-cmi": {
+      "titleZh": "FSM-N22《網絡衞生通知》（資本市場中介機構）",
+      "legalStatus": "待核對：據檢索摘要為具法定約束力的通知（原 Notice CMG-N03）",
+      "regulator": "MAS"
+    },
+    "mas-cyber-hygiene-insurers": {
+      "titleZh": "FSM-N31《網絡衞生通知》",
+      "legalStatus": "待核對：適用範圍（推測為保險業）與生效日期均未經原文確認",
+      "regulator": "MAS"
+    },
+    "mas-trm-notice": {
+      "titleZh": "FSM-N05《科技風險管理通知》",
+      "legalStatus": "待核對：標題與內容均未經原文確認",
+      "regulator": "MAS"
+    },
+    "mas-trm-guidelines": {
+      "titleZh": "《科技風險管理指引》",
+      "legalStatus": "指引，不具法律約束力，但 MAS 於監管評估時會考慮機構是否遵循",
+      "regulator": "MAS"
     }
   },
   "controls": {

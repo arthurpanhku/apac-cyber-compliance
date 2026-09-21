@@ -9,8 +9,9 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const HKCC = {
   baseLocale: 'zh-Hans',
-  sources: {}, licenses: [], attributes: [], domains: [], controls: [], i18n: {},
+  sources: {}, jurisdictions: [], licenses: [], attributes: [], domains: [], controls: [], i18n: {},
   addSources(o) { Object.assign(this.sources, o); },
+  addJurisdictions(a) { this.jurisdictions.push(...a); },
   addLicenses(a) { this.licenses.push(...a); },
   addAttributes(a) { this.attributes.push(...a); },
   addDomains(a) { this.domains.push(...a); },
@@ -24,10 +25,15 @@ globalThis.HKCC = HKCC;
 globalThis.window = { HKCC };
 
 const load = (p) => new Function('HKCC', readFileSync(join(root, p), 'utf8'))(HKCC);
-load('data/sources.js');
-load('data/taxonomy.js');
-for (const f of readdirSync(join(root, 'data/controls')).filter(f => f.endsWith('.js')).sort()) {
-  load(join('data/controls', f));
+load('data/jurisdictions.js');
+load('data/domains.js');
+for (const j of HKCC.jurisdictions) {
+  load(`data/${j.id}/sources.js`);
+  load(`data/${j.id}/taxonomy.js`);
+  const controlsDir = join(root, `data/${j.id}/controls`);
+  for (const f of readdirSync(controlsDir).filter(f => f.endsWith('.js')).sort()) {
+    load(join(`data/${j.id}/controls`, f));
+  }
 }
 for (const f of readdirSync(join(root, 'data/i18n')).filter(f => f.endsWith('.js')).sort()) {
   load(join('data/i18n', f));
@@ -39,8 +45,17 @@ const licenseIds = new Set(HKCC.licenses.map(l => l.id));
 const attrIds = new Set(HKCC.attributes.map(a => a.id));
 const domainIds = new Set(HKCC.domains.map(d => d.id));
 const sourceIds = new Set(Object.keys(HKCC.sources));
+const jurisdictionIds = new Set(HKCC.jurisdictions.map(j => j.id));
 const controlIds = new Set();
 const quoteStatuses = new Set(['verbatim', 'excerpt', 'summary']);
+
+for (const [kind, list] of [['licenses', HKCC.licenses], ['attributes', HKCC.attributes]]) {
+  for (const x of list) {
+    if (!x.jurisdiction || !jurisdictionIds.has(x.jurisdiction)) {
+      errors.push(`${kind} "${x.id}": 未知或缺失 jurisdiction "${x.jurisdiction}"`);
+    }
+  }
+}
 
 for (const c of HKCC.controls) {
   const at = `控制点 ${c.id ?? '(缺少 id)'}`;
@@ -132,6 +147,7 @@ for (const loc of TRANSLATED) {
   if (missingNote.length) errors.push(`${loc}: 控制点 note 未译 — ${missingNote.join(', ')}`);
 
   for (const [kind, list, fields] of [
+    ['jurisdictions', HKCC.jurisdictions, ['label']],
     ['licenses', HKCC.licenses, ['label', 'group']],
     ['attributes', HKCC.attributes, ['label']],
     ['domains', HKCC.domains, ['label', 'desc']]

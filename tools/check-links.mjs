@@ -1,5 +1,5 @@
 /**
- * 检查 data/sources.js 中每份出处的官方链接是否仍然可达。
+ * 检查各 data/<jurisdiction>/sources.js 中每份出处的官方链接是否仍然可达。
  *
  *   node tools/check-links.mjs
  *
@@ -21,8 +21,14 @@ import { promisify } from 'node:util';
 const run = promisify(execFile);
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const HKCC = { sources: {}, addSources(o) { Object.assign(this.sources, o); } };
-new Function('HKCC', readFileSync(join(root, 'data/sources.js'), 'utf8'))(HKCC);
+const HKCC = {
+  sources: {}, jurisdictions: [],
+  addSources(o) { Object.assign(this.sources, o); },
+  addJurisdictions(a) { this.jurisdictions.push(...a); }
+};
+const load = (p) => new Function('HKCC', readFileSync(join(root, p), 'utf8'))(HKCC);
+load('data/jurisdictions.js');
+for (const j of HKCC.jurisdictions) load(`data/${j.id}/sources.js`);
 
 const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ' +
            'Chrome/124.0 Safari/537.36 hk-cyber-compliance-linkcheck/1.0';

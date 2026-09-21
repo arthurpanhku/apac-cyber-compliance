@@ -22,15 +22,17 @@ window.HKCC = {
   locale: 'en',
 
   sources: {},
+  jurisdictions: [],
   licenses: [],
   attributes: [],
   domains: [],
   controls: [],
 
-  /** locale -> { ui:{}, licenses:{id:{...}}, attributes, domains, sources, controls } */
+  /** locale -> { ui:{}, jurisdictions:{id:{...}}, licenses:{id:{...}}, attributes, domains, sources, controls } */
   i18n: {},
 
   addSources(obj) { Object.assign(this.sources, obj); },
+  addJurisdictions(arr) { this.jurisdictions.push(...arr); },
   addLicenses(arr) { this.licenses.push(...arr); },
   addAttributes(arr) { this.attributes.push(...arr); },
   addDomains(arr) { this.domains.push(...arr); },

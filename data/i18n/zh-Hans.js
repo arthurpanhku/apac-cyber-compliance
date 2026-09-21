@@ -5,9 +5,9 @@
  */
 HKCC.addI18n('zh-Hans', {
   ui: {
-    appTitle: '香港网络安全合规助手',
-    metaDescription: '按牌照与业务特征生成 SFC、HKMA、PCPD 及关键基础设施条例的网络安全控制点要求，每条均标注官方条文出处。',
-    printTitle: '香港网络安全合规控制点清单',
+    appTitle: '亚太网络安全合规助手',
+    metaDescription: '按司法管辖区、牌照与业务特征生成 SFC、HKMA、PCPD、关键基础设施条例及 MAS 的网络安全控制点要求，每条均标注官方条文出处。',
+    printTitle: '亚太网络安全合规控制点清单',
     versionLine: 'v{version} · 条文核验于 {date}',
 
     langLabel: '语言',
@@ -129,6 +129,7 @@ HKCC.addI18n('zh-Hans', {
 
     csvProjectName: '项目名称',
     csvAsOfDate: '评估基准日期',
+    csvJurisdiction: '司法管辖区',
     csvId: '控制点 ID',
     csvDomain: '控制域',
     csvTitle: '控制点',

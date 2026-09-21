@@ -11,9 +11,9 @@
  */
 HKCC.addI18n('en', {
   ui: {
-    appTitle: 'HK Cyber Compliance Assistant',
-    metaDescription: 'Generate the cybersecurity control requirements that apply to your firm under SFC, HKMA, PCPD and the Critical Infrastructure Ordinance — every control cited to its official source.',
-    printTitle: 'Hong Kong Cybersecurity Compliance Control Checklist',
+    appTitle: 'APAC Cyber Compliance Assistant',
+    metaDescription: 'Generate the cybersecurity control requirements that apply to your firm across APAC financial regulators — SFC, HKMA, PCPD and the HK Critical Infrastructure Ordinance, MAS — every control cited to its official source.',
+    printTitle: 'APAC Cybersecurity Compliance Control Checklist',
     versionLine: 'v{version} · sources verified {date}',
 
     langLabel: 'Language',
@@ -135,6 +135,7 @@ HKCC.addI18n('en', {
 
     csvProjectName: 'Project name',
     csvAsOfDate: 'Assessment as-of date',
+    csvJurisdiction: 'Jurisdiction',
     csvId: 'Control ID',
     csvDomain: 'Domain',
     csvTitle: 'Control',
@@ -160,6 +161,11 @@ HKCC.addI18n('en', {
     disclaimerBody: 'This is an open-source reference tool and does not constitute legal or compliance advice. The controls listed are a structured reading of publicly available regulatory provisions; they are not a substitute for reading the source documents, nor for the judgement of a qualified legal or compliance professional. Regulatory requirements change — always check the latest version published on the regulator’s own website.',
     langNoteLabel: 'On language: ',
     langNoteBody: 'Control descriptions are offered in English, Traditional Chinese and Simplified Chinese for ease of reading only. English source text is labelled as verbatim, excerpt or summary and is never translated; each item links to the official source. Where any description differs from the official text, the official text governs.'
+  },
+
+  jurisdictions: {
+    hk: { label: 'Hong Kong' },
+    sg: { label: 'Singapore' }
   },
 
   licenses: {
