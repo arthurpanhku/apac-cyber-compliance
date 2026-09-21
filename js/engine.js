@@ -44,6 +44,19 @@
     return (applicability.attributes || []).every(id => selectedAttributes.has(id));
   }
 
+  /** Build attribute -> licence IDs from the controls that use each attribute. */
+  function indexAttributeLicenses(controls) {
+    const index = new Map();
+    for (const control of controls || []) {
+      for (const attributeId of control.applicability?.attributes || []) {
+        const licenses = index.get(attributeId) || new Set();
+        for (const licenseId of control.applicability?.licenses || []) licenses.add(licenseId);
+        index.set(attributeId, licenses);
+      }
+    }
+    return index;
+  }
+
   function cluster(controls, byId, merge) {
     const controlMap = byId instanceof Map ? byId : new Map(controls.map(c => [c.id, c]));
     const ids = new Set(controls.map(c => c.id));
@@ -292,6 +305,7 @@
     MAX_LENGTHS,
     DIAGNOSTIC_CODES,
     applies,
+    indexAttributeLicenses,
     cluster,
     pendingCount,
     migrateV1,

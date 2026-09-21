@@ -15,6 +15,8 @@
     { id: 'na', key: 'statusNa', cls: 's-na' }
   ];
   const byId = new Map(HKCC.controls.map(c => [c.id, c]));
+  const licenseById = new Map(HKCC.licenses.map(l => [l.id, l]));
+  const attributeLicenseIndex = E.indexAttributeLicenses(HKCC.controls);
   const definitions = {
     controlIds: new Set(HKCC.controls.map(c => c.id)),
     licenseIds: new Set(HKCC.licenses.map(l => l.id)),
@@ -36,10 +38,19 @@
     merge: true,
     gapsOnly: false,
     query: '',
+    jurisdiction: '',
     domain: '',
     storageAvailable: true,
     quarantined: false
   };
+
+  let activeScopeJurisdiction = '';
+  let projectPanelOpen = false;
+  let scopeDrawerOpen = false;
+  let headerMoreOpen = false;
+  let scopeReturnFocus = null;
+  const licenseGroupState = new Map();
+  const mobileScopeQuery = window.matchMedia('(max-width: 900px)');
 
   const $ = (selector, root) => (root || document).querySelector(selector);
   const el = (tag, cls, value) => {
@@ -50,7 +61,7 @@
   };
   const regKey = regulator => regulator === 'SFC' ? 'SFC' :
     regulator === 'HKMA' ? 'HKMA' : regulator === 'PCPD' ? 'PCPD' :
-    regulator === 'MAS' ? 'MAS' : 'CI';
+    regulator === 'IA' ? 'IA' : regulator === 'MAS' ? 'MAS' : 'CI';
   const t = (key, vars) => HKCC.t(key, vars);
   const trControl = control => HKCC.tr('controls', control.id, control);
   const trSource = id => HKCC.tr('sources', id, HKCC.sources[id]);
@@ -192,54 +203,221 @@
     });
   }
 
+  function scopeForJurisdiction(id) {
+    const licenses = HKCC.licenses.filter(item => item.jurisdiction === id);
+    const attributes = HKCC.attributes.filter(item => item.jurisdiction === id);
+    return {
+      licenses,
+      attributes,
+      selectedLicenses: licenses.filter(item => state.licenses.has(item.id)),
+      selectedAttributes: attributes.filter(item => state.attributes.has(item.id))
+    };
+  }
+
+  function preferredScopeJurisdiction() {
+    const selected = HKCC.jurisdictions.find(j => {
+      const scope = scopeForJurisdiction(j.id);
+      return scope.selectedLicenses.length || scope.selectedAttributes.length;
+    });
+    return selected?.id || HKCC.jurisdictions[0]?.id || '';
+  }
+
+  function relevantAttributes(scope) {
+    const selectedLicenses = new Set(scope.selectedLicenses.map(item => item.id));
+    return scope.attributes.filter(attribute => {
+      if (state.attributes.has(attribute.id)) return true;
+      const eligibleLicenses = attributeLicenseIndex.get(attribute.id);
+      return eligibleLicenses && [...selectedLicenses].some(id => eligibleLicenses.has(id));
+    });
+  }
+
+  function clearJurisdictionScope(id) {
+    const scope = scopeForJurisdiction(id);
+    for (const license of scope.licenses) state.licenses.delete(license.id);
+    for (const attribute of scope.attributes) state.attributes.delete(attribute.id);
+    save();
+    render();
+  }
+
+  function clearAllScope() {
+    state.licenses.clear();
+    state.attributes.clear();
+    save();
+    render();
+  }
+
   function renderSidebar() {
     const box = $('#sidebar');
     box.innerHTML = '';
 
-    const project = el('div', 'field-group project-fields');
-    project.appendChild(el('h2', null, t('secProject')));
-    project.appendChild(field(t('projectName'), 'text', state.project.name, value => {
+    const drawerHead = el('div', 'scope-drawer-head');
+    drawerHead.appendChild(el('h2', null, t('scopeTitle')));
+    const close = el('button', 'scope-close', t('btnClose'));
+    close.type = 'button';
+    close.addEventListener('click', closeScopeDrawer);
+    drawerHead.appendChild(close);
+    box.appendChild(drawerHead);
+
+    const project = el('details', 'scope-project');
+    project.open = projectPanelOpen;
+    const projectSummary = el('summary');
+    projectSummary.appendChild(el('span', null, t('scopeProjectDetails')));
+    if (state.project.name) projectSummary.appendChild(el('small', null, state.project.name));
+    project.appendChild(projectSummary);
+    const projectFields = el('div', 'project-fields');
+    projectFields.appendChild(field(t('projectName'), 'text', state.project.name, value => {
       state.project.name = value;
       save();
       updatePrintHeader();
     }, { maxlength: 200, placeholder: t('projectNamePlaceholder') }));
-    project.appendChild(field(t('asOfDate'), 'date', state.project.asOfDate, value => {
+    projectFields.appendChild(field(t('asOfDate'), 'date', state.project.asOfDate, value => {
       state.project.asOfDate = value || today();
       save();
       render();
     }));
+    project.appendChild(projectFields);
+    project.addEventListener('toggle', () => { projectPanelOpen = project.open; });
     box.appendChild(project);
 
-    const licences = el('div', 'field-group');
-    licences.appendChild(el('h2', null, t('secLicenses')));
-    let lastJurisdiction = null;
-    let lastGroup = null;
-    for (const rawLicence of HKCC.licenses) {
-      const licence = trLicense(rawLicence);
-      if (rawLicence.jurisdiction !== lastJurisdiction) {
-        licences.appendChild(el('div', 'opt-group-jurisdiction', jurisdictionLabel(rawLicence.jurisdiction)));
-        lastJurisdiction = rawLicence.jurisdiction;
-        lastGroup = null;
-      }
-      if (licence.group !== lastGroup) {
-        licences.appendChild(el('div', 'opt-group-label', licence.group));
-        lastGroup = licence.group;
-      }
-      licences.appendChild(option(rawLicence.id, licence, state.licenses));
+    if (!HKCC.jurisdictions.some(j => j.id === activeScopeJurisdiction)) {
+      activeScopeJurisdiction = preferredScopeJurisdiction();
     }
-    box.appendChild(licences);
 
-    const attributes = el('div', 'field-group');
-    attributes.appendChild(el('h2', null, t('secAttributes')));
-    lastJurisdiction = null;
-    for (const rawAttribute of HKCC.attributes) {
-      if (rawAttribute.jurisdiction !== lastJurisdiction) {
-        attributes.appendChild(el('div', 'opt-group-jurisdiction', jurisdictionLabel(rawAttribute.jurisdiction)));
-        lastJurisdiction = rawAttribute.jurisdiction;
-      }
-      attributes.appendChild(option(rawAttribute.id, trAttribute(rawAttribute), state.attributes));
+    const scopeHeading = el('h2', 'scope-section-title', t('scopeJurisdictions'));
+    box.appendChild(scopeHeading);
+    const tabs = el('div', 'scope-jurisdiction-tabs');
+    tabs.setAttribute('role', 'tablist');
+    tabs.setAttribute('aria-label', t('scopeJurisdictions'));
+    for (const jurisdiction of HKCC.jurisdictions) {
+      const jurisdictionScope = scopeForJurisdiction(jurisdiction.id);
+      const count = jurisdictionScope.selectedLicenses.length + jurisdictionScope.selectedAttributes.length;
+      const button = el('button', 'scope-jurisdiction-tab');
+      button.type = 'button';
+      button.id = `scope-tab-${jurisdiction.id}`;
+      button.setAttribute('role', 'tab');
+      button.setAttribute('aria-selected', String(activeScopeJurisdiction === jurisdiction.id));
+      button.setAttribute('aria-controls', `scope-panel-${jurisdiction.id}`);
+      button.setAttribute('aria-label', t('scopeJurisdictionTab', { name: jurisdictionLabel(jurisdiction.id) }));
+      button.classList.toggle('active', activeScopeJurisdiction === jurisdiction.id);
+      button.classList.toggle('configured', count > 0);
+      button.appendChild(el('span', null, jurisdictionLabel(jurisdiction.id)));
+      if (count) button.appendChild(el('b', null, count));
+      button.addEventListener('click', () => {
+        activeScopeJurisdiction = jurisdiction.id;
+        renderSidebar();
+      });
+      tabs.appendChild(button);
     }
-    box.appendChild(attributes);
+    box.appendChild(tabs);
+
+    const jurisdiction = HKCC.jurisdictions.find(j => j.id === activeScopeJurisdiction);
+    if (jurisdiction) {
+      const jurisdictionScope = scopeForJurisdiction(jurisdiction.id);
+      const panel = el('section', 'scope-jurisdiction-panel');
+      panel.id = `scope-panel-${jurisdiction.id}`;
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-labelledby', `scope-tab-${jurisdiction.id}`);
+
+      const panelHead = el('div', 'scope-panel-head');
+      const title = el('div');
+      title.appendChild(el('h3', null, jurisdictionLabel(jurisdiction.id)));
+      const selectedSummary = jurisdictionScope.selectedLicenses.length || jurisdictionScope.selectedAttributes.length ?
+        t('scopeConfigured', {
+          licenses: jurisdictionScope.selectedLicenses.length,
+          attributes: jurisdictionScope.selectedAttributes.length
+        }) : t('scopeNotConfigured');
+      title.appendChild(el('p', null, selectedSummary));
+      panelHead.appendChild(title);
+      if (jurisdictionScope.selectedLicenses.length || jurisdictionScope.selectedAttributes.length) {
+        const clear = el('button', 'scope-clear-jurisdiction', t('scopeClearJurisdiction'));
+        clear.type = 'button';
+        clear.addEventListener('click', () => clearJurisdictionScope(jurisdiction.id));
+        panelHead.appendChild(clear);
+      }
+      panel.appendChild(panelHead);
+
+      panel.appendChild(el('h4', 'scope-subheading', t('scopeEntities')));
+      const groups = [];
+      for (const rawLicense of jurisdictionScope.licenses) {
+        let group = groups.find(item => item.key === rawLicense.group);
+        if (!group) {
+          group = { key: rawLicense.group, label: trLicense(rawLicense).group, licenses: [] };
+          groups.push(group);
+        }
+        group.licenses.push(rawLicense);
+      }
+
+      for (const group of groups) {
+        const groupKey = `${jurisdiction.id}:${group.key}`;
+        const selectedCount = group.licenses.filter(item => state.licenses.has(item.id)).length;
+        const stored = licenseGroupState.get(groupKey);
+        const isOpen = stored == null ? selectedCount > 0 : stored;
+        const groupBox = el('div', 'scope-license-group');
+        const toggle = el('button', 'scope-license-group-toggle');
+        toggle.type = 'button';
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        toggle.setAttribute('aria-label', t('scopeGroupToggle', { name: group.label }));
+        toggle.appendChild(el('span', 'scope-chevron', isOpen ? '▾' : '▸'));
+        toggle.appendChild(el('span', 'scope-license-group-name', group.label));
+        toggle.appendChild(el('span', 'scope-license-group-count', `${selectedCount}/${group.licenses.length}`));
+        toggle.addEventListener('click', () => {
+          licenseGroupState.set(groupKey, !isOpen);
+          renderSidebar();
+        });
+        groupBox.appendChild(toggle);
+        if (isOpen) {
+          const options = el('div', 'scope-license-options');
+          for (const rawLicense of group.licenses) {
+            options.appendChild(option(rawLicense.id, trLicense(rawLicense), state.licenses));
+          }
+          groupBox.appendChild(options);
+        }
+        panel.appendChild(groupBox);
+      }
+
+      panel.appendChild(el('h4', 'scope-subheading scope-characteristics-heading', t('scopeCharacteristics')));
+      const attributes = relevantAttributes(jurisdictionScope);
+      if (!jurisdictionScope.selectedLicenses.length && !jurisdictionScope.selectedAttributes.length) {
+        panel.appendChild(el('p', 'scope-hint', t('scopeSelectEntityFirst')));
+      } else {
+        const attributeOptions = el('div', 'scope-attribute-options');
+        for (const rawAttribute of attributes) {
+          attributeOptions.appendChild(option(rawAttribute.id, trAttribute(rawAttribute), state.attributes));
+        }
+        panel.appendChild(attributeOptions);
+      }
+      box.appendChild(panel);
+    }
+
+    const current = el('section', 'scope-current');
+    const currentHead = el('div', 'scope-current-head');
+    currentHead.appendChild(el('h2', null, t('scopeCurrent')));
+    if (state.licenses.size || state.attributes.size) {
+      const clear = el('button', null, t('scopeClearAll'));
+      clear.type = 'button';
+      clear.addEventListener('click', clearAllScope);
+      currentHead.appendChild(clear);
+    }
+    current.appendChild(currentHead);
+    if (!state.licenses.size && !state.attributes.size) {
+      current.appendChild(el('p', 'scope-hint', t('scopeCurrentEmpty')));
+    } else {
+      for (const item of HKCC.jurisdictions) {
+        const itemScope = scopeForJurisdiction(item.id);
+        if (!itemScope.selectedLicenses.length && !itemScope.selectedAttributes.length) continue;
+        const row = el('div', 'scope-current-row');
+        row.appendChild(el('strong', null, jurisdictionLabel(item.id)));
+        const labels = [
+          ...itemScope.selectedLicenses.map(entry => trLicense(entry).label),
+          ...itemScope.selectedAttributes.map(entry => trAttribute(entry).label)
+        ];
+        row.appendChild(el('span', null, labels.join(HKCC.locale === 'en' ? '; ' : '；')));
+        current.appendChild(row);
+      }
+      current.appendChild(el('div', 'scope-control-count',
+        t('scopeControlCount', { n: HKCC.controls.filter(applies).length })));
+    }
+    box.appendChild(current);
   }
 
   function field(labelText, type, value, onChange, options) {
@@ -277,11 +455,15 @@
     updatePrintHeader();
     $('#merge').checked = state.merge;
     $('#gaps').checked = state.gapsOnly;
+    $('#jurisdiction-filter').value = state.jurisdiction;
     $('#domain-filter').value = state.domain;
 
     const active = HKCC.controls.filter(applies);
     const allGroups = E.cluster(active, byId, state.merge);
     let visible = allGroups.filter(matchesQuery);
+    if (state.jurisdiction) {
+      visible = visible.filter(group => group.some(c => controlJurisdictionId(c) === state.jurisdiction));
+    }
     if (state.domain) visible = visible.filter(group => group.some(c => c.domain === state.domain));
     if (state.gapsOnly) visible = visible.filter(group => E.pendingCount(group, state.assessments) > 0);
     visible.sort(compareGroups);
@@ -563,10 +745,14 @@
     return [...licences, ...attributes].join(HKCC.locale === 'en' ? '; ' : '；');
   }
 
-  function controlJurisdiction(control) {
+  function controlJurisdictionId(control) {
     const licenceId = control.applicability.licenses[0];
-    const licence = HKCC.licenses.find(item => item.id === licenceId);
-    return licence ? jurisdictionLabel(licence.jurisdiction) : '';
+    return licenseById.get(licenceId)?.jurisdiction || '';
+  }
+
+  function controlJurisdiction(control) {
+    const id = controlJurisdictionId(control);
+    return id ? jurisdictionLabel(id) : '';
   }
 
   function toCSV() {
@@ -658,6 +844,7 @@
     }));
     if (!confirmed) return;
     hydrate(data);
+    activeScopeJurisdiction = preferredScopeJurisdiction();
     save();
     render();
   }
@@ -684,6 +871,19 @@
   }
 
   function renderDomainOptions() {
+    const jurisdictionSelect = $('#jurisdiction-filter');
+    jurisdictionSelect.innerHTML = '';
+    const allJurisdictions = el('option', null, t('allJurisdictions'));
+    allJurisdictions.value = '';
+    jurisdictionSelect.appendChild(allJurisdictions);
+    for (const jurisdiction of HKCC.jurisdictions) {
+      const option = el('option', null, trJurisdiction(jurisdiction).label);
+      option.value = jurisdiction.id;
+      jurisdictionSelect.appendChild(option);
+    }
+    jurisdictionSelect.value = state.jurisdiction;
+    jurisdictionSelect.setAttribute('aria-label', t('jurisdictionFilterAria'));
+
     const select = $('#domain-filter');
     select.innerHTML = '';
     const all = el('option', null, t('allDomains'));
@@ -705,6 +905,8 @@
     $('#export-csv').textContent = t('btnExport');
     $('#print').textContent = t('btnPrint');
     $('#reset').textContent = t('btnReset');
+    $('#header-more-toggle').textContent = t('btnMore');
+    $('#scope-open').textContent = t('btnEditScope');
     const theme = $('#theme');
     theme.textContent = t('btnTheme');
     theme.title = t('btnThemeTitle');
@@ -737,12 +939,57 @@
   function renderAll() {
     renderChrome();
     render();
+    syncHeaderMore();
+    syncScopeDrawer();
+  }
+
+  function syncHeaderMore() {
+    const actions = $('.header-actions');
+    const toggle = $('#header-more-toggle');
+    actions.classList.toggle('more-open', headerMoreOpen);
+    toggle.setAttribute('aria-expanded', String(headerMoreOpen));
+  }
+
+  function closeHeaderMore() {
+    if (!headerMoreOpen) return;
+    headerMoreOpen = false;
+    syncHeaderMore();
+  }
+
+  function syncScopeDrawer() {
+    const isMobile = mobileScopeQuery.matches;
+    const open = isMobile && scopeDrawerOpen;
+    document.body.classList.toggle('scope-drawer-open', open);
+    $('#scope-open').setAttribute('aria-expanded', String(open));
+    const sidebar = $('#sidebar');
+    sidebar.inert = isMobile && !open;
+    sidebar.setAttribute('aria-hidden', String(isMobile && !open));
+  }
+
+  function openScopeDrawer() {
+    if (!mobileScopeQuery.matches) return;
+    scopeReturnFocus = document.activeElement;
+    scopeDrawerOpen = true;
+    closeHeaderMore();
+    syncScopeDrawer();
+    requestAnimationFrame(() => $('.scope-close', $('#sidebar'))?.focus());
+  }
+
+  function closeScopeDrawer() {
+    if (!scopeDrawerOpen) return;
+    scopeDrawerOpen = false;
+    syncScopeDrawer();
+    if (scopeReturnFocus?.focus) scopeReturnFocus.focus();
+    scopeReturnFocus = null;
   }
 
   function init() {
     load();
+    activeScopeJurisdiction = preferredScopeJurisdiction();
+    projectPanelOpen = !state.project.name;
     HKCC.applyDocumentLocale();
     const domainFilter = $('#domain-filter');
+    const jurisdictionFilter = $('#jurisdiction-filter');
     $('#q').addEventListener('input', event => {
       state.query = event.target.value.trim();
       render();
@@ -758,6 +1005,10 @@
     });
     domainFilter.addEventListener('change', event => {
       state.domain = event.target.value;
+      render();
+    });
+    jurisdictionFilter.addEventListener('change', event => {
+      state.jurisdiction = event.target.value;
       render();
     });
     $('#export-csv').addEventListener('click', () =>
@@ -782,9 +1033,12 @@
       state.assessments = Object.create(null);
       state.unresolvedAssessments = Object.create(null);
       state.query = '';
+      state.jurisdiction = '';
       state.domain = '';
       state.gapsOnly = false;
       $('#q').value = '';
+      activeScopeJurisdiction = HKCC.jurisdictions[0]?.id || '';
+      projectPanelOpen = true;
       save();
       render();
     });
@@ -793,6 +1047,26 @@
       const next = current === 'dark' ? 'light' : current === 'light' ? '' : 'dark';
       if (next) document.documentElement.setAttribute('data-theme', next);
       else document.documentElement.removeAttribute('data-theme');
+    });
+
+    $('#header-more-toggle').addEventListener('click', event => {
+      event.stopPropagation();
+      headerMoreOpen = !headerMoreOpen;
+      syncHeaderMore();
+    });
+    $('#secondary-actions').addEventListener('click', event => {
+      if (event.target.closest('button')) closeHeaderMore();
+    });
+    $('#scope-open').addEventListener('click', openScopeDrawer);
+    $('#scope-backdrop').addEventListener('click', closeScopeDrawer);
+    mobileScopeQuery.addEventListener('change', syncScopeDrawer);
+    document.addEventListener('click', event => {
+      if (headerMoreOpen && !event.target.closest('.header-actions')) closeHeaderMore();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      if (scopeDrawerOpen) closeScopeDrawer();
+      else closeHeaderMore();
     });
 
     const language = $('#lang');

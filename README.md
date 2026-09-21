@@ -11,9 +11,9 @@
   <p>
     <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
-    <img src="https://img.shields.io/badge/version-1.7.0-0ea5e9" alt="Version 1.7.0">
-    <img src="https://img.shields.io/badge/controls-211-16a34a" alt="211 controls">
-    <img src="https://img.shields.io/badge/sources-25-64748B" alt="25 sources">
+    <img src="https://img.shields.io/badge/version-1.9.0-0ea5e9" alt="Version 1.9.0">
+    <img src="https://img.shields.io/badge/controls-270-16a34a" alt="270 controls">
+    <img src="https://img.shields.io/badge/sources-29-64748B" alt="29 sources">
     <img src="https://img.shields.io/badge/jurisdictions-HK%20%C2%B7%20SG-0ea5e9" alt="Two jurisdictions">
     <img src="https://img.shields.io/badge/languages-EN%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E7%AE%80-7c3aed" alt="Three languages">
     <img src="https://img.shields.io/badge/zero%20dependencies-double--click%20to%20run-7c3aed" alt="Zero dependency">
@@ -61,9 +61,10 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 
 | Feature | Description |
 | --- | --- |
-| **Grouped by jurisdiction** | Licences and business characteristics in the sidebar are grouped by jurisdiction (Hong Kong / Singapore); licences from several jurisdictions can be ticked at once |
-| **Filter by licence** | 17 licence / entity types: 14 in Hong Kong (SFC regulated activities, VASP, authorized institutions, stored value facilities, general companies) + 3 in Singapore (banks, capital markets services licensees and related entities, licensed digital token service providers) |
-| **Narrow by business profile** | 7 characteristics (internet trading, e-banking, personal data processing, CI designation, outsourcing/cloud, use of AI models, online financial services over the internet) decide whether a provision applies to a given licence |
+| **Jurisdiction-first scope builder** | Switch between Hong Kong and Singapore, expand entities by regulator, and see only the business characteristics relevant to the selected entities; licences from several jurisdictions can remain selected at once |
+| **Jurisdiction result filter** | Focus the control list on Hong Kong or Singapore without changing the saved assessment scope |
+| **Filter by licence** | 18 licence / entity types: 15 in Hong Kong (SFC regulated activities, VASP, authorized institutions, stored value facilities, IA-authorized insurers, general companies) + 3 in Singapore (banks, capital markets services licensees and related entities, licensed digital token service providers) |
+| **Narrow by business profile** | 8 characteristics (internet trading, e-banking, personal data processing, CI designation, outsourcing/cloud, use of AI models, IA CRAF scope, online financial services over the internet) decide whether a provision applies to a given licence |
 | **De-duplication and cross-mapping** | Where several regulators impose the same requirement, it is merged into a single card listing each one's own provision and clause number — whether that's Hong Kong's SFC and HKMA, or Singapore's MAS across its three near-identical Notices on Cyber Hygiene to different entity types |
 | **Traceable to source** | Every control carries a description, clause number, issue and verification dates, official link, and a verbatim / excerpt / summary label for its English source text |
 | **Assessment work record** | Record status, implementation notes, evidence references, owner and target date for each individual regulatory control |
@@ -75,7 +76,7 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 
 ## Coverage
 
-v1.7.0 contains **211 controls** drawn from **25** official documents, across Hong Kong and Singapore.
+v1.9.0 contains **270 controls** drawn from **29** official documents, across Hong Kong and Singapore.
 Each source carries its own `verifiedOn` — the day its link and version were last checked against the
 regulator's website — because the documents span 2001 to 2026 and are re-checked at different times. The
 header shows the **earliest** of those dates, so the freshness claimed is the weakest link, never the most
@@ -112,6 +113,15 @@ recently touched one. A scheduled workflow re-checks every link weekly.
 | [Guideline on Supervision of Stored Value Facility Licensees (G.N. 5043)](https://www.hkma.gov.hk/media/eng/doc/key-functions/financial-infrastructure/Guidelines-on-supervision-of-SVF-licensees_Eng.pdf) | 2016-09 | Issued under s.54(1A)(b) of the Payment Systems and Stored Value Facilities Ordinance; technology risk, payment security and business continuity requirements in sections 7.2 / 7.3 / 7.4 |
 | [Practice Note on Supervision of Stored Value Facility Licensees](https://www.hkma.gov.hk/media/eng/doc/key-functions/financial-infrastructure/PN_on_supervision_of_SVF_licensees_eng.pdf) | 2025-10 | Explains how each principle is met in practice, including the anti-scam rule: **no hyperlinks embedded in messages** |
 | [Code of Practice for the SVF sector under the CI Ordinance](https://www.occics.gov.hk/filemanager/en/content_19/SCoP_SVF_Licensees_en.pdf) | 2026-06-12 | Applies to SVF licensees designated as CI operators |
+
+### IA — authorized insurers (59 controls)
+
+| Document | Date | Notes |
+| --- | --- | --- |
+| [Guideline on Cybersecurity (GL20), including CRAF](https://www.ia.org.hk/en/legislative_framework/files/GL20_Eng.pdf) | 2024-12 | Effective **2025-01-01**; 19 controls from GL20 sections 5–10, 13 CRAF assessment/submission controls, and 27 component-level controls covering every component of the 216-principle Annex B matrix. Relevant incidents must be reported to the IA within **72 hours** of detection |
+| [Frequently Asked Questions on GL20](https://www.ia.org.hk/en/legislative_framework/files/FAQ_GL20.pdf) | 2024-11 | Clarifies assessment frequency, ad hoc assessments, remediation timing, cloud services, third parties and sampling |
+| [Inherent Risk Rating Assessment Template](https://www.ia.org.hk/en/legislative_framework/files/IA_GL20_Inherent_Risk_Rating_Assessment_template.xlsx) | 2024-12 | Official five-category inherent-risk workbook and sign-off form |
+| [Cybersecurity Maturity Assessment Template](https://www.ia.org.hk/en/legislative_framework/files/IA_GL20_Cybersecurity_Maturity_Assessment_template.xlsx) | 2024-12 | Official workbook for assessing all 216 control principles across seven domains. The app groups those principles by their 27 regulatory components; use the workbook for the required principle-by-principle return |
 
 ### Critical infrastructure (13 controls)
 
@@ -161,7 +171,7 @@ operations under severe but plausible scenarios", say, or merging the mandatory 
 notification with voluntary notification under the PDPO. Those are different obligations, and merging them
 would mislead.
 
-Selecting every licence and characteristic, the 211 provisions collapse to **160** distinct requirements. A
+Selecting every licence and characteristic, the 270 provisions collapse to **219** distinct requirements. A
 platform operator that ticks VASP and internet trading sees 90 applicable provisions collapse to **61** —
 the SFC wrote Part XII of the VATP Guidelines closely along the lines of the Hacking Risks Guidelines, so
 most of it is the same obligation stated twice, and merging is what keeps the list honest.
@@ -262,12 +272,6 @@ overlay files in `data/i18n/`:
 
 ## Known gaps
 
-**The Insurance Authority (IA) cybersecurity guidelines are not yet included.** The whole of `ia.org.hk`
-sits behind Cloudflare bot verification, so automated tools cannot retrieve the source PDFs. This project
-does not accept provisions written from memory, so no IA controls will be added until the official text can
-be obtained, and insurance intermediaries / authorized insurers are not yet listed among the licence
-options. Pull requests welcome — please cite the official PDF and clause numbers.
-
 **Singapore's first phase covers only core technology risk and cyber hygiene.** MAS issues near-identical
 Notices on Technology Risk Management to several sectors (banks, merchant banks, finance companies,
 insurers, capital markets services licensees, and more — FSM-N03/05/07/09/11/13/17/19/21/23/25 and others);
@@ -301,7 +305,7 @@ translations fails the build. Unit tests cover applicability, merging, v1 migrat
 due dates and CSV injection protection. Sources unchecked for more than 180 days raise a warning.
 
 `.github/workflows/ci.yml` runs this on every pull request, and also confirms the generated Traditional
-files are up to date. A separate weekly workflow re-checks all 25 source links:
+files are up to date. A separate weekly workflow re-checks all 29 source links:
 
 ```bash
 node tools/check-links.mjs

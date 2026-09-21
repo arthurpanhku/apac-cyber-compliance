@@ -13,6 +13,7 @@ HKCC.addLicenses([
   { id: 'sfc-vasp', jurisdiction: 'hk', group: 'SFC 持牌法团', label: 'SFC 持牌虚拟资产服务提供者 / 交易平台', note: 'VASP / VATP' },
   { id: 'hkma-ai', jurisdiction: 'hk', group: 'HKMA 认可机构', label: '认可机构（银行 / 有限制牌照银行 / 接受存款公司）', note: 'Authorized Institution' },
   { id: 'hkma-svf', jurisdiction: 'hk', group: 'HKMA 认可机构', label: '储值支付工具持牌人', note: 'Stored Value Facility licensee' },
+  { id: 'ia-authorized-insurer', jurisdiction: 'hk', group: 'IA 获授权保险人', label: '获授权保险人', note: 'GL20 主体适用；不包括专属自保保险人及海事相互保险人' },
   { id: 'other', jurisdiction: 'hk', group: '其他', label: '无上述金融牌照（一般企业）', note: '仍受《个人资料（私隐）条例》约束' }
 ]);
 
@@ -23,5 +24,6 @@ HKCC.addAttributes([
   { id: 'personal-data', jurisdiction: 'hk', label: '收集或处理个人资料', note: '触发《个人资料（私隐）条例》DPP4 资料保安要求' },
   { id: 'ci-designated', jurisdiction: 'hk', label: '已被指定为关键基础设施营运者', note: '触发《保护关键基础设施（电脑系统）条例》三类法定责任' },
   { id: 'outsourcing', jurisdiction: 'hk', label: '使用第三方服务商或云端服务', note: '触发外判与供应链管理要求' },
-  { id: 'ai-models', jurisdiction: 'hk', label: '在营运中使用 AI 语言模型', note: '触发 2026 年 SFC / HKMA 关于 AI 驱动网络攻击的通函' }
+  { id: 'ai-models', jurisdiction: 'hk', label: '在营运中使用 AI 语言模型', note: '触发 2026 年 SFC / HKMA 关于 AI 驱动网络攻击的通函' },
+  { id: 'ia-craf', jurisdiction: 'hk', label: '须进行 IA 网络韧性评估（CRAF）', note: '适用于在香港或从香港经营保险业务且不属于 GL20 第 3.2 段豁免类别的获授权保险人' }
 ]);
