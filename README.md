@@ -9,7 +9,7 @@
     <a href="README.zh-Hant.md">繁體</a> · <a href="README.zh-Hans.md">简体</a> · <strong>English</strong>
   </p>
   <p>
-    <a href="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+    <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
     <img src="https://img.shields.io/badge/version-1.7.0-0ea5e9" alt="Version 1.7.0">
     <img src="https://img.shields.io/badge/controls-211-16a34a" alt="211 controls">
@@ -49,7 +49,7 @@ Ordinance) and **Singapore** (MAS), with the architecture built to add further A
 Nothing to install, no build step:
 
 ```bash
-git clone https://github.com/arthurpanhku/hk-cyber-compliance.git
+git clone https://github.com/arthurpanhku/apac-cyber-compliance.git
 ```
 
 Then **double-click `index.html`**. Data is loaded as `.js` rather than `.json` precisely so that opening
