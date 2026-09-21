@@ -31,7 +31,7 @@ load('data/jurisdictions.js');
 for (const j of HKCC.jurisdictions) load(`data/${j.id}/sources.js`);
 
 const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ' +
-           'Chrome/124.0 Safari/537.36 hk-cyber-compliance-linkcheck/1.0';
+           'Chrome/124.0 Safari/537.36 apac-cyber-compliance-linkcheck/1.0';
 const TIMEOUT = 25;
 const CONCURRENCY = 4;
 

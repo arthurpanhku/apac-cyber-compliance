@@ -9,7 +9,7 @@
     <strong>繁體</strong> · <a href="README.zh-Hans.md">简体</a> · <a href="README.md">English</a>
   </p>
   <p>
-    <a href="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+    <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
     <img src="https://img.shields.io/badge/version-1.7.0-0ea5e9" alt="Version 1.7.0">
     <img src="https://img.shields.io/badge/控制點-211-16a34a" alt="211 controls">
@@ -43,7 +43,7 @@
 不需要安裝任何東西，也不需要建置步驟：
 
 ```bash
-git clone https://github.com/arthurpanhku/hk-cyber-compliance.git
+git clone https://github.com/arthurpanhku/apac-cyber-compliance.git
 ```
 
 然後**雙擊 `index.html`** 即可在瀏覽器中使用。資料以 `.js` 形式加載而非 `.json`，正是為了讓本地
