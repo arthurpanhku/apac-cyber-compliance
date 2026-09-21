@@ -230,6 +230,14 @@
       applicability: { licenses: ALL_SG }
     },
     {
+      id: 'MAS-TRMG-13.3', domain: 'assurance', priority: 'baseline', sourceId: 'mas-trm-guidelines', clause: '13.3',
+      title: '网络演习',
+      requirement: '机构须定期进行以情景为本的网络演习，以验证其应对网络威胁的回应、恢复及沟通计划，演习可包括社交工程、桌面推演或网络靶场演习；须按演习目标邀请相关持份者参与，包括高级管理层、业务部门、企业传讯、危机管理小组、服务提供者，以及负责网络威胁侦测、回应及恢复的技术人员。',
+      quote: 'Cyber Exercises',
+      quoteStatus: 'summary',
+      applicability: { licenses: ALL_SG }
+    },
+    {
       id: 'MAS-TRMG-13.4', domain: 'assurance', priority: 'baseline', sourceId: 'mas-trm-guidelines', clause: '13.4',
       title: '对抗性攻击模拟演习',
       requirement: '机构须进行对抗性攻击模拟演习，以测试并验证其网络防御及回应计划应对常见网络威胁的有效性；演习的目标、范围及交战规则须于演习开始前订明，并在严密监督下受控进行，以确保红队活动不会干扰生产系统。',

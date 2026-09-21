@@ -12,7 +12,7 @@
     <a href="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
     <img src="https://img.shields.io/badge/version-1.7.0-0ea5e9" alt="Version 1.7.0">
-    <img src="https://img.shields.io/badge/控制點-210-16a34a" alt="210 controls">
+    <img src="https://img.shields.io/badge/控制點-211-16a34a" alt="211 controls">
     <img src="https://img.shields.io/badge/條文出處-25-64748B" alt="25 sources">
     <img src="https://img.shields.io/badge/司法管轄區-HK%20%C2%B7%20SG-0ea5e9" alt="Two jurisdictions">
     <img src="https://img.shields.io/badge/語言-EN%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E7%AE%80-7c3aed" alt="Three languages">
@@ -69,7 +69,7 @@ git clone https://github.com/arthurpanhku/hk-cyber-compliance.git
 
 ## 覆蓋範圍
 
-v1.7.0 共 **210 條控制點**，來自 **25 份**官方文件，涵蓋香港與新加坡兩個司法管轄區。
+v1.7.0 共 **211 條控制點**，來自 **25 份**官方文件，涵蓋香港與新加坡兩個司法管轄區。
 每份出處各有自己的 `verifiedOn`——最近一次實際打開官網核對連結與版本的日期。條文發佈跨
 2001 至 2026 年、複核節奏各不相同，用一個全局日期會讓剛複核過的和多年沒碰的看起來一樣新。
 頁首顯示的是其中**最早**的一個，即以最弱的一環為準；另有每週自動巡檢全部連結的工作流。
@@ -121,7 +121,7 @@ v1.7.0 共 **210 條控制點**，來自 **25 份**官方文件，涵蓋香港�
 
 ## 新加坡
 
-### 金融管理局 MAS（58 條）
+### 金融管理局 MAS（59 條）
 
 | 文件 | 日期 | 說明 |
 | --- | --- | --- |
@@ -150,14 +150,14 @@ v1.7.0 共 **210 條控制點**，來自 **25 份**官方文件，涵蓋香港�
 例如把「每日離線備份」和「在嚴重情景下測試關鍵業務交付能力」合併，或把強制的 12 小時法定事故通報
 與《私隱條例》下的自願通報合併。兩者性質不同，合併會造成合規誤讀。
 
-在勾選全部牌照與業務特徵的最大範圍下，210 條條文合併為 **159 項**獨立要求。
+在勾選全部牌照與業務特徵的最大範圍下，211 條條文合併為 **160 項**獨立要求。
 平台營運者若勾選「虛擬資產服務提供者」與「互聯網交易」，90 條適用條文會合併為 **61 項**——
 證監會撰寫《虛擬資產交易平台營運者指引》第 XII 部時顯然以《黑客入侵風險指引》為藍本，
 大部分是同一項要求寫了兩遍，合併正是為了不讓清單虛胖。
 
 新加坡方面同樣如此：MAS 致銀行、資本市場金融機構、持牌數字代幣服務提供者的三份
-《網絡衞生通知》第 IV 段，條文幾乎逐字相同，只是主體名詞不同——58 條 MAS 控制點在勾選
-全部三種新加坡牌照時合併為 **45 項**。
+《網絡衞生通知》第 IV 段，條文幾乎逐字相同，只是主體名詞不同——59 條 MAS 控制點在勾選
+全部三種新加坡牌照時合併為 **46 項**。
 
 > **部署注意**：倉庫根目錄的 `.nojekyll` 不可刪除。GitHub Pages 預設以 Jekyll 處理站點，
 > 而 Jekyll 會忽略以下劃線開頭的路徑，導致 `data/_registry.js` 返回 404、整個應用無法啟動。

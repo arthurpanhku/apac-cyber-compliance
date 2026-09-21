@@ -12,7 +12,7 @@
     <a href="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
     <img src="https://img.shields.io/badge/version-1.7.0-0ea5e9" alt="Version 1.7.0">
-    <img src="https://img.shields.io/badge/controls-210-16a34a" alt="210 controls">
+    <img src="https://img.shields.io/badge/controls-211-16a34a" alt="211 controls">
     <img src="https://img.shields.io/badge/sources-25-64748B" alt="25 sources">
     <img src="https://img.shields.io/badge/jurisdictions-HK%20%C2%B7%20SG-0ea5e9" alt="Two jurisdictions">
     <img src="https://img.shields.io/badge/languages-EN%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E7%AE%80-7c3aed" alt="Three languages">
@@ -75,7 +75,7 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 
 ## Coverage
 
-v1.7.0 contains **210 controls** drawn from **25** official documents, across Hong Kong and Singapore.
+v1.7.0 contains **211 controls** drawn from **25** official documents, across Hong Kong and Singapore.
 Each source carries its own `verifiedOn` — the day its link and version were last checked against the
 regulator's website — because the documents span 2001 to 2026 and are re-checked at different times. The
 header shows the **earliest** of those dates, so the freshness claimed is the weakest link, never the most
@@ -128,7 +128,7 @@ recently touched one. A scheduled workflow re-checks every link weekly.
 
 ## Singapore
 
-### MAS (58 controls)
+### MAS (59 controls)
 
 | Document | Date | Notes |
 | --- | --- | --- |
@@ -161,15 +161,15 @@ operations under severe but plausible scenarios", say, or merging the mandatory 
 notification with voluntary notification under the PDPO. Those are different obligations, and merging them
 would mislead.
 
-Selecting every licence and characteristic, the 210 provisions collapse to **159** distinct requirements. A
+Selecting every licence and characteristic, the 211 provisions collapse to **160** distinct requirements. A
 platform operator that ticks VASP and internet trading sees 90 applicable provisions collapse to **61** —
 the SFC wrote Part XII of the VATP Guidelines closely along the lines of the Hacking Risks Guidelines, so
 most of it is the same obligation stated twice, and merging is what keeps the list honest.
 
 The same is true in Singapore: MAS's three Notices on Cyber Hygiene — to banks, to capital markets
 financial institutions, and to licensed digital token service providers — repeat paragraph IV almost
-verbatim, swapping only the entity noun. Selecting all three Singapore licences, the 58 MAS controls
-collapse to **45**.
+verbatim, swapping only the entity noun. Selecting all three Singapore licences, the 59 MAS controls
+collapse to **46**.
 
 > **Deployment note**: do not delete `.nojekyll` in the repository root. GitHub Pages processes sites with
 > Jekyll by default, and Jekyll ignores paths beginning with an underscore — which would make

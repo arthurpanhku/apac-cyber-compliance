@@ -20,7 +20,7 @@ HKCC.addSources({
     titleEn: 'MAS Notice FSM-N22 — Notice on Cyber Hygiene (Notice to capital markets financial institutions)',
     titleZh: 'FSM-N22《网络卫生通知》（致资本市场金融机构）',
     issued: '2024-05-09',
-    legalStatus: '根据《金融服务与市场法 2022》第 29(1) 条向资本市场服务持牌人及相关实体发出的法定通知，2024-05-10 生效',
+    legalStatus: '根据《金融服务与市场法 2022》第 29(1) 条向资本市场服务持牌人及相关实体发出的法定通知，2024-05-10 生效；2024-08-20 经 FSM-N22（修订）2024 修订，将获批准的集体投资计划受托人纳入适用范围',
     url: 'https://www.mas.gov.sg/-/media/mas-media-library/regulation/notices/trpd/notice-fsm-n22/mas-notice-fsm-n22.pdf',
     verifiedOn: '2026-09-21',
     status: 'current'
