@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       sourceId:
-        description: 'data/sources.js 中的出处 ID（如 sfc-vatp-guidelines）'
+        description: '出处 ID（如 sfc-vatp-guidelines、mas-fsm-n06），须已登记在 data/<jurisdiction>/sources.js'
         required: true
         type: string
       pages:
@@ -43,7 +43,7 @@ jobs:
 
       # 输入经环境变量传入，不直接插进 run: 的命令行——
       # ${{ inputs.* }} 会在 shell 解析前原样展开，拼进命令即是注入面。
-      # 出处 ID 是否合法由脚本自己对 data/sources.js 校验。
+      # 出处 ID 是否合法由脚本自己对各 data/<jurisdiction>/sources.js 校验。
       - name: node tools/fetch-source.mjs
         env:
           SOURCE_ID: ${{ inputs.sourceId }}
