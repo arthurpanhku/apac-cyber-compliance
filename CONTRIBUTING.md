@@ -4,7 +4,7 @@
 
 ## 基本原则
 
-1. **每条控制点必须可追溯到官方原文。** `sourceId` 指向 `data/sources.js` 中一份有官方链接的文件，
+1. **每条控制点必须可追溯到官方原文。** `sourceId` 指向 `data/<jurisdiction>/sources.js` 中一份有官方链接的文件，
    `clause` 填写条文中的实际条款编号（如 `1.1`、`(B)(iii)`、`7.3.4`）。不接受「综合业界实践」类条目。
 2. **`quote` 字段须诚实分类。** 逐字原文用 `quoteStatus: 'verbatim'`，删节内容用 `excerpt`，
    章节标题或来源说明用 `summary`。不要把标题或摘要标成逐字原文；中文说明写在 `requirement`。
@@ -45,19 +45,23 @@ node tools/check-links.mjs
 ## 连不上监管机构网站时
 
 撰写控制点必须逐字对照官方原文，但受限的开发环境（容器、代理、公司网络）
-常把 `www.sfc.hk`、`brdr.hkma.gov.hk`、`occics.gov.hk` 整域拦掉。
-GitHub Actions 的 runner 没有这个限制，所以取文这一步可以放到 CI 里跑：
+常把监管机构的官网整域拦掉——不止 `www.sfc.hk`、`brdr.hkma.gov.hk`、`occics.gov.hk`，
+`www.mas.gov.sg` 同样常被拦。GitHub Actions 的 runner 没有这个限制，
+所以取文这一步可以放到 CI 里跑：
 
-**Actions → 取回条文原文 → Run workflow**，填入出处 ID（与 `data/sources.js` 一致），
-PDF 可另填页码范围如 `1-20`。本地同样可用：
+**Actions → 取回条文原文 → Run workflow**，填入出处 ID（与 `data/<jurisdiction>/sources.js`
+一致，如 `sfc-vatp-guidelines`、`mas-cyber-hygiene`），PDF 可另填页码范围如 `1-20`。
+本地同样可用：
 
 ```bash
 node tools/fetch-source.mjs sfc-vatp-guidelines 1-20
 ```
 
 原文会转成纯文本，同时写进作业日志（不需额外出网即可阅读）与构建产物
-`source-text`（完整全文，保留 14 天）。只接受 `data/sources.js` 里已登记的出处 ID，
-不接受任意 URL——它是取官方原文的工具，不是通用抓取代理。
+`source-text`（完整全文，保留 14 天）。只接受各 `data/<jurisdiction>/sources.js` 里
+已登记的出处 ID，不接受任意 URL——它是取官方原文的工具，不是通用抓取代理。
+日志只印正文的前 1200 行；文件较长时（如指引类文件动辄五六十页）请用页码范围分几次取，
+或直接下载 `source-text` 构建产物看全文。
 
 **取回的原文不要提交进仓库**（`out/` 已在 `.gitignore` 中）。版权属于各监管机构，
 本项目只以结构化形式引述条文并链接官方出处。
@@ -75,7 +79,9 @@ python3 tools/gen-hant.py
 
 ## 多语言
 
-基础数据（`data/taxonomy.js`、`data/sources.js`、`data/controls/*.js`）一律以**简体中文**撰写，
+基础数据（`data/<jurisdiction>/taxonomy.js`、`data/<jurisdiction>/sources.js`、
+`data/<jurisdiction>/controls/*.js`、共用的 `data/domains.js`、`data/jurisdictions.js`）
+一律以**简体中文**撰写，
 其余语言以覆盖层形式放在 `data/i18n/`：
 
 | 文件 | 维护方式 |
@@ -112,14 +118,25 @@ python3 tools/gen-hant.py
 
 ## 新增一份法规
 
-1. 在 `data/sources.js` 加入出处条目（含官方链接、发布日期、法律地位）
-2. 在 `data/controls/` 新建或扩充对应文件
+1. 在对应司法管辖区的 `data/<jurisdiction>/sources.js` 加入出处条目（含官方链接、发布日期、法律地位）
+2. 在 `data/<jurisdiction>/controls/` 新建或扩充对应文件；牌照/业务特征不存在时先在
+   `data/<jurisdiction>/taxonomy.js` 补上（`jurisdiction` 字段须与目录一致）
 3. 在 `index.html` 的 `<script>` 列表中加入新文件
-4. 在 `data/i18n/en.js` 补上新控制点的英文
+4. 在 `data/i18n/en.js` 补上新控制点、新牌照/业务特征的英文
 5. 运行 `python3 tools/gen-hant.py` 生成繁体层
 6. 更新 `README.md` 与 `README.zh-Hans.md` 的覆盖范围表格与徽章中的控制点数量
    （`README.zh-Hant.md` 由脚本生成，不必手改）
 7. 运行校验并在浏览器实测
+
+## 新增一个司法管辖区
+
+1. 在 `data/jurisdictions.js` 登记新的司法管辖区 ID 与显示名称
+2. 新建 `data/<jurisdiction>/{sources.js,taxonomy.js,controls/}`，牌照与业务特征的
+   `jurisdiction` 字段须填新 ID；能复用的控制域优先复用 `data/domains.js` 里已有的，
+   只有确实不同类别的概念才新增
+3. 在 `data/i18n/en.js` 的 `jurisdictions` 里补上新管辖区的英文名，运行
+   `python3 tools/gen-hant.py` 生成繁体层（`jurisdictions.label` 会自动转换）
+4. 其余步骤同「新增一份法规」
 
 ## 什么不适合提交
 

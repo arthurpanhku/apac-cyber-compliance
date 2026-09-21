@@ -1,9 +1,9 @@
 <div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
-    <img src="assets/logo.svg" alt="香港网络安全合规助手" width="374">
+    <img src="assets/logo.svg" alt="亚太网络安全合规助手" width="374">
   </picture>
-  <p><strong>按牌照与业务特征，生成香港监管机构的网络安全控制点要求</strong></p>
+  <p><strong>按司法管辖区、牌照与业务特征，生成 APAC 监管机构的网络安全控制点要求</strong></p>
   <p>
     <!-- lang-nav -->
     <a href="README.zh-Hant.md">繁體</a> · <strong>简体</strong> · <a href="README.md">English</a>
@@ -11,12 +11,13 @@
   <p>
     <a href="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
-    <img src="https://img.shields.io/badge/version-1.6.0-0ea5e9" alt="Version 1.6.0">
-    <img src="https://img.shields.io/badge/控制点-152-16a34a" alt="152 controls">
-    <img src="https://img.shields.io/badge/条文出处-20-64748B" alt="20 sources">
+    <img src="https://img.shields.io/badge/version-1.7.0-0ea5e9" alt="Version 1.7.0">
+    <img src="https://img.shields.io/badge/控制点-210-16a34a" alt="210 controls">
+    <img src="https://img.shields.io/badge/条文出处-25-64748B" alt="25 sources">
+    <img src="https://img.shields.io/badge/司法管辖区-HK%20%C2%B7%20SG-0ea5e9" alt="Two jurisdictions">
     <img src="https://img.shields.io/badge/语言-EN%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E7%AE%80-7c3aed" alt="Three languages">
     <img src="https://img.shields.io/badge/零依赖-双击即用-7c3aed" alt="Zero dependency">
-    <img src="https://img.shields.io/badge/条文核验-2026--09--08-64748B" alt="Verified 2026-09-08">
+    <img src="https://img.shields.io/badge/条文核验-2026--09--21-64748B" alt="Verified 2026-09-21">
   </p>
 </div>
 
@@ -27,12 +28,15 @@
 
 ## 简介
 
-香港的金融机构同时受多个监管机构的网络安全要求约束：证监会（SFC）、金管局（HKMA）、私隐专员公署（PCPD），
-2026 年起还有《保护关键基础设施（电脑系统）条例》。条文散落在指引、通函、监管政策手册和实务守则中，
-同一项控制往往被多个机构以不同措辞重复要求。
+亚太地区的金融机构往往同时受多个司法管辖区、多个监管机构的网络安全要求约束。以香港为例，
+证监会（SFC）、金管局（HKMA）、私隐专员公署（PCPD），2026 年起还有《保护关键基础设施
+（电脑系统）条例》；新加坡则有金融管理局（MAS）。条文散落在指引、通函、法定通知、监管政策
+手册和实务守则中，同一项控制往往被多个机构以不同措辞重复要求。
 
-本工具把这些条文拆解为**可勾选的控制点**：选择贵公司持有的牌照与业务特征，即时得到适用的控制点清单，
-每条都标注**来源法规、条款编号、发布日期与官方原文链接**，并可自评打分、导出底稿。
+本工具把这些条文拆解为**可勾选的控制点**：先选择司法管辖区，再勾选贵公司持有的牌照与业务
+特征，即时得到适用的控制点清单，每条都标注**来源法规、条款编号、发布日期与官方原文链接**，
+并可自评打分、导出底稿。目前覆盖**香港**（SFC / HKMA / PCPD / 关键基础设施条例）与
+**新加坡**（MAS）；架构已支持逐步加入其他 APAC 司法管辖区。
 
 ## 快速开始
 
@@ -51,9 +55,10 @@ git clone https://github.com/arthurpanhku/hk-cyber-compliance.git
 
 | 功能 | 说明 |
 | --- | --- |
-| **按牌照筛选** | 14 种牌照／实体类型（SFC 各类受规管活动、VASP、认可机构、储值支付工具、一般企业） |
-| **按业务特征细分** | 6 项特征（互联网交易、电子银行、处理个人资料、关键基础设施指定、外判／云端、使用 AI 模型）决定同一牌照下条文是否适用 |
-| **控制点去重与交叉映射** | 同一项要求被 SFC 与 HKMA 同时规定时合并为一张卡片，并逐一列出各自的条文出处与条款编号 |
+| **按司法管辖区分组** | 侧栏的牌照与业务特征按司法管辖区（香港 / 新加坡）分组显示，可同时勾选多地牌照 |
+| **按牌照筛选** | 17 种牌照／实体类型：香港 14 种（SFC 各类受规管活动、VASP、认可机构、储值支付工具、一般企业）+ 新加坡 3 种（银行、资本市场服务持牌人及相关实体、持牌数字代币服务提供者） |
+| **按业务特征细分** | 7 项特征（互联网交易、电子银行、处理个人资料、关键基础设施指定、外判／云端、使用 AI 模型、透过互联网提供网上金融服务）决定同一牌照下条文是否适用 |
+| **控制点去重与交叉映射** | 同一项要求被多个监管机构同时规定时合并为一张卡片，并逐一列出各自的条文出处与条款编号——不论是香港 SFC 与 HKMA 之间，还是新加坡 MAS 致不同实体类型近乎逐字相同的三份《网络卫生通知》之间 |
 | **条文可追溯** | 每条控制附说明、条款、发布及核验日期、官方链接，并标明英文来源文字属于原文、节录或说明 |
 | **评估工作记录** | 每个监管控制可记录状态、实施说明、证据引用、负责人及目标完成日期 |
 | **整改清单** | 集中查看未评、部分及未实施控制，按控制领域筛选并标示逾期／30 日内到期 |
@@ -64,10 +69,12 @@ git clone https://github.com/arthurpanhku/hk-cyber-compliance.git
 
 ## 覆盖范围
 
-v1.6.0 共 **152 条控制点**，来自 **20 份**官方文件。每份出处各有自己的 `verifiedOn`——
-最近一次实际打开官网核对链接与版本的日期。条文发布跨 2001 至 2026 年、复核节奏各不相同，
-用一个全局日期会让刚复核过的和多年没碰的看起来一样新。页首显示的是其中**最早**的一个，
-即以最弱的一环为准；另有每周自动巡检全部链接的工作流。
+v1.7.0 共 **210 条控制点**，来自 **25 份**官方文件，涵盖香港与新加坡两个司法管辖区。
+每份出处各有自己的 `verifiedOn`——最近一次实际打开官网核对链接与版本的日期。条文发布跨
+2001 至 2026 年、复核节奏各不相同，用一个全局日期会让刚复核过的和多年没碰的看起来一样新。
+页首显示的是其中**最早**的一个，即以最弱的一环为准；另有每周自动巡检全部链接的工作流。
+
+## 香港
 
 ### 证监会 SFC（92 条）
 
@@ -112,6 +119,18 @@ v1.6.0 共 **152 条控制点**，来自 **20 份**官方文件。每份出处�
 | --- | --- |
 | [《个人资料（私隐）条例》（第 486 章）六项保障资料原则](https://www.pcpd.org.hk/english/data_privacy_law/6_data_protection_principles/principles.html) | 以 DPP4 资料保安原则为核心 |
 
+## 新加坡
+
+### 金融管理局 MAS（58 条）
+
+| 文件 | 日期 | 说明 |
+| --- | --- | --- |
+| [FSM-N06《网络卫生通知》（致新加坡银行）](https://www.mas.gov.sg/-/media/mas-media-library/regulation/notices/trpd/notice-fsm-n06/mas-notice-fsm-n06.pdf?sc_lang=en) | 2024-05-09 | 根据《金融服务与市场法 2022》第 29(1) 条发出的法定通知；管理员账户、安全补丁、保安标准、网络边界防御、防恶意软件、多重认证 |
+| [FSM-N22《网络卫生通知》（致资本市场金融机构）](https://www.mas.gov.sg/-/media/mas-media-library/regulation/notices/trpd/notice-fsm-n22/mas-notice-fsm-n22.pdf) | 2024-05-09 | 条文与 FSM-N06 几乎逐字相同；适用于核准交易所、结算所、资本市场服务持牌人、注册基金管理公司等 |
+| [FSM-N31《网络卫生通知》（致持牌数字代币服务提供者）](https://www.mas.gov.sg/-/media/mas-notice-fsm-n31---notice-on-cyber-hygiene.pdf) | 2025-05-30 | 条文与 FSM-N06 几乎逐字相同；适用于《金融服务与市场法》第 138 条下的持牌数字代币服务提供者 |
+| [FSM-N05《科技风险管理通知》（致新加坡银行）](https://www.mas.gov.sg/-/media/mas-media-library/regulation/notices/trpd/notice-fsm-n05/mas-notice-fsm-n05.pdf?sc_lang=en) | 2024-05-09 | 关键系统识别框架、年度非计划停机上限 **4 小时**、恢复时限目标 **4 小时**、**1 小时**内通报金管局、**14 日**内提交根因及影响分析报告、保护客户资料 |
+| [《科技风险管理指引》](https://www.mas.gov.sg/-/media/MAS/Regulations-and-Financial-Stability/Regulatory-and-Supervisory-Framework/Risk-Management/TRM-Guidelines-18-January-2021.pdf) | 2021-01-18 | 不具法律约束力的指引；治理监督、第三方管理、资讯科技韧性、存取控制、密码技术、数据与基础设施保安、网络保安运作与评估、网上金融服务、资讯科技审计 |
+
 ## 适用性判定规则
 
 每条控制点的 `applicability` 由两部分组成：
@@ -131,10 +150,14 @@ v1.6.0 共 **152 条控制点**，来自 **20 份**官方文件。每份出处�
 例如把「每日离线备份」和「在严重情景下测试关键业务交付能力」合并，或把强制的 12 小时法定事故通报
 与《私隐条例》下的自愿通报合并。两者性质不同，合并会造成合规误读。
 
-在勾选全部牌照与业务特征的最大范围下，152 条条文合并为 **114 项**独立要求。
+在勾选全部牌照与业务特征的最大范围下，210 条条文合并为 **159 项**独立要求。
 平台营运者若勾选「虚拟资产服务提供者」与「互联网交易」，90 条适用条文会合并为 **61 项**——
 证监会撰写《虚拟资产交易平台营运者指引》第 XII 部时显然以《黑客入侵风险指引》为蓝本，
 大部分是同一项要求写了两遍，合并正是为了不让清单虚胖。
+
+新加坡方面同样如此：MAS 致银行、资本市场金融机构、持牌数字代币服务提供者的三份
+《网络卫生通知》第 IV 段，条文几乎逐字相同，只是主体名词不同——58 条 MAS 控制点在勾选
+全部三种新加坡牌照时合并为 **45 项**。
 
 > **部署注意**：仓库根目录的 `.nojekyll` 不可删除。GitHub Pages 默认以 Jekyll 处理站点，
 > 而 Jekyll 会忽略以下划线开头的路径，导致 `data/_registry.js` 返回 404、整个应用无法启动。
@@ -175,20 +198,30 @@ python3 tools/gen-hant.py
 .nojekyll                 关闭 GitHub Pages 的 Jekyll 处理（必需，勿删）
 data/
 ├── _registry.js          全局注册表与语言查找
-├── sources.js            20 份条文出处（标题、日期、法律地位、官方链接）
-├── taxonomy.js           14 种牌照 · 6 项业务特征 · 11 个控制域
+├── jurisdictions.js      司法管辖区登记（目前：香港 hk、新加坡 sg）
+├── domains.js            11 个控制域——跨司法管辖区共用，用于结果分组
 ├── i18n/
 │   ├── zh-Hans.js        简体界面字符串
 │   ├── zh-Hant.js        繁体层（生成）
 │   └── en.js             英文层
-└── controls/
-    ├── sfc-internet-trading.js    SFC 黑客风险指引 20 项 + 操守准则
-    ├── sfc-circulars-2026.js      SFC 2026 年两份通函
-    ├── sfc-vatp.js                虚拟资产交易平台指引第 X、XII 部及附表 3
-    ├── hkma.js                    TM-G-1 / TM-E-1 / TM-C-1 / OR-2 / SA-2 / C-RAF
-    ├── svf.js                     储值支付工具指引与实务备考
-    ├── pdpo.js                    六项保障资料原则
-    └── critical-infrastructure.js 关键基础设施条例三类责任
+├── hk/                   香港：14 种牌照 · 6 项业务特征
+│   ├── sources.js        20 份条文出处（标题、日期、法律地位、官方链接）
+│   ├── taxonomy.js       牌照与业务特征
+│   └── controls/
+│       ├── sfc-internet-trading.js    SFC 黑客风险指引 20 项 + 操守准则
+│       ├── sfc-circulars-2026.js      SFC 2026 年两份通函
+│       ├── sfc-vatp.js                虚拟资产交易平台指引第 X、XII 部及附表 3
+│       ├── hkma.js                    TM-G-1 / TM-E-1 / TM-C-1 / OR-2 / SA-2 / C-RAF
+│       ├── svf.js                     储值支付工具指引与实务备考
+│       ├── pdpo.js                    六项保障资料原则
+│       └── critical-infrastructure.js 关键基础设施条例三类责任
+└── sg/                   新加坡：3 种牌照 · 1 项业务特征
+    ├── sources.js        5 份条文出处
+    ├── taxonomy.js       牌照与业务特征
+    └── controls/
+        ├── cyber-hygiene.js    FSM-N06 / N22 / N31《网络卫生通知》
+        ├── trm-notice.js       FSM-N05《科技风险管理通知》
+        └── trm-guidelines.js   《科技风险管理指引》
 ```
 
 单条控制点的形态（以简体撰写，其余语言由 `data/i18n/` 的覆盖层提供）：
@@ -215,6 +248,14 @@ data/
 **保险业监管局（IA）的网络安全指引尚未纳入。** `ia.org.hk` 全站启用了 Cloudflare 机器人验证，
 自动化工具无法取得原文 PDF。本项目不接受凭记忆撰写的条文，因此在取得官方原文前不会加入 IA 相关控制点，
 牌照选项中亦暂未列出保险中介人／授权保险人。欢迎以 PR 形式补充（请附官方 PDF 出处与条款编号）。
+
+**新加坡第一期只覆盖核心科技风险与网络卫生。** MAS 就科技风险管理向不同界别（银行、商人银行、
+财务公司、保险公司、资本市场服务持牌人等）发出多份近乎相同的通知（FSM-N03/05/07/09/11/13/
+17/19/21/23/25 等），本项目目前只录入面向银行的 FSM-N05 作为该系列的代表；《网络卫生通知》
+则录入了银行（N06）、资本市场金融机构（N22）及数字代币服务提供者（N31）三份，未包括其余
+界别版本。《科技风险管理指引》第 1、2、4–7 章（前言、适用范围、风险管理框架、IT 项目管理、
+软件开发、IT 服务管理）尚未拆解为控制点；outsourcing 相关的《外判指引》等其他 MAS 文件亦不
+在本期范围内。欢迎以 PR 形式补充（请附官方 PDF 出处与条款编号）。
 
 **条文是否仍现行有效，最终由使用者自行核对。** 每份出处的 `verifiedOn` 记录的是某一天
 有人实际打开官网核对过，不是持续监控；监管机构随时可能修订或撤回条文。

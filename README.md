@@ -1,9 +1,9 @@
 <div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
-    <img src="assets/logo.svg" alt="HK Cyber Compliance Assistant" width="374">
+    <img src="assets/logo.svg" alt="APAC Cyber Compliance Assistant" width="374">
   </picture>
-  <p><strong>Generate the cybersecurity controls Hong Kong regulators require of your firm, by licence and business profile</strong></p>
+  <p><strong>Generate the cybersecurity controls APAC regulators require of your firm, by jurisdiction, licence and business profile</strong></p>
   <p>
     <!-- lang-nav -->
     <a href="README.zh-Hant.md">繁體</a> · <a href="README.zh-Hans.md">简体</a> · <strong>English</strong>
@@ -11,12 +11,13 @@
   <p>
     <a href="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/hk-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
-    <img src="https://img.shields.io/badge/version-1.6.0-0ea5e9" alt="Version 1.6.0">
-    <img src="https://img.shields.io/badge/controls-152-16a34a" alt="152 controls">
-    <img src="https://img.shields.io/badge/sources-20-64748B" alt="20 sources">
+    <img src="https://img.shields.io/badge/version-1.7.0-0ea5e9" alt="Version 1.7.0">
+    <img src="https://img.shields.io/badge/controls-210-16a34a" alt="210 controls">
+    <img src="https://img.shields.io/badge/sources-25-64748B" alt="25 sources">
+    <img src="https://img.shields.io/badge/jurisdictions-HK%20%C2%B7%20SG-0ea5e9" alt="Two jurisdictions">
     <img src="https://img.shields.io/badge/languages-EN%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E7%AE%80-7c3aed" alt="Three languages">
     <img src="https://img.shields.io/badge/zero%20dependencies-double--click%20to%20run-7c3aed" alt="Zero dependency">
-    <img src="https://img.shields.io/badge/sources%20verified-2026--09--08-64748B" alt="Verified 2026-09-08">
+    <img src="https://img.shields.io/badge/sources%20verified-2026--09--21-64748B" alt="Verified 2026-09-21">
   </p>
 </div>
 
@@ -29,15 +30,19 @@
 
 ## What this is
 
-Financial institutions in Hong Kong answer to several regulators on cybersecurity at once: the Securities
-and Futures Commission (SFC), the Hong Kong Monetary Authority (HKMA), the Privacy Commissioner for
-Personal Data (PCPD), and — from 2026 — the Protection of Critical Infrastructures (Computer Systems)
-Ordinance. The requirements are scattered across guidelines, circulars, Supervisory Policy Manual modules
-and codes of practice, and the same control is often demanded by several regulators in different words.
+Financial institutions across APAC often answer to several regulators, in several jurisdictions, on
+cybersecurity at once. In Hong Kong: the Securities and Futures Commission (SFC), the Hong Kong Monetary
+Authority (HKMA), the Privacy Commissioner for Personal Data (PCPD), and — from 2026 — the Protection of
+Critical Infrastructures (Computer Systems) Ordinance. In Singapore: the Monetary Authority of Singapore
+(MAS). The requirements are scattered across guidelines, circulars, statutory notices, Supervisory Policy
+Manual modules and codes of practice, and the same control is often demanded by several regulators in
+different words.
 
-This tool breaks those provisions down into **checkable controls**. Select the licences your firm holds
-and its business characteristics, and you get the list of controls that apply — each one citing its
-**source document, clause number, issue date and official link** — which you can then self-assess and export.
+This tool breaks those provisions down into **checkable controls**. Pick a jurisdiction, select the
+licences your firm holds and its business characteristics, and you get the list of controls that apply —
+each one citing its **source document, clause number, issue date and official link** — which you can then
+self-assess and export. It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
+Ordinance) and **Singapore** (MAS), with the architecture built to add further APAC jurisdictions over time.
 
 ## Quick start
 
@@ -56,9 +61,10 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 
 | Feature | Description |
 | --- | --- |
-| **Filter by licence** | 14 licence / entity types (SFC regulated activities, VASP, authorized institutions, stored value facilities, general companies) |
-| **Narrow by business profile** | 6 characteristics (internet trading, e-banking, personal data processing, CI designation, outsourcing/cloud, use of AI models) decide whether a provision applies to a given licence |
-| **De-duplication and cross-mapping** | Where the SFC and HKMA impose the same requirement, it is merged into a single card listing each regulator's own provision and clause number |
+| **Grouped by jurisdiction** | Licences and business characteristics in the sidebar are grouped by jurisdiction (Hong Kong / Singapore); licences from several jurisdictions can be ticked at once |
+| **Filter by licence** | 17 licence / entity types: 14 in Hong Kong (SFC regulated activities, VASP, authorized institutions, stored value facilities, general companies) + 3 in Singapore (banks, capital markets services licensees and related entities, licensed digital token service providers) |
+| **Narrow by business profile** | 7 characteristics (internet trading, e-banking, personal data processing, CI designation, outsourcing/cloud, use of AI models, online financial services over the internet) decide whether a provision applies to a given licence |
+| **De-duplication and cross-mapping** | Where several regulators impose the same requirement, it is merged into a single card listing each one's own provision and clause number — whether that's Hong Kong's SFC and HKMA, or Singapore's MAS across its three near-identical Notices on Cyber Hygiene to different entity types |
 | **Traceable to source** | Every control carries a description, clause number, issue and verification dates, official link, and a verbatim / excerpt / summary label for its English source text |
 | **Assessment work record** | Record status, implementation notes, evidence references, owner and target date for each individual regulatory control |
 | **Remediation list** | Review unrated, partially implemented and unimplemented controls by domain, with overdue and 30-day due indicators |
@@ -69,11 +75,13 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 
 ## Coverage
 
-v1.6.0 contains **152 controls** drawn from **20** official documents. Each source carries its own
-`verifiedOn` — the day its link and version were last checked against the regulator's website — because
-the documents span 2001 to 2026 and are re-checked at different times. The header shows the **earliest**
-of those dates, so the freshness claimed is the weakest link, never the most recently touched one. A
-scheduled workflow re-checks every link weekly.
+v1.7.0 contains **210 controls** drawn from **25** official documents, across Hong Kong and Singapore.
+Each source carries its own `verifiedOn` — the day its link and version were last checked against the
+regulator's website — because the documents span 2001 to 2026 and are re-checked at different times. The
+header shows the **earliest** of those dates, so the freshness claimed is the weakest link, never the most
+recently touched one. A scheduled workflow re-checks every link weekly.
+
+## Hong Kong
 
 ### SFC (92 controls)
 
@@ -118,6 +126,18 @@ scheduled workflow re-checks every link weekly.
 | --- | --- |
 | [Personal Data (Privacy) Ordinance (Cap. 486) — six Data Protection Principles](https://www.pcpd.org.hk/english/data_privacy_law/6_data_protection_principles/principles.html) | Centred on DPP4, the data security principle |
 
+## Singapore
+
+### MAS (58 controls)
+
+| Document | Date | Notes |
+| --- | --- | --- |
+| [FSM-N06 Notice on Cyber Hygiene (to banks in Singapore)](https://www.mas.gov.sg/-/media/mas-media-library/regulation/notices/trpd/notice-fsm-n06/mas-notice-fsm-n06.pdf?sc_lang=en) | 2024-05-09 | Statutory notice under s.29(1) of the Financial Services and Markets Act 2022; administrative accounts, security patches, security standards, network perimeter defence, malware protection, multi-factor authentication |
+| [FSM-N22 Notice on Cyber Hygiene (to capital markets financial institutions)](https://www.mas.gov.sg/-/media/mas-media-library/regulation/notices/trpd/notice-fsm-n22/mas-notice-fsm-n22.pdf) | 2024-05-09 | Near-verbatim copy of FSM-N06; applies to approved exchanges, clearing houses, capital markets services licensees, registered fund management companies and similar entities |
+| [FSM-N31 Notice on Cyber Hygiene (to licensed digital token service providers)](https://www.mas.gov.sg/-/media/mas-notice-fsm-n31---notice-on-cyber-hygiene.pdf) | 2025-05-30 | Near-verbatim copy of FSM-N06; applies to holders of a licence under s.138 of the Financial Services and Markets Act 2022 |
+| [FSM-N05 Notice on Technology Risk Management (to banks in Singapore)](https://www.mas.gov.sg/-/media/mas-media-library/regulation/notices/trpd/notice-fsm-n05/mas-notice-fsm-n05.pdf?sc_lang=en) | 2024-05-09 | Framework to identify critical systems, unscheduled downtime capped at **4 hours** a year, **4-hour** recovery time objective, MAS notified within **1 hour**, root cause report within **14 days**, protection of customer information |
+| [Technology Risk Management Guidelines](https://www.mas.gov.sg/-/media/MAS/Regulations-and-Financial-Stability/Regulatory-and-Supervisory-Framework/Risk-Management/TRM-Guidelines-18-January-2021.pdf) | 2021-01-18 | Non-statutory guidelines; governance and oversight, third-party management, IT resilience, access control, cryptography, data and infrastructure security, cyber security operations and assessment, online financial services, IT audit |
+
 ## How applicability is decided
 
 Each control's `applicability` has two parts:
@@ -141,10 +161,15 @@ operations under severe but plausible scenarios", say, or merging the mandatory 
 notification with voluntary notification under the PDPO. Those are different obligations, and merging them
 would mislead.
 
-Selecting every licence and characteristic, the 152 provisions collapse to **114** distinct requirements. A
+Selecting every licence and characteristic, the 210 provisions collapse to **159** distinct requirements. A
 platform operator that ticks VASP and internet trading sees 90 applicable provisions collapse to **61** —
 the SFC wrote Part XII of the VATP Guidelines closely along the lines of the Hacking Risks Guidelines, so
 most of it is the same obligation stated twice, and merging is what keeps the list honest.
+
+The same is true in Singapore: MAS's three Notices on Cyber Hygiene — to banks, to capital markets
+financial institutions, and to licensed digital token service providers — repeat paragraph IV almost
+verbatim, swapping only the entity noun. Selecting all three Singapore licences, the 58 MAS controls
+collapse to **45**.
 
 > **Deployment note**: do not delete `.nojekyll` in the repository root. GitHub Pages processes sites with
 > Jekyll by default, and Jekyll ignores paths beginning with an underscore — which would make
@@ -189,20 +214,30 @@ the English text matches the wording a reader will find in the cited document.
 .nojekyll                 disables Jekyll on GitHub Pages (required, do not delete)
 data/
 ├── _registry.js          global registry and locale lookup
-├── sources.js            20 source documents (title, date, legal status, official link)
-├── taxonomy.js           14 licences · 6 business characteristics · 11 control domains
+├── jurisdictions.js      jurisdiction registry (currently: hk, sg)
+├── domains.js            11 control domains — shared across jurisdictions, used to group results
 ├── i18n/
 │   ├── zh-Hans.js        Simplified UI strings
 │   ├── zh-Hant.js        Traditional layer (generated)
 │   └── en.js             English layer
-└── controls/
-    ├── sfc-internet-trading.js    SFC Hacking Risks Guidelines (20) + Code of Conduct
-    ├── sfc-circulars-2026.js      the two 2026 SFC circulars
-    ├── sfc-vatp.js                VATP Guidelines Parts X and XII, and Schedule 3
-    ├── hkma.js                    TM-G-1 / TM-E-1 / TM-C-1 / OR-2 / SA-2 / C-RAF
-    ├── svf.js                     SVF Guideline and Practice Note
-    ├── pdpo.js                    the six Data Protection Principles
-    └── critical-infrastructure.js the three categories of CI obligation
+├── hk/                    Hong Kong: 14 licences · 6 business characteristics
+│   ├── sources.js        20 source documents (title, date, legal status, official link)
+│   ├── taxonomy.js       licences and business characteristics
+│   └── controls/
+│       ├── sfc-internet-trading.js    SFC Hacking Risks Guidelines (20) + Code of Conduct
+│       ├── sfc-circulars-2026.js      the two 2026 SFC circulars
+│       ├── sfc-vatp.js                VATP Guidelines Parts X and XII, and Schedule 3
+│       ├── hkma.js                    TM-G-1 / TM-E-1 / TM-C-1 / OR-2 / SA-2 / C-RAF
+│       ├── svf.js                     SVF Guideline and Practice Note
+│       ├── pdpo.js                    the six Data Protection Principles
+│       └── critical-infrastructure.js the three categories of CI obligation
+└── sg/                    Singapore: 3 licences · 1 business characteristic
+    ├── sources.js        5 source documents
+    ├── taxonomy.js       licences and business characteristics
+    └── controls/
+        ├── cyber-hygiene.js    FSM-N06 / N22 / N31 Notices on Cyber Hygiene
+        ├── trm-notice.js       FSM-N05 Notice on Technology Risk Management
+        └── trm-guidelines.js   Technology Risk Management Guidelines
 ```
 
 A single control looks like this — authored in Simplified Chinese, with other languages supplied by the
@@ -233,6 +268,17 @@ does not accept provisions written from memory, so no IA controls will be added 
 be obtained, and insurance intermediaries / authorized insurers are not yet listed among the licence
 options. Pull requests welcome — please cite the official PDF and clause numbers.
 
+**Singapore's first phase covers only core technology risk and cyber hygiene.** MAS issues near-identical
+Notices on Technology Risk Management to several sectors (banks, merchant banks, finance companies,
+insurers, capital markets services licensees, and more — FSM-N03/05/07/09/11/13/17/19/21/23/25 and others);
+this project currently includes only FSM-N05, the banks' version, as a representative of that family. The
+Notices on Cyber Hygiene are included for banks (N06), capital markets financial institutions (N22) and
+digital token service providers (N31), but not for the remaining sectors. Chapters 1, 2 and 4–7 of the
+Technology Risk Management Guidelines (preface, application, the risk management framework, IT project
+management, software development, IT service management) have not yet been broken down into controls, and
+other MAS documents such as the Guidelines on Outsourcing are out of scope for this phase. Pull requests
+welcome — please cite the official PDF and clause numbers.
+
 **Whether a provision is still in force is ultimately yours to check.** Each source's `verifiedOn` records
 the day someone actually opened the regulator's site and checked it — it is not continuous monitoring, and
 regulators amend or withdraw documents at any time. Before relying on this tool's output for anything
@@ -255,7 +301,7 @@ translations fails the build. Unit tests cover applicability, merging, v1 migrat
 due dates and CSV injection protection. Sources unchecked for more than 180 days raise a warning.
 
 `.github/workflows/ci.yml` runs this on every pull request, and also confirms the generated Traditional
-files are up to date. A separate weekly workflow re-checks all 20 source links:
+files are up to date. A separate weekly workflow re-checks all 25 source links:
 
 ```bash
 node tools/check-links.mjs
