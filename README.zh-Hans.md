@@ -3,7 +3,7 @@
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo.zh-Hans-dark.svg">
     <img src="assets/logo.zh-Hans.svg" alt="亚太网络安全合规助手" width="374">
   </picture>
-  <p><strong>按司法管辖区、牌照与业务特征，生成 APAC 监管机构的网络安全控制点要求</strong></p>
+  <p><strong>面向亚太金融机构的开源、离线网络安全与科技风险监管要求映射及差距评估工具</strong></p>
   <p>
     <!-- lang-nav -->
     <a href="README.zh-Hant.md">繁體</a> · <strong>简体</strong> · <a href="README.md">English</a>
@@ -50,6 +50,31 @@
 
 目前覆盖**香港**（SFC / HKMA / PCPD / 关键基础设施条例）与
 **新加坡**（MAS）、**澳大利亚**（APRA）与**马来西亚**（BNM）；架构已支持逐步加入其他 APAC 司法管辖区。
+
+## 范围
+
+> **面向亚太金融机构的开源、离线网络安全与科技风险监管要求映射及差距评估工具。**
+>
+> *Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC
+> financial institutions.*
+
+**在范围内**
+
+- 亚太金融监管机构发出的网络安全与科技风险条文；以及跨行业规则（个人资料保护、关键基础设施保护）
+  中适用于金融机构的部分
+- 按牌照／实体类型与业务特征判断哪些条文适用
+- 映射不同监管机构条文之间的关系——实质等价、部分重叠或相关——以及各自多出的要求
+- 自评工作底稿：状态、实施说明、证据引用、负责人、目标日期、整改清单与导出
+- 在机构自己的环境中完全离线、自行部署运行
+
+**不在范围内**
+
+- 法律意见或判断机构是否合规——由使用者评估，工具只负责组织与记录
+- 网络安全与科技风险以外的监管领域，如反洗钱、资本、操守
+- GRC 平台功能：账号、多人协作、审批流、SaaS 托管、云端同步
+- 保存证据文件——只记录证据引用
+- 技术检测，如漏洞扫描、资产发现、SIEM
+- 没有官方出处的「最佳实践」内容
 
 ## 快速开始
 

@@ -4,6 +4,10 @@
 
 This project is only as valuable as its provisions are accurate. The rules below all follow from that.
 
+**Scope:** *open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for
+APAC financial institutions.* Contributions should fit that sentence — see the [Scope](README.md#scope) section
+of the README for what is in and out.
+
 ## Basic principles
 
 1. **Every control must trace back to the official text.** `sourceId` points to a document with an official link in
@@ -186,6 +190,10 @@ Recent examples: Australia (`data/au/`) and Malaysia (`data/my/`).
 ## What isn't a good fit
 
 - "Best practice" suggestions with no official source
+- Regulatory areas beyond cybersecurity and technology risk (AML, capital, conduct and so on)
+- GRC-platform features: accounts, multi-user collaboration, approval workflows, SaaS hosting, cloud sync
+- Storing evidence files (the tool records references to evidence only) or technical testing such as
+  vulnerability scanning
 - Personal interpretations of provisions or compliance opinions (this tool deliberately offers none)
 - Changes that need a build step or add runtime dependencies — zero dependencies and double-click-to-run are hard
   constraints of this project
