@@ -2,6 +2,16 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [未发布]
+
+### 变更
+
+- **确定项目范围：** *面向亚太金融机构的开源、离线网络安全与科技风险监管要求映射及差距评估工具*
+  （*Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC
+  financial institutions*）。README（英／简／繁）以此为副标题并新增「范围」一节（在范围内／不在范围内）；
+  `DEVELOPMENT_PLAN.md` 第 1 节逐词说明含义及刻意不用的说法（offline-first、regulatory compliance、
+  单用 assessment）；CONTRIBUTING（英／简）引用范围并扩充「不适合提交」清单
+
 ## [1.12.0] — 2026-10-07
 
 ### 新增

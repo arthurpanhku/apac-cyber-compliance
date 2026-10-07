@@ -3,7 +3,7 @@
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
     <img src="assets/logo.svg" alt="APAC Cyber Compliance Assistant" width="482">
   </picture>
-  <p><strong>Generate the cybersecurity controls APAC regulators require of your firm, by jurisdiction, licence and business profile</strong></p>
+  <p><strong>Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC financial institutions</strong></p>
   <p>
     <!-- lang-nav -->
     <a href="README.zh-Hant.md">繁體</a> · <a href="README.zh-Hans.md">简体</a> · <strong>English</strong>
@@ -63,6 +63,30 @@ within them — is the next step on the roadmap; see section 1A of `DEVELOPMENT_
 
 It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
 Ordinance), **Singapore** (MAS), **Australia** (APRA) and **Malaysia** (BNM), with the architecture built to add further APAC jurisdictions over time.
+
+## Scope
+
+> **Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC
+> financial institutions.**
+
+**In scope**
+
+- Cybersecurity and technology-risk provisions issued by APAC financial regulators — plus cross-sector rules
+  (personal data protection, critical-infrastructure protection) to the extent they apply to financial institutions
+- Working out which provisions apply, by licence or entity type and business characteristics
+- Mapping how provisions relate across regulators — equivalent, overlapping or related — and what each adds
+- Self-assessment workpapers: status, implementation notes, evidence references, owners, target dates,
+  remediation list, export
+- Running entirely offline and self-hosted inside a firm's own environment
+
+**Out of scope**
+
+- Legal advice or deciding whether a firm is compliant — the user assesses; the tool organises and records
+- Regulatory areas beyond cybersecurity and technology risk, such as AML, capital or conduct
+- GRC-platform features: accounts, multi-user collaboration, approval workflows, SaaS hosting, cloud sync
+- Storing evidence files — only references to evidence are recorded
+- Technical testing such as vulnerability scanning, asset discovery or SIEM
+- "Best practice" content with no official source
 
 ## Quick start
 

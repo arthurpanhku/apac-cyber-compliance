@@ -3,7 +3,7 @@
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo.zh-Hant-dark.svg">
     <img src="assets/logo.zh-Hant.svg" alt="亞太網絡安全合規助手" width="374">
   </picture>
-  <p><strong>按司法管轄區、牌照與業務特徵，生成 APAC 監管機構的網絡安全控制點要求</strong></p>
+  <p><strong>面向亞太金融機構的開源、離線網絡安全與科技風險監管要求映射及差距評估工具</strong></p>
   <p>
     <!-- lang-nav -->
     <strong>繁體</strong> · <a href="README.zh-Hans.md">简体</a> · <a href="README.md">English</a>
@@ -50,6 +50,31 @@
 
 目前覆蓋**香港**（SFC / HKMA / PCPD / 關鍵基礎設施條例）與
 **新加坡**（MAS）、**澳洲**（APRA）與**馬來西亞**（BNM）；架構已支持逐步加入其他 APAC 司法管轄區。
+
+## 範圍
+
+> **面向亞太金融機構的開源、離線網絡安全與科技風險監管要求映射及差距評估工具。**
+>
+> *Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC
+> financial institutions.*
+
+**在範圍內**
+
+- 亞太金融監管機構發出的網絡安全與科技風險條文；以及跨行業規則（個人資料保護、關鍵基礎設施保護）
+  中適用於金融機構的部分
+- 按牌照／實體類型與業務特徵判斷哪些條文適用
+- 映射不同監管機構條文之間的關係——實質等價、部分重疊或相關——以及各自多出的要求
+- 自評工作底稿：狀態、實施說明、證據引用、負責人、目標日期、整改清單與匯出
+- 在機構自己的環境中完全離線、自行部署執行
+
+**不在範圍內**
+
+- 法律意見或判斷機構是否合規——由使用者評估，工具只負責組織與記錄
+- 網絡安全與科技風險以外的監管領域，如反洗錢、資本、操守
+- GRC 平台功能：賬號、多人協作、審批流、SaaS 託管、雲端同步
+- 保存證據文件——只記錄證據引用
+- 技術檢測，如漏洞掃描、資產發現、SIEM
+- 沒有官方出處的「最佳實踐」內容
 
 ## 快速開始
 
