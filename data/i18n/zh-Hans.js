@@ -6,7 +6,7 @@
 HKCC.addI18n('zh-Hans', {
   ui: {
     appTitle: '亚太网络安全合规助手',
-    metaDescription: '按司法管辖区、牌照与业务特征生成 SFC、HKMA、IA、PCPD、关键基础设施条例、MAS 及 APRA 的网络安全控制点要求，每条均标注官方条文出处。',
+    metaDescription: '按司法管辖区、牌照与业务特征生成 SFC、HKMA、IA、PCPD、关键基础设施条例、MAS、APRA 及 BNM 的网络安全控制点要求，每条均标注官方条文出处。',
     printTitle: '亚太网络安全合规控制点清单',
     versionLine: 'v{version} · 条文核验于 {date}',
 
