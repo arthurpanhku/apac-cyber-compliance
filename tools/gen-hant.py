@@ -182,6 +182,9 @@ def gen_readme(conv):
     if not count:
         sys.exit('README.zh-Hans.md 中找不到 <!-- lang-nav --> 标记')
 
+    # 繁体 README 用繁体字形的 Logo
+    out = out.replace('assets/logo.zh-Hans', 'assets/logo.zh-Hant')
+
     README_OUT.write_text(out, encoding='utf-8')
     print(f'已生成 {README_OUT.relative_to(ROOT)}（由 {README_SRC.name} 转换）。')
 

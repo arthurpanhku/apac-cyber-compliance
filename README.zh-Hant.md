@@ -1,7 +1,7 @@
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
-    <img src="assets/logo.svg" alt="亞太網絡安全合規助手" width="374">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo.zh-Hant-dark.svg">
+    <img src="assets/logo.zh-Hant.svg" alt="亞太網絡安全合規助手" width="374">
   </picture>
   <p><strong>按司法管轄區、牌照與業務特徵，生成 APAC 監管機構的網絡安全控制點要求</strong></p>
   <p>
@@ -316,7 +316,7 @@ node tools/check-links.mjs
 ```
 
 只有確定失效（404／410／域名解析不了）才會失敗；403／429 多為機器人防護，5xx 與超時多為暫時性
-故障，只報告不失敗——長期紅着的檢查很快就沒人看了。詳見 [CONTRIBUTING.md](CONTRIBUTING.md)。
+故障，只報告不失敗——長期紅着的檢查很快就沒人看了。詳見 [CONTRIBUTING.zh-Hans.md](CONTRIBUTING.zh-Hans.md)。
 
 ## 授權
 
