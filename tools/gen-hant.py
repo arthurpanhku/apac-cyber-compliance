@@ -76,6 +76,7 @@ def dump_base():
         require(`./data/${j.id}/controls/` + f);
       }
     }
+    require('./data/equivalence.js');
     require('./data/i18n/zh-Hans.js');
     process.stdout.write(JSON.stringify({
       ui: HKCC.i18n['zh-Hans'].ui,
@@ -84,7 +85,8 @@ def dump_base():
       licenses: HKCC.licenses,
       attributes: HKCC.attributes,
       domains: HKCC.domains,
-      controls: HKCC.controls
+      controls: HKCC.controls,
+      equivalence: HKCC.equivalence
     }));
     '''
     res = subprocess.run([ 'node', '-e', script ], cwd=ROOT,
@@ -127,6 +129,7 @@ def main():
                     for k, v in base['sources'].items()},
         'controls': {c['id']: pick(c, ('title', 'requirement', 'note', 'clause'))
                      for c in base['controls']},
+        'equivalence': {g['id']: pick(g, ('rationale',)) for g in base['equivalence']},
     }
 
     body = json.dumps(out, ensure_ascii=False, indent=2)

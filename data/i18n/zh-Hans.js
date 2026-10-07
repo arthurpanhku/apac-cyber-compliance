@@ -70,7 +70,12 @@ HKCC.addI18n('zh-Hans', {
     notePrefix: '注：',
     tagMerged: '跨监管合并 {n} 条',
     tagDeadline: '限期 {date}',
-    tagSeeAlso: '另见 {id}',
+    tagOverlaps: '部分重叠：{id}',
+    tagRelated: '相关：{id}',
+    equivalenceBasis: '合并依据（{basis}）：{rationale}',
+    basisSameProvision: '同一条文',
+    basisIdenticalText: '原文相同',
+    basisReviewed: '经人工评审实质等价，{date}',
     tagApplies: '适用：{value}',
     tagTriggered: '触发：{value}',
 

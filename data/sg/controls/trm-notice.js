@@ -35,7 +35,7 @@
       quote: 'A Bank must notify the Authority as soon as possible, but not later than 1 hour, upon the discovery of a relevant incident.',
       quoteStatus: 'verbatim',
       applicability: { licenses: ['sg-bank'] },
-      crossRefs: ['MAS-N05-8']
+      related: ['MAS-N05-8']
     },
     {
       id: 'MAS-N05-8', domain: 'respond', priority: 'baseline', sourceId: 'mas-trm-notice', clause: '8',
@@ -44,7 +44,7 @@
       quote: 'A Bank must submit a root cause and impact analysis report to the Authority, within 14 days or such longer period as the Authority may allow, from the discovery of the relevant incident. The report must contain— (a) an executive summary of the relevant incident; (b) an analysis of the root cause which triggered the relevant incident; (c) a description of the impact of the relevant incident on the Bank’s— i. compliance with laws and regulations applicable to the Bank; ii. operations; and iii. service to its customers; and (d) a description of the remedial measures taken to address the root cause and consequences of the relevant incident.',
       quoteStatus: 'verbatim',
       applicability: { licenses: ['sg-bank'] },
-      crossRefs: ['MAS-N05-7']
+      related: ['MAS-N05-7']
     },
     {
       id: 'MAS-N05-9', domain: 'data', priority: 'baseline', sourceId: 'mas-trm-notice', clause: '9',

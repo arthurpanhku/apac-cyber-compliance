@@ -76,7 +76,12 @@ HKCC.addI18n('en', {
     notePrefix: 'Note: ',
     tagMerged: 'Merged across {n} regulators',
     tagDeadline: 'Deadline {date}',
-    tagSeeAlso: 'See also {id}',
+    tagOverlaps: 'Overlaps: {id}',
+    tagRelated: 'Related: {id}',
+    equivalenceBasis: 'Merged as equivalent ({basis}): {rationale}',
+    basisSameProvision: 'same provision',
+    basisIdenticalText: 'identical text',
+    basisReviewed: 'reviewed as substantively equivalent, {date}',
     tagApplies: 'Applies: {value}',
     tagTriggered: 'Triggered by: {value}',
 
@@ -1235,5 +1240,21 @@ HKCC.addI18n('en', {
     'BNM-RMIT-17.4': { title: 'Comply promptly with BNM directions on consultation, notification or Appendices 9 and 10', requirement: 'BNM may direct an institution to consult under paragraph 17.1, notify under paragraph 17.2, or observe Appendix 9 or 10 and explain deviations, including for non-critical systems; the institution must comply promptly and to BNM’s satisfaction.' },
     'BNM-RMIT-17.5': { title: 'Include cloud and emerging technology roadmap in the annual outsourcing plan', requirement: 'Include the roadmap for adopting cloud services or emerging technology (critical and non-critical systems) in the annual outsourcing plan submitted under the Outsourcing policy document or IT Profile reporting, and document the paragraph 10.50 or Appendix 9 risk assessment for BNM’s review on request.' },
     'BNM-RMIT-18.1': { title: 'Submit gap analysis and action plan within 90 days of issuance', requirement: 'Perform a gap analysis against this policy document with an action plan, timeline and milestones, and submit it to BNM no later than 90 days after the issuance date; institutions that submitted under the previous version must identify and address new gaps against the revised requirements and make an updated annual compliance assessment available on request.', note: 'The deadline is the issuance date of 25 September 2026 plus 90 days. Paragraph 18.2 specifies the recipient: the Financial Conglomerates Supervision, Banking Supervision, Insurance and Takaful Supervision or Payment Services Oversight department, as applicable.' }
+  }
+});
+
+/* ---- Equivalence groups (data/equivalence.js) ---- */
+HKCC.addI18n('en', {
+  equivalence: {
+    ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`eq-mas-cyber-hygiene-4.${n}`, {
+      rationale: `Paragraph 4.${n} is identical in all three Notices on Cyber Hygiene; they differ only in addressee (banks, capital markets financial institutions and licensed digital token service providers).`
+    }])),
+    'eq-sfc-2fa-login': { rationale: 'Both require two-factor authentication for client account login, with the same definition of two-factor authentication; platform client accounts are accessed over the internet, so the scope is the same.' },
+    'eq-sfc-login-password-delivery': { rationale: 'The two paragraphs are word for word the same apart from how each document names the regulated person.' },
+    'eq-sfc-network-segmentation': { rationale: 'The two paragraphs are word for word the same apart from the examples of critical systems; both require network segmentation through a DMZ with multi-tiered firewalls.' },
+    'eq-sfc-patch-one-month': { rationale: 'Both require timely monitoring and evaluation of patches, testing as soon as practicable, and deployment within one month of completing testing — the same timeframe.' },
+    'eq-sfc-incident-escalation': { rationale: 'Both require written policies and procedures for escalating suspected or actual cybersecurity incidents internally and externally, with external parties including clients and the SFC.' },
+    'eq-bnm-rmit-10.31': { rationale: 'The same RMiT paragraph 10.31, split into two controls because e-money issuers, merchant acquirers and intermediary remittance institutions must comply only when designated as NCII.' },
+    'eq-bnm-rmit-13.3': { rationale: 'The same RMiT paragraph 13.3, split into two controls because under paragraph 2.2(c) the three payment-type institutions must comply only when designated as NCII.' }
   }
 });

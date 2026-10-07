@@ -15,7 +15,7 @@
       quote: 'IT control policies; Oversight and organisation of IT functions; Technology risk management function; Technology audits; Staff competence and training; IT support provided by overseas offices',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST },
-      crossRefs: ['SFC-IT-3.1']
+      overlaps: ['SFC-IT-3.1']
     },
     {
       id: 'HKMA-TMG1-3', domain: 'data', priority: 'baseline', sourceId: 'hkma-tm-g-1', clause: '3. Security management',
@@ -24,7 +24,7 @@
       quote: 'Information classification and protection; Authentication and access control; Security administration and monitoring; System security; End-user and mobile computing; Physical and personnel security',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST },
-      crossRefs: ['SFC-IT-2.1']
+      related: ['SFC-IT-2.1']
     },
     {
       id: 'HKMA-TMG1-4', domain: 'protect', priority: 'baseline', sourceId: 'hkma-tm-g-1', clause: '4. System development and change management',
@@ -41,7 +41,7 @@
       quote: 'IT operations management and support; Performance monitoring and capacity planning; IT facilities and equipment maintenance; Disaster recovery planning',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST },
-      crossRefs: ['SFC-IT-2.8']
+      overlaps: ['SFC-IT-2.8']
     },
     {
       id: 'HKMA-TMG1-7', domain: 'thirdparty', priority: 'baseline', sourceId: 'hkma-tm-g-1', clause: '7. Management of technology service providers',
@@ -50,7 +50,7 @@
       quote: 'Management of technology outsourcing; Management of other technology service providers',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST, attributes: ['outsourcing'] },
-      crossRefs: ['HKMA-SA2-1']
+      overlaps: ['HKMA-SA2-1']
     },
 
     // ---- TM-E-1 电子银行风险管理 (V.4, 2024-10-25) ----
@@ -69,7 +69,7 @@
       quote: 'Independent assessment and penetration tests (see Annex A: Items to be reported in independent assessment)',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST, attributes: ['ebanking'] },
-      crossRefs: ['HKMA-CRAF-3']
+      related: ['HKMA-CRAF-3']
     },
     {
       id: 'HKMA-TME1-4.1', domain: 'identity', priority: 'baseline', sourceId: 'hkma-tm-e-1', clause: '4.1',
@@ -78,7 +78,7 @@
       quote: 'Authentication of customers',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST, attributes: ['ebanking'] },
-      crossRefs: ['SFC-IT-1.1', 'SFC-PH-A1']
+      overlaps: ['SFC-IT-1.1'], related: ['SFC-PH-A1']
     },
     {
       id: 'HKMA-TME1-4.2', domain: 'detect', priority: 'baseline', sourceId: 'hkma-tm-e-1', clause: '4.2 / 4.3',
@@ -87,7 +87,7 @@
       quote: 'Notifications sent to customers; Customer awareness and education; Customer protection',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST, attributes: ['ebanking'] },
-      crossRefs: ['SFC-IT-1.3', 'SFC-PH-B1']
+      overlaps: ['SFC-IT-1.3'], related: ['SFC-PH-B1']
     },
     {
       id: 'HKMA-TME1-5', domain: 'protect', priority: 'baseline', sourceId: 'hkma-tm-e-1', clause: '5',
@@ -96,7 +96,7 @@
       quote: 'Confidentiality and integrity of information; Internet infrastructure; Application system security; Threat monitoring and vulnerability assessment',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST, attributes: ['ebanking'] },
-      crossRefs: ['SFC-IT-1.4', 'SFC-IT-2.1']
+      related: ['SFC-IT-1.4', 'SFC-IT-2.1']
     },
     {
       id: 'HKMA-TME1-6', domain: 'protect', priority: 'baseline', sourceId: 'hkma-tm-e-1', clause: '6',
@@ -113,7 +113,7 @@
       quote: 'Service level of e-banking for customers; Capacity planning; Performance monitoring; System resilience; Controls for coping with system disruptions',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST, attributes: ['ebanking'] },
-      crossRefs: ['HKMA-OR2-3']
+      related: ['HKMA-OR2-3']
     },
 
     // ---- TM-C-1 网络风险管理监管方针 + C-RAF ----
@@ -174,7 +174,7 @@
       quote: 'Mapping interconnections and interdependencies underlying critical operations; Preparing for and managing risks to critical operations delivery; Responding to and recovering from incidents',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST },
-      crossRefs: ['SFC-IT-2.9']
+      overlaps: ['SFC-IT-2.9']
     },
     {
       id: 'HKMA-OR2-6', domain: 'assurance', priority: 'baseline', sourceId: 'hkma-or-2', clause: '7',
@@ -193,7 +193,7 @@
       quote: 'SPM SA-2 Outsourcing',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST, attributes: ['outsourcing'] },
-      crossRefs: ['SFC-IT-2.10', 'HKMA-TMG1-7']
+      overlaps: ['SFC-IT-2.10', 'HKMA-TMG1-7']
     },
 
     // ---- 2026 AI 威胁通函 ----
@@ -204,7 +204,7 @@
       quote: 'Strengthening Cyber Resilience amid Artificial Intelligence-Empowered Cyber Threats',
       quoteStatus: 'summary',
       applicability: { licenses: AI_INST, attributes: ['ai-models'] },
-      crossRefs: ['SFC-AI-INV', 'SFC-AI-B3']
+      related: ['SFC-AI-INV', 'SFC-AI-B3']
     }
   ]);
 })();
@@ -218,5 +218,5 @@ HKCC.addControls([{
   quote: 'Cybersecurity Fortification Initiative 2.0',
   quoteStatus: 'summary',
   applicability: { licenses: ['hkma-ai'] },
-  crossRefs: ['HKMA-CRAF-1', 'HKMA-CRAF-2', 'HKMA-CRAF-3', 'HKMA-CRAF-4']
+  related: ['HKMA-CRAF-1', 'HKMA-CRAF-2', 'HKMA-CRAF-3', 'HKMA-CRAF-4']
 }]);

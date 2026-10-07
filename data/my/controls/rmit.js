@@ -11,7 +11,8 @@
  *   - 第 16–17 段不适用于指定支付系统营运者、电子货币发行人、商户收单机构及中介汇款机构；
  *   - 第 13.3 段不适用于未被指定为 NCII 的电子货币发行人、商户收单机构及中介汇款机构。
  * 引擎只能表达「任一牌照且全部业务特征」，故第 13.3 段（及按第 10.33 段推断的第 10.31 段）
- * 拆成两条：一般机构一条、须同时具 my-ncii 的三类机构一条，以双向 crossRefs 合并为同一张卡片。
+ * 拆成两条：一般机构一条、须同时具 my-ncii 的三类机构一条，在 data/equivalence.js 登记为
+ * same-provision 等价组，合并为同一张卡片。
  */
 (function () {
   const ALL = ['my-bank', 'my-insurer', 'my-dfi', 'my-emoney', 'my-dps', 'my-acquirer', 'my-iri'];
@@ -230,8 +231,7 @@
       {
         deadline: '2027-09-30',
         note: '主要数码服务包括存款账户结余查询、本地跨行转账、DuitNow、FPX、RENTAS、账单付款及海外汇款；主要交付渠道包括网上银行、流动银行、扣账卡或自动柜员机（脚注 25、26）。',
-        applicability: { licenses: NOT_NCII_EXEMPT },
-        crossRefs: ['BNM-RMIT-10.31-NCII']
+        applicability: { licenses: NOT_NCII_EXEMPT }
       }),
     rmit('10.31', 'S', 'resilience',
       '提升主要数码服务及交付渠道的韧性',
@@ -241,8 +241,7 @@
         id: 'BNM-RMIT-10.31-NCII',
         deadline: '2027-09-30',
         note: '第 10.33 段（G）只「鼓励」未被指定为 NCII 的电子货币发行人、商户收单机构及中介汇款机构实施本段措施；本工具据此只在该三类机构获指定为 NCII 时将本段列为必须遵守。',
-        applicability: { licenses: NCII_ONLY, attributes: ['my-ncii'] },
-        crossRefs: ['BNM-RMIT-10.31']
+        applicability: { licenses: NCII_ONLY, attributes: ['my-ncii'] }
       }),
     rmit('10.32', 'S', 'resilience',
       '关键系统年度非计划停机不超过 4 小时、每宗不超过 120 分钟',
@@ -523,7 +522,7 @@
       '内部审计须有具专业认证的专责科技审计资源',
       '机构须确保内部审计职能设有具专门能力及专业认证的专责科技审计资源，并熟悉机构科技系统、交付渠道及受审范畴。',
       'A financial institution must ensure the internal audit function must have dedicated technology audit resources with specialised competencies and professionally certified. The technology audit resources shall be adequately conversant with the developing sophisticate of the financial institution’s technology systems, delivery channels and have sound knowledge in the areas audited.',
-      { applicability: { licenses: NOT_NCII_EXEMPT }, crossRefs: ['BNM-RMIT-13.3-NCII'] }),
+      { applicability: { licenses: NOT_NCII_EXEMPT } }),
     rmit('13.3', 'S', 'assurance',
       '内部审计须有具专业认证的专责科技审计资源',
       '机构须确保内部审计职能设有具专门能力及专业认证的专责科技审计资源，并熟悉机构科技系统、交付渠道及受审范畴。',
@@ -531,8 +530,7 @@
       {
         id: 'BNM-RMIT-13.3-NCII',
         note: '按第 2.2(c) 段，合资格电子货币发行人、非银行注册商户收单机构及中介汇款机构只在获指定为 NCII 实体时须遵守本段。',
-        applicability: { licenses: NCII_ONLY, attributes: ['my-ncii'] },
-        crossRefs: ['BNM-RMIT-13.3']
+        applicability: { licenses: NCII_ONLY, attributes: ['my-ncii'] }
       }),
     rmit('13.4', 'G', 'assurance',
       '科技审计人员提供咨询时须顾及独立性',

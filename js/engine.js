@@ -57,8 +57,14 @@
     return index;
   }
 
-  function cluster(controls, byId, merge) {
-    const controlMap = byId instanceof Map ? byId : new Map(controls.map(c => [c.id, c]));
+  /**
+   * 把适用的控制点分组。只有登记在 data/equivalence.js 的等价组（Equivalent）会合并；
+   * overlaps／related 只是标签，永不合并。
+   * @param {object[]} controls     适用的控制点
+   * @param {object[]} equivalence  等价组 [{ id, members: [...] }]
+   * @param {boolean}  merge        是否合并
+   */
+  function cluster(controls, equivalence, merge) {
     const ids = new Set(controls.map(c => c.id));
     const parent = new Map([...ids].map(id => [id, id]));
     const find = id => {
@@ -70,14 +76,12 @@
     };
 
     if (merge) {
-      for (const control of controls) {
-        for (const ref of control.crossRefs || []) {
-          if (!ids.has(ref)) continue;
-          const other = controlMap.get(ref);
-          if (!other || !(other.crossRefs || []).includes(control.id)) continue;
-          const a = find(control.id);
-          const b = find(ref);
-          if (a !== b) parent.set(a, b);
+      for (const group of equivalence || []) {
+        const present = (group.members || []).filter(id => ids.has(id));
+        for (const id of present.slice(1)) {
+          const a = find(present[0]);
+          const b = find(id);
+          if (a !== b) parent.set(b, a);
         }
       }
     }
@@ -96,6 +100,38 @@
     }));
   }
 
+  /**
+   * overlaps／related 在数据中只需写在一方；此处补成双向，供卡片显示。
+   * 同一对若两种关系都有，以 overlaps 为准。
+   * @returns {Map<string, {overlaps: Set<string>, related: Set<string>}>}
+   */
+  function indexRelations(controls) {
+    const index = new Map();
+    const entry = id => {
+      if (!index.has(id)) index.set(id, { overlaps: new Set(), related: new Set() });
+      return index.get(id);
+    };
+    for (const control of controls || []) {
+      for (const type of ['overlaps', 'related']) {
+        for (const ref of control[type] || []) {
+          if (ref === control.id) continue;
+          entry(control.id)[type].add(ref);
+          entry(ref)[type].add(control.id);
+        }
+      }
+    }
+    for (const value of index.values()) {
+      for (const id of value.overlaps) value.related.delete(id);
+    }
+    return index;
+  }
+
+  /** 找出完全包含某合并卡片的等价组（用于显示合并依据）。 */
+  function equivalenceFor(group, equivalence) {
+    if (!group || group.length < 2) return null;
+    return (equivalence || []).find(g => group.every(c => (g.members || []).includes(c.id))) || null;
+  }
+
   function pendingCount(group, assessments) {
     return group.filter(control => {
       const status = assessments[control.id]?.status;
@@ -103,7 +139,7 @@
     }).length;
   }
 
-  function migrateV1(saved, controls) {
+  function migrateV1(saved, controls, equivalence) {
     if (!isObject(saved)) {
       const error = new Error('legacy state is not an object');
       error.diagnostic = diag('diagLegacyNotObject');
@@ -124,7 +160,9 @@
 
     if (saved.merge === true) {
       const active = controls.filter(c => applies(c, licenses, attributes));
-      const groups = cluster(active, new Map(controls.map(c => [c.id, c])), true);
+      // v1 按当时的双向交叉引用合并；该模型已改为等价组，故以等价组重建。
+      // 这比 v1 保守：只部分重叠的条文不再继承组首状态，会回到「未评」以便复核。
+      const groups = cluster(active, equivalence, true);
       for (const group of groups) {
         const groupHead = group[0]?.id;
         const headStatus = oldAssessments[groupHead];
@@ -307,6 +345,8 @@
     applies,
     indexAttributeLicenses,
     cluster,
+    indexRelations,
+    equivalenceFor,
     pendingCount,
     migrateV1,
     csvCell,

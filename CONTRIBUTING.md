@@ -27,11 +27,12 @@ This project is only as valuable as its provisions are accurate. The rules below
 
 ```bash
 node tools/validate.mjs
+node tools/check-equivalence.mjs
 node --test tests/*.test.mjs
 ```
 
 The checks cover: unique IDs, sources exist, valid control domains / licences / business characteristics, resolvable
-cross-references, required fields present, date formats, a `verifiedOn` on every source, **and completeness of the
+`overlaps` / `related` references, the equivalence rules for every merged group, required fields present, date formats, a `verifiedOn` on every source, **and completeness of the
 English and Traditional Chinese layers**. Sources not re-checked for more than 180 days produce a warning (it doesn't
 fail the run, but it is worth dealing with).
 
@@ -116,17 +117,46 @@ A few rules:
    `formatDiagnostic()` → `t()`. The validator confirms every code is registered and has text in all three languages —
    a missing one would show up in the dialog as a bare `diagXxx`.
 
-## About cross-references (`crossRefs`)
+## Regulatory relationships: Equivalent, Overlaps, Related
 
-`crossRefs` has two uses, depending on whether the reference is mutual:
+| Relationship | Meaning | Merged? | Where to record it |
+| --- | --- | --- | --- |
+| **Equivalent** | The two requirements are substantively the same | Yes — one card | a group in `data/equivalence.js` |
+| **Overlaps** | The requirements partly overlap | No — tag only | the control's `overlaps` field |
+| **Related** | Connected, or useful to read together | No — tag only | the control's `related` field |
 
-- **Bidirectional** (A references B and B references A) → the UI **merges** them into one card, treated as the same
-  requirement
-- **One-way** → shown only as a "see also" tag, not merged
+`overlaps` and `related` only need to be written on one side; the UI shows the tag on both. (The old `crossRefs`
+field is no longer accepted by the validator.)
 
-**Only create a bidirectional reference when the two provisions genuinely require the same thing.** If one is clearly
-broader (for example, TM-G-1 section 3 "Security management" compared with PDPO DPP4), use a one-way reference. A
-wrong bidirectional reference would lead users to believe that satisfying one satisfies the other.
+**Only record a group as Equivalent when the provisions genuinely require the same thing.** If either side adds
+anything of substance — one more measure, a shorter deadline, a wider scope, a different trigger — use `overlaps`.
+A wrong equivalence leads users to believe that satisfying one satisfies the other. When in doubt, don't merge.
+
+Every equivalence group must pass `node tools/check-equivalence.mjs` (rules in `tools/lib/equivalence-rules.mjs`):
+
+| Rule | Requirement |
+| --- | --- |
+| EQ1 | At least two members, all existing; a control belongs to at most one group |
+| EQ2 | `basis` is `same-provision`, `identical-text` or `reviewed` |
+| EQ3 | Same control domain |
+| EQ4 | Same obligation strength (`priority`): a baseline requirement cannot be equivalent to an enhanced one |
+| EQ5 | Same deadline, or none |
+| EQ6 | Every member has an official-text `quote` labelled `verbatim` or `excerpt` — equivalence cannot rest on a summary |
+| EQ7 | `same-provision`: same source, clause and text. Otherwise members come from different sources |
+| EQ8 | `identical-text`: quotes identical after normalising whitespace and quotation marks; only the names for the regulated person listed in `addressees` may differ |
+| EQ9 | `reviewed`: a written `rationale` in Chinese and English and a `reviewedOn` date |
+| EQ10 | Members of a group are not also marked `overlaps` or `related` with each other |
+
+Choose the `basis`:
+
+- `same-provision` — the same paragraph of the same document, split into several controls because of applicability
+  (e.g. RMiT 13.3 and 13.3-NCII)
+- `identical-text` — different documents with the same text. If the documents name the regulated person differently
+  (e.g. "relevant entity" / "digital token service provider"), list those names in `addressees`; nothing else may
+  differ
+- `reviewed` — different wording, judged substantively the same after comparing the official texts paragraph by
+  paragraph. Write the `rationale` (Simplified Chinese in `data/equivalence.js`, English under `equivalence` in
+  `data/i18n/en.js`) and set `reviewedOn` to the date you did the comparison
 
 ## Adding a regulation
 

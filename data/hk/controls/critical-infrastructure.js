@@ -35,7 +35,7 @@
       quote: 'Obligation to set up and maintain computer-system security management unit',
       quoteStatus: 'summary',
       applicability: { licenses: ALL, attributes: A },
-      crossRefs: ['SFC-IT-3.1', 'HKMA-TMG1-2']
+      related: ['SFC-IT-3.1', 'HKMA-TMG1-2']
     },
     {
       id: 'CI-CAT2-1', domain: 'governance', priority: 'baseline', sourceId: src, clause: '6.1',
@@ -60,7 +60,7 @@
       quote: 'Obligation to conduct computer-system security risk assessments',
       quoteStatus: 'summary',
       applicability: { licenses: ALL, attributes: A },
-      crossRefs: ['HKMA-CRAF-1']
+      related: ['HKMA-CRAF-1']
     },
     {
       id: 'CI-CAT2-4', domain: 'assurance', priority: 'baseline', sourceId: src, clause: '6.4',
@@ -93,7 +93,7 @@
       quote: 'Obligation to submit and implement emergency response plan',
       quoteStatus: 'summary',
       applicability: { licenses: ALL, attributes: A },
-      crossRefs: ['SFC-IT-2.9', 'HKMA-OR2-3']
+      related: ['SFC-IT-2.9', 'HKMA-OR2-3']
     },
     {
       id: 'CI-CAT3-3', domain: 'respond', priority: 'baseline', sourceId: src, clause: '7.3.4 / 7.3.6',
@@ -102,7 +102,7 @@
       quote: 'A serious computer-system security incident … must be notified within 12 hours after the CI operator becomes aware of it.',
       quoteStatus: 'excerpt',
       applicability: { licenses: ALL, attributes: A },
-      crossRefs: ['SFC-PH-C1']
+      related: ['SFC-PH-C1']
     },
     {
       id: 'CI-CAT3-4', domain: 'respond', priority: 'baseline', sourceId: src, clause: '7.3.7',
@@ -119,7 +119,7 @@
       quote: '… where “material” is defined by the CI operator in the business continuity management plan',
       quoteStatus: 'excerpt',
       applicability: { licenses: ALL, attributes: A },
-      crossRefs: ['HKMA-OR2-2', 'CI-CAT3-3']
+      related: ['HKMA-OR2-2', 'CI-CAT3-3']
     },
     {
       id: 'CI-BANK-COP', domain: 'governance', priority: 'baseline', sourceId: 'hkma-cop-ci', clause: '1.1.2 / 1.1.3',

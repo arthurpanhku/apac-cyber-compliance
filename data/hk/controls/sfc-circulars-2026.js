@@ -19,7 +19,7 @@
       quote: 'The SFC does not consider OTP to be a phishing-resistant authentication solution, and internet brokers and VASPs should not use it for the processes mentioned under paragraph 5 above.',
       quoteStatus: 'excerpt',
       applicability: { licenses: IT, attributes: ['internet-trading'] },
-      crossRefs: ['SFC-IT-1.1']
+      overlaps: ['SFC-IT-1.1']
     },
     {
       id: 'SFC-PH-A2', domain: 'identity', priority: 'enhanced', sourceId: PH, clause: '(A)',
@@ -44,7 +44,7 @@
       quote: '… internet brokers and VASPs should not allow clients to disable session timeout and should limit the idle timeout period, for example, to within 30 minutes, subject to prior assessments and ongoing monitoring.',
       quoteStatus: 'excerpt',
       applicability: { licenses: IT, attributes: ['internet-trading'] },
-      crossRefs: ['SFC-IT-1.6']
+      overlaps: ['SFC-IT-1.6']
     },
     {
       id: 'SFC-PH-B1', domain: 'detect', priority: 'enhanced', sourceId: PH, clause: '(B)',
@@ -53,7 +53,7 @@
       quote: 'Internet brokers and VASPs should notify clients promptly of successful login to their internet trading accounts and other high-risk account activities, including logins from new devices, binding of new device and creation or revocation of passkeys.',
       quoteStatus: 'excerpt',
       applicability: { licenses: IT, attributes: ['internet-trading'] },
-      crossRefs: ['SFC-IT-1.3']
+      overlaps: ['SFC-IT-1.3']
     },
     {
       id: 'SFC-PH-B2', domain: 'detect', priority: 'enhanced', sourceId: PH, clause: '(B)',
@@ -78,7 +78,7 @@
       quote: 'Maintain sufficient logs, including device IDs captured during system login and device binding, and review them on a timely basis to detect irregular events …',
       quoteStatus: 'excerpt',
       applicability: { licenses: IT, attributes: ['internet-trading'] },
-      crossRefs: ['SFC-IT-1.2']
+      overlaps: ['SFC-IT-1.2']
     },
     {
       id: 'SFC-PH-C1', domain: 'respond', priority: 'enhanced', sourceId: PH, clause: '(C)',
@@ -87,7 +87,7 @@
       quote: 'Internet brokers and VASPs should also report hacking incidents to the SFC immediately.',
       quoteStatus: 'excerpt',
       applicability: { licenses: IT, attributes: ['internet-trading'] },
-      crossRefs: ['SFC-IT-3.2']
+      overlaps: ['SFC-IT-3.2']
     },
     {
       id: 'SFC-PH-D1', domain: 'awareness', priority: 'enhanced', sourceId: PH, clause: '(D)',
@@ -96,7 +96,7 @@
       quote: '… alert clients of common attack scenarios, including fraudulent emails, text messages or phone calls impersonating the firm, fake websites or mobile applications designed to harvest login credentials, and social engineering tactics …',
       quoteStatus: 'excerpt',
       applicability: { licenses: IT, attributes: ['internet-trading'] },
-      crossRefs: ['SFC-IT-3.4']
+      overlaps: ['SFC-IT-3.4']
     },
 
     // ---- 26EC32 AI 驱动网络攻击 ----
@@ -107,7 +107,7 @@
       quote: 'They are reminded that their senior management, including the Manager-in-Charge of Information Technology (MIC-IT), is ultimately responsible for managing cybersecurity risks faced by their firms.',
       quoteStatus: 'excerpt',
       applicability: { licenses: ALL_LC },
-      crossRefs: ['SFC-IT-3.1']
+      overlaps: ['SFC-IT-3.1']
     },
     {
       id: 'SFC-AI-INV', domain: 'governance', priority: 'enhanced', sourceId: AI, clause: '第 8 段',
@@ -124,7 +124,7 @@
       quote: 'They should take prompt actions to address known vulnerabilities and implement adequate policies and procedures for handling urgent and critical fixes that fall outside routine patching cycles, especially for vulnerabilities and fixes affecting their business critical components.',
       quoteStatus: 'excerpt',
       applicability: { licenses: ALL_LC },
-      crossRefs: ['SFC-IT-2.4']
+      overlaps: ['SFC-IT-2.4']
     },
     {
       id: 'SFC-AI-B1', domain: 'identity', priority: 'enhanced', sourceId: AI, clause: '(B)(i)',
@@ -133,7 +133,7 @@
       quote: 'Licensed firms should design system controls based on the assumption that any user, device, privileged account or network component may be compromised.',
       quoteStatus: 'excerpt',
       applicability: { licenses: ALL_LC },
-      crossRefs: ['SFC-IT-2.2']
+      overlaps: ['SFC-IT-2.2']
     },
     {
       id: 'SFC-AI-B2', domain: 'protect', priority: 'enhanced', sourceId: AI, clause: '(B)(ii)',
@@ -142,7 +142,7 @@
       quote: '… licensed firms should implement micro network segmentation where feasible to limit lateral movement capabilities across networks and systems.',
       quoteStatus: 'excerpt',
       applicability: { licenses: ALL_LC },
-      crossRefs: ['SFC-IT-2.1']
+      overlaps: ['SFC-IT-2.1']
     },
     {
       id: 'SFC-AI-B3', domain: 'protect', priority: 'enhanced', sourceId: AI, clause: '(B)(iii)',
@@ -175,7 +175,7 @@
       quote: 'They should strengthen their third-party supply chain risk governance framework, enhance initial and ongoing assessments on third-party service providers to factor in the latest threat landscape …',
       quoteStatus: 'excerpt',
       applicability: { licenses: ALL_LC, attributes: ['outsourcing'] },
-      crossRefs: ['SFC-IT-2.10']
+      overlaps: ['SFC-IT-2.10']
     },
     {
       id: 'SFC-AI-E1', domain: 'respond', priority: 'enhanced', sourceId: AI, clause: '(E)',
@@ -184,7 +184,7 @@
       quote: 'Licensed firms should review and enhance their cybersecurity incident handling procedures and contingency plans to effectively handle AI-enabled cyberattacks …',
       quoteStatus: 'excerpt',
       applicability: { licenses: ALL_LC },
-      crossRefs: ['SFC-IT-2.9']
+      overlaps: ['SFC-IT-2.9']
     },
     {
       id: 'SFC-AI-LLM', domain: 'governance', priority: 'enhanced', sourceId: AI, clause: '第 7 段',

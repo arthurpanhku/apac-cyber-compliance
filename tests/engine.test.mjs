@@ -5,11 +5,12 @@ await import('../js/engine.js');
 const E = globalThis.HKCCEngine;
 
 const controls = [
-  { id: 'A', priority: 'baseline', applicability: { licenses: ['l1'], attributes: ['a1'] }, crossRefs: ['B'] },
-  { id: 'B', priority: 'enhanced', applicability: { licenses: ['l1'], attributes: ['a1'] }, crossRefs: ['A'] },
-  { id: 'C', priority: 'baseline', applicability: { licenses: ['l2'], attributes: [] }, crossRefs: ['A'] }
+  { id: 'A', priority: 'baseline', applicability: { licenses: ['l1'], attributes: ['a1'] } },
+  { id: 'B', priority: 'enhanced', applicability: { licenses: ['l1'], attributes: ['a1'] } },
+  { id: 'C', priority: 'baseline', applicability: { licenses: ['l2'], attributes: [] }, overlaps: ['A'] },
+  { id: 'D', priority: 'baseline', applicability: { licenses: ['l1'], attributes: [] }, related: ['A', 'C'] }
 ];
-const byId = new Map(controls.map(c => [c.id, c]));
+const equivalence = [{ id: 'eq-ab', basis: 'reviewed', members: ['A', 'B'] }];
 
 test('applies uses any licence and all attributes', () => {
   assert.equal(E.applies(controls[0], new Set(['l1']), new Set()), false);
@@ -23,9 +24,30 @@ test('indexAttributeLicenses derives relevant entity types from controls', () =>
   assert.equal(index.has('missing'), false);
 });
 
-test('cluster merges reciprocal references only', () => {
-  assert.deepEqual(E.cluster(controls, byId, true).map(g => g.map(c => c.id)), [['A', 'B'], ['C']]);
-  assert.deepEqual(E.cluster(controls, byId, false).map(g => g.map(c => c.id)), [['A'], ['B'], ['C']]);
+test('cluster merges equivalence groups only, never overlaps or related', () => {
+  assert.deepEqual(E.cluster(controls, equivalence, true).map(g => g.map(c => c.id)), [['A', 'B'], ['C'], ['D']]);
+  assert.deepEqual(E.cluster(controls, equivalence, false).map(g => g.map(c => c.id)), [['A'], ['B'], ['C'], ['D']]);
+  assert.deepEqual(E.cluster(controls, [], true).map(g => g.map(c => c.id)), [['A'], ['B'], ['C'], ['D']]);
+});
+
+test('cluster merges only the members that apply', () => {
+  const three = [{ id: 'eq', members: ['A', 'B', 'X'] }];
+  assert.deepEqual(E.cluster(controls.slice(0, 1), three, true).map(g => g.map(c => c.id)), [['A']]);
+});
+
+test('indexRelations is symmetric and overlaps wins over related', () => {
+  const index = E.indexRelations(controls);
+  assert.deepEqual([...index.get('A').overlaps], ['C']);
+  assert.deepEqual([...index.get('C').overlaps], ['A']);
+  assert.deepEqual([...index.get('A').related], ['D']);
+  assert.deepEqual([...index.get('C').related], ['D']);
+  const both = E.indexRelations([{ id: 'P', overlaps: ['Q'] }, { id: 'Q', related: ['P'] }]);
+  assert.deepEqual([...both.get('P').related], []);
+});
+
+test('equivalenceFor finds the group behind a merged card', () => {
+  assert.equal(E.equivalenceFor(controls.slice(0, 2), equivalence).id, 'eq-ab');
+  assert.equal(E.equivalenceFor(controls.slice(0, 1), equivalence), null);
 });
 
 test('pendingCount includes unassessed, partial and gap', () => {
@@ -37,7 +59,7 @@ test('v1 merged state propagates without overwriting explicit member state', () 
   const migrated = E.migrateV1({
     licenses: ['l1'], attributes: ['a1'], merge: true,
     assessment: { A: 'done', B: 'partial', UNKNOWN: 'gap' }
-  }, controls);
+  }, controls, equivalence);
   assert.equal(migrated.assessments.A.status, 'done');
   assert.equal(migrated.assessments.B.status, 'partial');
   assert.equal(migrated.unresolvedAssessments.UNKNOWN.status, 'gap');
@@ -46,14 +68,21 @@ test('v1 merged state propagates without overwriting explicit member state', () 
 test('v1 merged state propagates to an unassessed member', () => {
   const migrated = E.migrateV1({
     licenses: ['l1'], attributes: ['a1'], merge: true, assessment: { A: 'done' }
-  }, controls);
+  }, controls, equivalence);
   assert.equal(migrated.assessments.B.status, 'done');
+});
+
+test('v1 merged state does not propagate to merely overlapping controls', () => {
+  const migrated = E.migrateV1({
+    licenses: ['l1', 'l2'], attributes: ['a1'], merge: true, assessment: { A: 'done' }
+  }, controls, equivalence);
+  assert.equal(migrated.assessments.C, undefined);
 });
 
 test('v1 unmerged state stays on its original control', () => {
   const migrated = E.migrateV1({
     licenses: ['l1'], attributes: ['a1'], merge: false, assessment: { A: 'done' }
-  }, controls);
+  }, controls, equivalence);
   assert.equal(migrated.assessments.A.status, 'done');
   assert.equal(migrated.assessments.B, undefined);
 });

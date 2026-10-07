@@ -24,10 +24,11 @@
 
 ```bash
 node tools/validate.mjs
+node tools/check-equivalence.mjs
 node --test tests/*.test.mjs
 ```
 
-校验项：ID 唯一、出处存在、控制域／牌照／业务特征有效、交叉引用可解析、必填字段齐全、
+校验项：ID 唯一、出处存在、控制域／牌照／业务特征有效、overlaps／related 引用可解析、每个合并组的等价性规则、必填字段齐全、
 日期格式正确、每份出处都有 `verifiedOn`，**以及英文层与繁体层是否完整**。
 超过 180 天未复核的出处会出现提示（不影响通过，但值得处理）。
 
@@ -110,15 +111,41 @@ python3 tools/gen-hant.py
    由页面的 `formatDiagnostic()` 经 `t()` 取用。校验器会确认每个代码都已登记、
    且三种语言都有文案——漏了文案对话框会直接显示 `diagXxx`。
 
-## 关于交叉引用（`crossRefs`）
+## 监管关系：Equivalent、Overlaps、Related
 
-`crossRefs` 有两种用途，取决于是否双向：
+| 关系 | 含义 | 是否合并 | 登记位置 |
+| --- | --- | --- | --- |
+| **Equivalent（实质等价）** | 两个监管要求实质相同 | 合并为一张卡片 | `data/equivalence.js` 的等价组 |
+| **Overlaps（部分重叠）** | 要求部分重叠 | 不合并，只显示标签 | 控制点的 `overlaps` 字段 |
+| **Related（相关）** | 存在关联或参考价值 | 不合并，只显示标签 | 控制点的 `related` 字段 |
 
-- **双向**（A 引用 B 且 B 引用 A）→ 界面会**合并**为一张卡片，视为同一项要求
-- **单向** → 只显示为「另见」标签，不合并
+`overlaps` 与 `related` 只需写在一方，界面会在两边都显示标签。（旧的 `crossRefs` 字段已不被校验器接受。）
 
-**只在两条条文确实要求同一件事时才建立双向引用。** 若一方范围明显更宽（例如 TM-G-1 第 3 节「保安管理」
-之于 PDPO DPP4），请用单向引用。错误的双向引用会让使用者误以为满足一方即满足另一方。
+**只有两条条文确实要求同一件事时才登记为等价。** 任何一方多出实质内容——多一项措施、时限更短、范围更广、
+触发条件不同——都请用 `overlaps`。错误的等价会让使用者误以为满足一方即满足另一方。拿不准时宁可不合并。
+
+每个等价组都必须通过 `node tools/check-equivalence.mjs`（规则见 `tools/lib/equivalence-rules.mjs`）：
+
+| 规则 | 要求 |
+| --- | --- |
+| EQ1 | 至少 2 个成员且全部存在；一个控制点至多属于一个等价组 |
+| EQ2 | `basis` 为 `same-provision`、`identical-text` 或 `reviewed` |
+| EQ3 | 控制域相同 |
+| EQ4 | 义务强度（`priority`）相同：baseline 与 enhanced 不可等价 |
+| EQ5 | 截止日期相同（或均无） |
+| EQ6 | 每个成员都有标为 `verbatim` 或 `excerpt` 的原文 `quote`——不能凭「说明」断言等价 |
+| EQ7 | `same-provision`：出处、条款编号与原文相同；其余 basis：成员来自不同出处 |
+| EQ8 | `identical-text`：规范化空白与引号后原文相同；只有 `addressees` 列明的受规管者称谓可以不同 |
+| EQ9 | `reviewed`：须有中英文 `rationale` 及 `reviewedOn` 日期 |
+| EQ10 | 同组成员之间不得再标为 `overlaps` 或 `related` |
+
+`basis` 的选择：
+
+- `same-provision`——同一份文件的同一段，因适用范围不同拆成多条控制点（如 RMiT 13.3 与 13.3-NCII）
+- `identical-text`——不同文件、原文相同。如各文件对受规管者的称谓不同（如 relevant entity／digital token
+  service provider），把这些称谓列在 `addressees`；除此之外不得有任何差异
+- `reviewed`——措辞不同，但逐段对照官方原文后判断实质相同。须写明 `rationale`（简体写在
+  `data/equivalence.js`，英文写在 `data/i18n/en.js` 的 `equivalence`），`reviewedOn` 填实际对照的日期
 
 ## 新增一份法规
 

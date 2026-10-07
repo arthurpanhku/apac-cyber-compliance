@@ -27,6 +27,17 @@ jobs:
       - name: node tools/validate.mjs
         run: node tools/validate.mjs
 
+      # 监管关系分三类：Equivalent（实质等价，合并）、Overlaps（部分重叠）、Related（相关）。
+      # 只有 data/equivalence.js 登记的等价组会合并为一张卡片，所以每组都必须通过
+      # tools/lib/equivalence-rules.mjs 的规则（控制域、义务强度、截止日期一致，
+      # 有原文依据，原文相同或经人工评审并写明理由等）。不通过的组请改为 overlaps 或 related。
+      - name: 等价性规则检查
+        run: node tools/check-equivalence.mjs
+
+      # 引擎逻辑与等价性规则的单元测试（零依赖，Node 内置 test runner）。
+      - name: node --test
+        run: node --test tests/*.test.mjs
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.x'

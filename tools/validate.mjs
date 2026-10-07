@@ -1,43 +1,13 @@
 /**
  * 数据完整性校验。CI 与提交 PR 前请运行：node tools/validate.mjs
- * 校验项：ID 唯一、出处存在、控制域存在、牌照/业务特征存在、交叉引用可解析、必填字段齐全。
+ * 校验项：ID 唯一、出处存在、控制域存在、牌照/业务特征存在、overlaps／related 引用可解析、必填字段齐全。
+ * 等价组（data/equivalence.js）的规则另由 tools/check-equivalence.mjs 检查。
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { loadData, root } from './lib/load-data.mjs';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const HKCC = {
-  baseLocale: 'zh-Hans',
-  sources: {}, jurisdictions: [], licenses: [], attributes: [], domains: [], controls: [], i18n: {},
-  addSources(o) { Object.assign(this.sources, o); },
-  addJurisdictions(a) { this.jurisdictions.push(...a); },
-  addLicenses(a) { this.licenses.push(...a); },
-  addAttributes(a) { this.attributes.push(...a); },
-  addDomains(a) { this.domains.push(...a); },
-  addControls(a) { this.controls.push(...a); },
-  addI18n(loc, obj) {
-    const b = this.i18n[loc] || (this.i18n[loc] = {});
-    for (const [k, v] of Object.entries(obj)) Object.assign(b[k] || (b[k] = {}), v);
-  }
-};
-globalThis.HKCC = HKCC;
-globalThis.window = { HKCC };
-
-const load = (p) => new Function('HKCC', readFileSync(join(root, p), 'utf8'))(HKCC);
-load('data/jurisdictions.js');
-load('data/domains.js');
-for (const j of HKCC.jurisdictions) {
-  load(`data/${j.id}/sources.js`);
-  load(`data/${j.id}/taxonomy.js`);
-  const controlsDir = join(root, `data/${j.id}/controls`);
-  for (const f of readdirSync(controlsDir).filter(f => f.endsWith('.js')).sort()) {
-    load(join(`data/${j.id}/controls`, f));
-  }
-}
-for (const f of readdirSync(join(root, 'data/i18n')).filter(f => f.endsWith('.js')).sort()) {
-  load(join('data/i18n', f));
-}
+const HKCC = loadData();
 
 const errors = [];
 const warn = [];
@@ -81,9 +51,31 @@ for (const c of HKCC.controls) {
   }
 }
 
+/* ---------- 监管关系：overlaps／related ----------
+   实质等价（Equivalent）登记在 data/equivalence.js，由 tools/check-equivalence.mjs 检查；
+   这里只检查控制点上的部分重叠（overlaps）与相关（related）引用。 */
 for (const c of HKCC.controls) {
-  for (const r of c.crossRefs || []) {
-    if (!controlIds.has(r)) errors.push(`控制点 ${c.id}: 交叉引用指向不存在的控制点 "${r}"`);
+  if (c.crossRefs) {
+    errors.push(`控制点 ${c.id}: crossRefs 已弃用——实质等价请登记到 data/equivalence.js，` +
+      '其余改用 overlaps（部分重叠）或 related（相关）');
+  }
+  const seenRefs = new Map();
+  for (const type of ['overlaps', 'related']) {
+    if (c[type] !== undefined && !Array.isArray(c[type])) errors.push(`控制点 ${c.id}: ${type} 须为数组`);
+    for (const r of c[type] || []) {
+      if (!controlIds.has(r)) errors.push(`控制点 ${c.id}: ${type} 指向不存在的控制点 "${r}"`);
+      if (r === c.id) errors.push(`控制点 ${c.id}: ${type} 指向自己`);
+      if (seenRefs.has(r)) errors.push(`控制点 ${c.id}: "${r}" 同时出现在 ${seenRefs.get(r)} 与 ${type}`);
+      seenRefs.set(r, type);
+    }
+  }
+}
+const byIdForRelations = new Map(HKCC.controls.map(c => [c.id, c]));
+for (const c of HKCC.controls) {
+  for (const r of c.overlaps || []) {
+    if ((byIdForRelations.get(r)?.related || []).includes(c.id)) {
+      errors.push(`控制点 ${c.id} 与 ${r}: 一方标为 overlaps、另一方标为 related，请统一`);
+    }
   }
 }
 /* ---------- 出处：链接与核验日期 ----------
@@ -145,6 +137,9 @@ for (const loc of TRANSLATED) {
   const missingNote = HKCC.controls
     .filter(c => c.note && !bucket.controls?.[c.id]?.note).map(c => c.id);
   if (missingNote.length) errors.push(`${loc}: 控制点 note 未译 — ${missingNote.join(', ')}`);
+
+  const missingEq = HKCC.equivalence.filter(g => g.rationale && !bucket.equivalence?.[g.id]?.rationale).map(g => g.id);
+  if (missingEq.length) errors.push(`${loc}: 等价组 rationale 未译 — ${missingEq.join(', ')}`);
 
   for (const [kind, list, fields] of [
     ['jurisdictions', HKCC.jurisdictions, ['label']],

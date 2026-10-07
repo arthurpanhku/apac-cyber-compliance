@@ -11,7 +11,7 @@
   <p>
     <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
-    <img src="https://img.shields.io/badge/version-1.11.0-0ea5e9" alt="Version 1.11.0">
+    <img src="https://img.shields.io/badge/version-1.12.0-0ea5e9" alt="Version 1.12.0">
     <img src="https://img.shields.io/badge/控制點-412-16a34a" alt="412 controls">
     <img src="https://img.shields.io/badge/條文出處-31-64748B" alt="31 sources">
     <img src="https://img.shields.io/badge/司法管轄區-HK%20%C2%B7%20SG%20%C2%B7%20AU%20%C2%B7%20MY-0ea5e9" alt="Four jurisdictions">
@@ -33,9 +33,15 @@
 （電腦系統）條例》；新加坡有金融管理局（MAS）；澳洲有審慎監管局（APRA）；馬來西亞則有國家銀行（BNM）。條文散落在指引、通函、法定通知、監管政策
 手冊和實務守則中，同一項控制往往被多個機構以不同措辭重複要求。
 
+**項目目標：一家公司實施一次安全控制，就能複用同一份證據評估多個監管框架，同時清楚知道每個框架
+還有哪些額外要求。** 在香港、新加坡、馬來西亞、澳洲都有持牌實體的區域集團，不應為同一套多重認證
+或補丁流程向四個監管機構各證明一次——但也絕不能漏掉要求更短時限或多一項措施的那個監管機構。
+
 本工具把這些條文拆解為**可勾選的控制點**：先選擇司法管轄區，再勾選貴公司持有的牌照與業務
 特徵，即時得到適用的控制點清單，每條都標註**來源法規、條款編號、發佈日期與官方原文連結**，
-並可自評打分、匯出底稿。目前覆蓋**香港**（SFC / HKMA / PCPD / 關鍵基礎設施條例）與
+並可自評打分、匯出底稿。跨監管實質等價的條文合併為一張卡片；只是部分重疊的條文不合並、只作標示，
+讓額外要求始終看得見（見[三類監管關係](#關於合併跨監管重複項)）。等價條文共用一次實施記錄、
+逐條寫明重疊部分的額外要求、按監管框架出具結果，均已列入路線，見 `DEVELOPMENT_PLAN.md` 第 1A 節。目前覆蓋**香港**（SFC / HKMA / PCPD / 關鍵基礎設施條例）與
 **新加坡**（MAS）、**澳洲**（APRA）與**馬來西亞**（BNM）；架構已支持逐步加入其他 APAC 司法管轄區。
 
 ## 快速開始
@@ -169,21 +175,39 @@ v1.11.0 共 **412 條控制點**，來自 **31 份**官方文件，涵蓋香港�
 
 ## 關於「合併跨監管重複項」
 
-合併只在**雙向交叉引用**時發生：控制點 A 引用 B **且** B 也引用 A，才視為同一項要求並合併為一張卡片。
-單向引用只顯示為「另見」標籤，不合並。
+不同監管機構的控制點之間有三類關係：
 
-這條規則是刻意保守的。若採用引用關係的傳遞閉包，會把範圍不對等的條文錯誤等同——
-例如把「每日離線備份」和「在嚴重情景下測試關鍵業務交付能力」合併，或把強制的 12 小時法定事故通報
-與《私隱條例》下的自願通報合併。兩者性質不同，合併會造成合規誤讀。
+| 關係 | 含義 | 是否合併 | 登記位置 |
+| --- | --- | --- | --- |
+| **Equivalent（實質等價）** | 兩個監管要求實質相同 | 合併為一張卡片 | `data/equivalence.js` |
+| **Overlaps（部分重疊）** | 要求部分重疊（如一方多一項措施、時限更短或範圍更廣） | 不合並，只顯示標籤 | 控制點的 `overlaps` 欄位 |
+| **Related（相關）** | 存在關聯或參考價值 | 不合並，只顯示標籤 | 控制點的 `related` 欄位 |
 
-在勾選全部牌照與業務特徵的最大範圍下，412 條條文合併為 **359 項**獨立要求。
-平台營運者若勾選「虛擬資產服務提供者」與「互聯網交易」，90 條適用條文會合併為 **61 項**——
-證監會撰寫《虛擬資產交易平台營運者指引》第 XII 部時顯然以《黑客入侵風險指引》為藍本，
-大部分是同一項要求寫了兩遍，合併正是為了不讓清單虛胖。
+合併等於告訴使用者「滿足其中一條即滿足全組」，所以只有等價組會合並，而且每組都必須通過 CI 中的
+明確規則（`node tools/check-equivalence.mjs`，規則見 `tools/lib/equivalence-rules.mjs`）：
 
-新加坡方面同樣如此：MAS 致銀行、資本市場金融機構、持牌數字代幣服務提供者的三份
-《網絡衞生通知》第 IV 段，條文幾乎逐字相同，只是主體名詞不同——59 條 MAS 控制點在勾選
-全部三種新加坡牌照時合併為 **46 項**。
+| 規則 | 要求 |
+| --- | --- |
+| EQ1 | 至少 2 個成員且全部存在；一個控制點至多屬於一個等價組 |
+| EQ2 | `basis` 為 `same-provision`、`identical-text` 或 `reviewed` |
+| EQ3 | 控制域相同 |
+| EQ4 | 義務強度（`priority`）相同：baseline 與 enhanced 不可等價 |
+| EQ5 | 截止日期相同（或均無） |
+| EQ6 | 每個成員都有標為 `verbatim` 或 `excerpt` 的原文 `quote`——不能憑「說明」斷言等價 |
+| EQ7 | `same-provision`：出處、條款編號與原文相同；其餘 basis：成員來自不同出處 |
+| EQ8 | `identical-text`：規範化空白與引號後原文相同；只有 `addressees` 列明的受規管者稱謂可以不同 |
+| EQ9 | `reviewed`：須有中英文 `rationale` 及 `reviewedOn` 日期 |
+| EQ10 | 同組成員之間不得再標為 `overlaps` 或 `related` |
+
+這些規則是必要條件而非證明：措辭不同的兩條條文是否「實質」等價，終究要靠人判斷，所以 `reviewed`
+等價組必須把理由寫下來。
+
+實際執行相當嚴格。證監會撰寫《虛擬資產交易平台營運者指引》第 XII 部時以《黑客入侵風險指引》為藍本，
+但多數對應段落中 VATP 版本另有增補——端點偵測與響應、儲存媒介管控、應急計劃每年測試——這些只標為
+部分重疊，不合並；逐段對照後確認實質相同的只有五組。勾選「虛擬資產服務提供者」與「互聯網交易」時，
+90 條適用條文顯示為 **85** 張卡片。MAS 三份《網絡衞生通知》第 4 段除受規管者稱謂外逐字相同，故合併：
+勾選全部三種新加坡牌照時，59 條 MAS 控制點顯示為 **47** 張卡片。勾選全部牌照與業務特徵時，
+412 條條文顯示為 **393** 張卡片。
 
 > **部署注意**：倉庫根目錄的 `.nojekyll` 不可刪除。GitHub Pages 預設以 Jekyll 處理站點，
 > 而 Jekyll 會忽略以下劃線開頭的路徑，導致 `data/_registry.js` 返回 404、整個應用無法啟動。
@@ -275,7 +299,18 @@ data/
   quoteStatus: 'excerpt',               // verbatim | excerpt | summary
   applicability: { licenses: [...], attributes: [...] },
   deadline: '2027-07-08',              // 可選：合規限期
-  crossRefs: ['SFC-PH-A1', 'HKMA-TME1-4.1']
+  overlaps: ['SFC-PH-A1', 'HKMA-TME1-4.1'],  // 部分重疊，只顯示標籤
+  related: ['SFC-COC-18']              // 相關，只顯示標籤
+}
+```
+
+實質等價是唯一會合並卡片的關係，以等價組形式登記在 `data/equivalence.js`：
+
+```js
+{
+  id: 'eq-sfc-2fa-login', basis: 'reviewed', reviewedOn: '2026-10-07',
+  members: ['SFC-IT-1.1', 'SFC-VATP-12.12b'],
+  rationale: '……'                      // 實質等價的理由（英文寫在 data/i18n/en.js）
 }
 ```
 
@@ -303,7 +338,7 @@ node tools/validate.mjs
 node --test tests/*.test.mjs
 ```
 
-校驗項包括：ID 唯一、出處存在、控制域／牌照／業務特徵有效、交叉引用可解析、必填欄位及來源文字分類齊全、
+校驗項包括：ID 唯一、出處存在、控制域／牌照／業務特徵有效、overlaps／related 引用可解析、必填欄位及來源文字分類齊全、
 每份出處都有 `verifiedOn`，**以及英文層與繁體層是否完整**——新增控制點若未補譯，校驗會失敗。
 單元測試覆蓋適用性、合併、v1 遷移、項目校驗、到期計算及 CSV 注入防護。
 超過 180 天未複核的出處會出現提示。

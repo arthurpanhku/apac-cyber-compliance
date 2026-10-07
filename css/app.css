@@ -326,6 +326,8 @@ blockquote { margin: 8px 0 0; padding: 9px 13px; border-left: 3px solid var(--bo
 .tag.deadline { background: var(--gap-soft); color: var(--gap); border-color: transparent;
   font-weight: 600; }
 .tag.merged { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.tag.overlap { border-style: dashed; color: var(--accent); }
+.tag.related { border-style: dotted; }
 .tag.pending, .tag.overdue { background: var(--gap-soft); color: var(--gap); border-color: transparent; }
 .tag.complete { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
 .tag.due-soon { background: var(--partial-soft); color: var(--partial); border-color: transparent; }
