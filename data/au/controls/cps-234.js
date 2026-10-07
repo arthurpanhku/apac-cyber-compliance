@@ -227,8 +227,8 @@
       requirement: '知悉预期无法及时修补的重大资讯保安控制弱点后，须尽快通知 APRA，最迟不超过 10 个营业日。',
       quote: 'An APRA-regulated entity must notify APRA as soon as possible and, in any case, no later than 10 business days, after it becomes aware of a material information security control weakness which the entity expects it will not be able to remediate in a timely manner.',
       quoteStatus: 'verbatim',
-      // 单向「另见」：第 29 段是内部上报，本段是通知 APRA，二者不是同一要求，不可合并。
-      crossRefs: ['APRA-234-29'],
+      // 相关（related）：第 29 段是内部上报，本段是通知 APRA，二者不是同一要求，不可合并。
+      related: ['APRA-234-29'],
       applicability: all()
     }
   ]);

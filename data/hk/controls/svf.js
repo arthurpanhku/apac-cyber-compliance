@@ -18,7 +18,7 @@
       quote: 'A licensee should establish an effective technology risk management framework to ensure (i) the adequacy of IT controls, (ii) the quality and security, including the reliability, robustness, stability and availability, of its computer systems, and (iii) the safety and efficiency of the operations of the SVF.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['HKMA-TMG1-2']
+      related: ['HKMA-TMG1-2']
     },
     {
       id: 'SVF-7.2.2', domain: 'respond', priority: 'baseline', sourceId: GL, clause: '7.2.2',
@@ -27,7 +27,7 @@
       quote: 'This includes (i) timely reporting to the HKMA of any confirmed IT-related fraud cases or major security breaches, including cyber attacks, cases of prolonged disruption of service, and systemic incidents where users suffer from monetary loss or frustrating user experience.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['SFC-PH-C1']
+      related: ['SFC-PH-C1']
     },
     {
       id: 'SVF-7.2.3', domain: 'data', priority: 'baseline', sourceId: GL, clause: '7.2.3',
@@ -36,7 +36,7 @@
       quote: 'In respect of any personal data of users, including merchants, a licensee should at all times comply with the PDPO as well as any relevant codes of practice, guidelines or best practice issued by the Office of the PCPD from time to time.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['PDPO-DPP4-1', 'SFC-IT-2.2']
+      related: ['PDPO-DPP4-1', 'SFC-IT-2.2']
     },
     {
       id: 'SVF-7.3.1', domain: 'governance', priority: 'baseline', sourceId: GL, clause: '7.3.1',
@@ -53,7 +53,7 @@
       quote: 'A licensee should have adequate policies and procedures on the ownership, classification, storage, transmission, processing and retention of information collected from users through registration of SVF service and execution of payment transactions to ensure confidentiality and integrity of the information.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['PDPO-DPP2', 'SFC-IT-1.4']
+      related: ['PDPO-DPP2', 'SFC-IT-1.4']
     },
     {
       id: 'SVF-7.3.3', domain: 'protect', priority: 'baseline', sourceId: GL, clause: '7.3.3',
@@ -70,7 +70,7 @@
       quote: 'A licensee should implement adequate payment security controls to ensure the authenticity and traceability of payment transactions and detect fraudulent transactions.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['SFC-PH-B3']
+      related: ['SFC-PH-B3']
     },
     {
       id: 'SVF-7.3.5', domain: 'identity', priority: 'baseline', sourceId: GL, clause: '7.3.5',
@@ -79,7 +79,7 @@
       quote: 'A licensee should authenticate the identity of SVF users before they can administer their SVF accounts and initiate high-risk transactions. Timely notification should be sent to users after these activities.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['HKMA-TME1-4.1', 'SFC-IT-1.3']
+      related: ['HKMA-TME1-4.1', 'SFC-IT-1.3']
     },
     {
       id: 'SVF-7.3.6', domain: 'awareness', priority: 'baseline', sourceId: GL, clause: '7.3.6',
@@ -88,7 +88,7 @@
       quote: 'A licensee should provide advice and assistance to users on the secure use of SVF through an effective communication channel.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['SFC-IT-3.4']
+      related: ['SFC-IT-3.4']
     },
     {
       id: 'SVF-PN-ANTISCAM', domain: 'awareness', priority: 'enhanced', sourceId: PN, clause: '7.3.6 补充指引 (b)',
@@ -97,7 +97,7 @@
       quote: 'A licensee should not send, generate or trigger any message (e.g. emails, SMS messages, or similar kinds of instant messages) to the users with embedded hyperlinks that would (a) request users to provide sensitive user information such as personal data and credentials; or (b) direct a user to its website or Apps for transactions.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['SFC-PH-D1']
+      related: ['SFC-PH-D1']
     },
     {
       id: 'SVF-7.3.7', domain: 'assurance', priority: 'baseline', sourceId: GL, clause: '7.3.7',
@@ -106,7 +106,7 @@
       quote: 'A licensee should guard against current and upcoming cyber security risks associated with its SVF by monitoring the trends in cyber threats, implementing adequate protective measures and performing periodic security testing.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['HKMA-CRAF-3', 'SFC-AI-C1']
+      related: ['HKMA-CRAF-3', 'SFC-AI-C1']
     },
     {
       id: 'SVF-7.3.8', domain: 'resilience', priority: 'baseline', sourceId: GL, clause: '7.3.8',
@@ -123,7 +123,7 @@
       quote: 'A licensee should have in place adequate business continuity management (BCM) programs to ensure continuation, timely recovery, or in extreme situations orderly scale-down of critical operations in the event of major disruptions caused by different contingent scenarios.',
       quoteStatus: 'verbatim',
       applicability: { licenses: SVF },
-      crossRefs: ['SFC-IT-2.9', 'HKMA-OR2-3']
+      related: ['SFC-IT-2.9', 'HKMA-OR2-3']
     },
     {
       id: 'SVF-7.4.2', domain: 'governance', priority: 'baseline', sourceId: GL, clause: '7.4.2',
@@ -140,7 +140,7 @@
       quote: 'Code of Practice Pursuant to the Protection of Critical Infrastructures (Computer Systems) Ordinance For Stored Value Facility Licensees designated by the Monetary Authority as Critical Infrastructure Operators',
       quoteStatus: 'summary',
       applicability: { licenses: SVF, attributes: ['ci-designated'] },
-      crossRefs: ['CI-CAT1-3', 'CI-CAT3-3']
+      related: ['CI-CAT1-3', 'CI-CAT3-3']
     }
   ]);
 })();

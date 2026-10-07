@@ -11,7 +11,7 @@
   <p>
     <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
-    <img src="https://img.shields.io/badge/version-1.11.0-0ea5e9" alt="Version 1.11.0">
+    <img src="https://img.shields.io/badge/version-1.12.0-0ea5e9" alt="Version 1.12.0">
     <img src="https://img.shields.io/badge/控制点-412-16a34a" alt="412 controls">
     <img src="https://img.shields.io/badge/条文出处-31-64748B" alt="31 sources">
     <img src="https://img.shields.io/badge/司法管辖区-HK%20%C2%B7%20SG%20%C2%B7%20AU%20%C2%B7%20MY-0ea5e9" alt="Four jurisdictions">
@@ -169,21 +169,39 @@ v1.11.0 共 **412 条控制点**，来自 **31 份**官方文件，涵盖香港�
 
 ## 关于「合并跨监管重复项」
 
-合并只在**双向交叉引用**时发生：控制点 A 引用 B **且** B 也引用 A，才视为同一项要求并合并为一张卡片。
-单向引用只显示为「另见」标签，不合并。
+不同监管机构的控制点之间有三类关系：
 
-这条规则是刻意保守的。若采用引用关系的传递闭包，会把范围不对等的条文错误等同——
-例如把「每日离线备份」和「在严重情景下测试关键业务交付能力」合并，或把强制的 12 小时法定事故通报
-与《私隐条例》下的自愿通报合并。两者性质不同，合并会造成合规误读。
+| 关系 | 含义 | 是否合并 | 登记位置 |
+| --- | --- | --- | --- |
+| **Equivalent（实质等价）** | 两个监管要求实质相同 | 合并为一张卡片 | `data/equivalence.js` |
+| **Overlaps（部分重叠）** | 要求部分重叠（如一方多一项措施、时限更短或范围更广） | 不合并，只显示标签 | 控制点的 `overlaps` 字段 |
+| **Related（相关）** | 存在关联或参考价值 | 不合并，只显示标签 | 控制点的 `related` 字段 |
 
-在勾选全部牌照与业务特征的最大范围下，412 条条文合并为 **359 项**独立要求。
-平台营运者若勾选「虚拟资产服务提供者」与「互联网交易」，90 条适用条文会合并为 **61 项**——
-证监会撰写《虚拟资产交易平台营运者指引》第 XII 部时显然以《黑客入侵风险指引》为蓝本，
-大部分是同一项要求写了两遍，合并正是为了不让清单虚胖。
+合并等于告诉使用者「满足其中一条即满足全组」，所以只有等价组会合并，而且每组都必须通过 CI 中的
+明确规则（`node tools/check-equivalence.mjs`，规则见 `tools/lib/equivalence-rules.mjs`）：
 
-新加坡方面同样如此：MAS 致银行、资本市场金融机构、持牌数字代币服务提供者的三份
-《网络卫生通知》第 IV 段，条文几乎逐字相同，只是主体名词不同——59 条 MAS 控制点在勾选
-全部三种新加坡牌照时合并为 **46 项**。
+| 规则 | 要求 |
+| --- | --- |
+| EQ1 | 至少 2 个成员且全部存在；一个控制点至多属于一个等价组 |
+| EQ2 | `basis` 为 `same-provision`、`identical-text` 或 `reviewed` |
+| EQ3 | 控制域相同 |
+| EQ4 | 义务强度（`priority`）相同：baseline 与 enhanced 不可等价 |
+| EQ5 | 截止日期相同（或均无） |
+| EQ6 | 每个成员都有标为 `verbatim` 或 `excerpt` 的原文 `quote`——不能凭「说明」断言等价 |
+| EQ7 | `same-provision`：出处、条款编号与原文相同；其余 basis：成员来自不同出处 |
+| EQ8 | `identical-text`：规范化空白与引号后原文相同；只有 `addressees` 列明的受规管者称谓可以不同 |
+| EQ9 | `reviewed`：须有中英文 `rationale` 及 `reviewedOn` 日期 |
+| EQ10 | 同组成员之间不得再标为 `overlaps` 或 `related` |
+
+这些规则是必要条件而非证明：措辞不同的两条条文是否「实质」等价，终究要靠人判断，所以 `reviewed`
+等价组必须把理由写下来。
+
+实际执行相当严格。证监会撰写《虚拟资产交易平台营运者指引》第 XII 部时以《黑客入侵风险指引》为蓝本，
+但多数对应段落中 VATP 版本另有增补——端点侦测与响应、储存媒介管控、应急计划每年测试——这些只标为
+部分重叠，不合并；逐段对照后确认实质相同的只有五组。勾选「虚拟资产服务提供者」与「互联网交易」时，
+90 条适用条文显示为 **85** 张卡片。MAS 三份《网络卫生通知》第 4 段除受规管者称谓外逐字相同，故合并：
+勾选全部三种新加坡牌照时，59 条 MAS 控制点显示为 **47** 张卡片。勾选全部牌照与业务特征时，
+412 条条文显示为 **393** 张卡片。
 
 > **部署注意**：仓库根目录的 `.nojekyll` 不可删除。GitHub Pages 默认以 Jekyll 处理站点，
 > 而 Jekyll 会忽略以下划线开头的路径，导致 `data/_registry.js` 返回 404、整个应用无法启动。
@@ -275,7 +293,18 @@ data/
   quoteStatus: 'excerpt',               // verbatim | excerpt | summary
   applicability: { licenses: [...], attributes: [...] },
   deadline: '2027-07-08',              // 可选：合规限期
-  crossRefs: ['SFC-PH-A1', 'HKMA-TME1-4.1']
+  overlaps: ['SFC-PH-A1', 'HKMA-TME1-4.1'],  // 部分重叠，只显示标签
+  related: ['SFC-COC-18']              // 相关，只显示标签
+}
+```
+
+实质等价是唯一会合并卡片的关系，以等价组形式登记在 `data/equivalence.js`：
+
+```js
+{
+  id: 'eq-sfc-2fa-login', basis: 'reviewed', reviewedOn: '2026-10-07',
+  members: ['SFC-IT-1.1', 'SFC-VATP-12.12b'],
+  rationale: '……'                      // 实质等价的理由（英文写在 data/i18n/en.js）
 }
 ```
 
@@ -303,7 +332,7 @@ node tools/validate.mjs
 node --test tests/*.test.mjs
 ```
 
-校验项包括：ID 唯一、出处存在、控制域／牌照／业务特征有效、交叉引用可解析、必填字段及来源文字分类齐全、
+校验项包括：ID 唯一、出处存在、控制域／牌照／业务特征有效、overlaps／related 引用可解析、必填字段及来源文字分类齐全、
 每份出处都有 `verifiedOn`，**以及英文层与繁体层是否完整**——新增控制点若未补译，校验会失败。
 单元测试覆盖适用性、合并、v1 迁移、项目校验、到期计算及 CSV 注入防护。
 超过 180 天未复核的出处会出现提示。

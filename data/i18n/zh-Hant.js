@@ -71,7 +71,12 @@ HKCC.addI18n('zh-Hant', {
     "notePrefix": "注：",
     "tagMerged": "跨監管合併 {n} 條",
     "tagDeadline": "限期 {date}",
-    "tagSeeAlso": "另見 {id}",
+    "tagOverlaps": "部分重疊：{id}",
+    "tagRelated": "相關：{id}",
+    "equivalenceBasis": "合併依據（{basis}）：{rationale}",
+    "basisSameProvision": "同一條文",
+    "basisIdenticalText": "原文相同",
+    "basisReviewed": "經人工評審實質等價，{date}",
     "tagApplies": "適用：{value}",
     "tagTriggered": "觸發：{value}",
     "summaryLabel": "項適用控制要求",
@@ -2684,6 +2689,47 @@ HKCC.addI18n('zh-Hant', {
       "requirement": "機構須就現行科技風險管理實務對照本政策文件進行差距分析，並訂立具清晰時間表及里程碑的行動計劃，於本政策文件發出日期後 90 日內提交 BNM；先前已按舊版作出提交的機構，須就新版新增或修訂的要求識別新差距並持續合規，年度合規評估須在 BNM 要求時提供。",
       "note": "截止日期按發出日期 2026-09-25 加 90 日計算。第 18.2 段訂明提交對象：金融集團監管部、銀行監管部、保險及伊斯蘭保險監管部或支付服務監察部（視乎機構類別）。",
       "clause": "S 18.1"
+    }
+  },
+  "equivalence": {
+    "eq-mas-cyber-hygiene-4.1": {
+      "rationale": "三份《網絡衞生通知》第 4.1 段原文相同，只是分別適用於銀行、資本市場金融機構及持牌數字代幣服務提供者。"
+    },
+    "eq-mas-cyber-hygiene-4.2": {
+      "rationale": "三份《網絡衞生通知》第 4.2 段原文相同，只是分別適用於銀行、資本市場金融機構及持牌數字代幣服務提供者。"
+    },
+    "eq-mas-cyber-hygiene-4.3": {
+      "rationale": "三份《網絡衞生通知》第 4.3 段原文相同，只是分別適用於銀行、資本市場金融機構及持牌數字代幣服務提供者。"
+    },
+    "eq-mas-cyber-hygiene-4.4": {
+      "rationale": "三份《網絡衞生通知》第 4.4 段原文相同，只是分別適用於銀行、資本市場金融機構及持牌數字代幣服務提供者。"
+    },
+    "eq-mas-cyber-hygiene-4.5": {
+      "rationale": "三份《網絡衞生通知》第 4.5 段原文相同，只是分別適用於銀行、資本市場金融機構及持牌數字代幣服務提供者。"
+    },
+    "eq-mas-cyber-hygiene-4.6": {
+      "rationale": "三份《網絡衞生通知》第 4.6 段原文相同，只是分別適用於銀行、資本市場金融機構及持牌數字代幣服務提供者。"
+    },
+    "eq-sfc-2fa-login": {
+      "rationale": "兩段同樣要求客戶帳戶登入實施雙重認證，雙重認證的定義相同；平台客戶帳戶本身即經互聯網登入，適用範圍一致。"
+    },
+    "eq-sfc-login-password-delivery": {
+      "rationale": "兩段原文除受規管者稱謂外逐字相同。"
+    },
+    "eq-sfc-network-segmentation": {
+      "rationale": "兩段原文除關鍵系統的舉例外逐字相同，均要求以配備多層防火牆的 DMZ 進行網絡分段。"
+    },
+    "eq-sfc-patch-one-month": {
+      "rationale": "兩段均要求及時監察及評估補丁、儘快測試，並於測試完成後一個月內部署，時限相同。"
+    },
+    "eq-sfc-incident-escalation": {
+      "rationale": "兩段均要求以書面政策及程序訂明懷疑或實際網絡安全事故的內部及外部呈報，對外對象均包括客戶及證監會。"
+    },
+    "eq-bnm-rmit-10.31": {
+      "rationale": "RMiT 第 10.31 段同一條文；因電子貨幣發行人、商戶收單機構及中介匯款機構只在獲指定為 NCII 時須遵守，拆成兩條控制點。"
+    },
+    "eq-bnm-rmit-13.3": {
+      "rationale": "RMiT 第 13.3 段同一條文；按第 2.2(c) 段，三類支付機構只在獲指定為 NCII 時須遵守，故拆成兩條控制點。"
     }
   }
 });

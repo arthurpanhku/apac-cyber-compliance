@@ -8,7 +8,7 @@
  * 注入 HKCC.i18n。查字段一律走 HKCC.tr()／HKCC.t()，不要直接读 obj.label。
  */
 window.HKCC = {
-  meta: { version: '1.11.0' },
+  meta: { version: '1.12.0' },
 
   /** 基础数据的撰写语言：这些字段本身即 zh-Hans，无需覆盖层。 */
   baseLocale: 'zh-Hans',
@@ -27,6 +27,8 @@ window.HKCC = {
   attributes: [],
   domains: [],
   controls: [],
+  /** 实质等价的控制点组，见 data/equivalence.js；只有这些组会合并为一张卡片。 */
+  equivalence: [],
 
   /** locale -> { ui:{}, jurisdictions:{id:{...}}, licenses:{id:{...}}, attributes, domains, sources, controls } */
   i18n: {},
@@ -37,6 +39,7 @@ window.HKCC = {
   addAttributes(arr) { this.attributes.push(...arr); },
   addDomains(arr) { this.domains.push(...arr); },
   addControls(arr) { this.controls.push(...arr); },
+  addEquivalence(arr) { this.equivalence.push(...arr); },
 
   /**
    * 对外声称的核验日期取各出处中**最早**的一个。
@@ -64,7 +67,7 @@ window.HKCC = {
   /**
    * 取某条记录在当前语言下的字段。找不到译文时回落到基础数据（zh-Hans），
    * 使新增控制点在译文补齐前仍可显示，而不是留空。
-   * @param {string} kind  licenses | attributes | domains | sources | controls
+   * @param {string} kind  licenses | attributes | domains | sources | controls | equivalence
    * @param {string} id    记录 ID
    * @param {object} base  基础数据对象
    */

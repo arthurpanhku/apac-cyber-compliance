@@ -16,7 +16,7 @@
       quote: 'DPP4 - Data Security Principle',
       quoteStatus: 'summary',
       applicability: { licenses: ALL, attributes: ['personal-data'] },
-      crossRefs: ['SFC-IT-1.4', 'HKMA-TMG1-3']
+      overlaps: ['SFC-IT-1.4'], related: ['HKMA-TMG1-3']
     },
     {
       id: 'PDPO-DPP4-2', domain: 'thirdparty', priority: 'baseline', sourceId: src, clause: 'DPP4(2)',
@@ -25,7 +25,7 @@
       quote: 'DPP4 - Data Security Principle（委托处理情形）',
       quoteStatus: 'summary',
       applicability: { licenses: ALL, attributes: ['personal-data', 'outsourcing'] },
-      crossRefs: ['SFC-IT-2.10', 'HKMA-SA2-1']
+      related: ['SFC-IT-2.10', 'HKMA-SA2-1']
     },
     {
       id: 'PDPO-DPP2', domain: 'data', priority: 'baseline', sourceId: src, clause: 'DPP2',
@@ -74,7 +74,7 @@
       quote: 'Guidance on Data Breach Handling and Data Breach Notifications（私隐专员公署指引）',
       quoteStatus: 'summary',
       applicability: { licenses: ALL, attributes: ['personal-data'] },
-      crossRefs: ['SFC-PH-C1', 'CI-CAT3-3'],
+      related: ['SFC-PH-C1', 'CI-CAT3-3'],
       note: '本条的「自愿通报」表述以 2026-09-08 核验日的法律状态为准；若日后条例修订引入强制通报，须相应更新。'
     }
   ]);

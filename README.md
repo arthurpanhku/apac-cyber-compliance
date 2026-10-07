@@ -11,7 +11,7 @@
   <p>
     <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
-    <img src="https://img.shields.io/badge/version-1.11.0-0ea5e9" alt="Version 1.11.0">
+    <img src="https://img.shields.io/badge/version-1.12.0-0ea5e9" alt="Version 1.12.0">
     <img src="https://img.shields.io/badge/controls-412-16a34a" alt="412 controls">
     <img src="https://img.shields.io/badge/sources-31-64748B" alt="31 sources">
     <img src="https://img.shields.io/badge/jurisdictions-HK%20%C2%B7%20SG%20%C2%B7%20AU%20%C2%B7%20MY-0ea5e9" alt="Four jurisdictions">
@@ -178,24 +178,42 @@ own internet trading facility).
 
 ## About "merge duplicates across regulators"
 
-Merging happens only on a **bidirectional cross-reference**: control A references B **and** B references A.
-A one-way reference shows up as a "see also" tag and is not merged.
+Controls from different regulators relate to each other in one of three ways:
 
-That rule is deliberately conservative. Taking the transitive closure of references would wrongly equate
-provisions of unequal scope — merging "daily offline backup" with "test the ability to deliver critical
-operations under severe but plausible scenarios", say, or merging the mandatory 12-hour statutory incident
-notification with voluntary notification under the PDPO. Those are different obligations, and merging them
-would mislead.
+| Relationship | Meaning | Merged? | Where it is recorded |
+| --- | --- | --- | --- |
+| **Equivalent** | The two requirements are substantively the same | Yes — one card | `data/equivalence.js` |
+| **Overlaps** | The requirements partly overlap (e.g. one adds a measure, a shorter deadline or a wider scope) | No — tag only | the control's `overlaps` field |
+| **Related** | Connected, or useful to read together | No — tag only | the control's `related` field |
 
-Selecting every licence and characteristic, the 412 provisions collapse to **359** distinct requirements. A
-platform operator that ticks VASP and internet trading sees 90 applicable provisions collapse to **61** —
-the SFC wrote Part XII of the VATP Guidelines closely along the lines of the Hacking Risks Guidelines, so
-most of it is the same obligation stated twice, and merging is what keeps the list honest.
+Merging tells the user "satisfy one and you satisfy the group", so only equivalence groups are merged, and every
+group must pass explicit rules checked in CI (`node tools/check-equivalence.mjs`, rules in
+`tools/lib/equivalence-rules.mjs`):
 
-The same is true in Singapore: MAS's three Notices on Cyber Hygiene — to banks, to capital markets
-financial institutions, and to licensed digital token service providers — repeat paragraph IV almost
-verbatim, swapping only the entity noun. Selecting all three Singapore licences, the 59 MAS controls
-collapse to **46**.
+| Rule | Requirement |
+| --- | --- |
+| EQ1 | At least two members, all existing; a control belongs to at most one group |
+| EQ2 | `basis` is `same-provision`, `identical-text` or `reviewed` |
+| EQ3 | Same control domain |
+| EQ4 | Same obligation strength (`priority`): a baseline requirement cannot be equivalent to an enhanced one |
+| EQ5 | Same deadline, or none |
+| EQ6 | Every member has an official-text `quote` labelled `verbatim` or `excerpt` — equivalence cannot rest on a summary |
+| EQ7 | `same-provision`: same source, clause and text. Otherwise members come from different sources |
+| EQ8 | `identical-text`: quotes identical after normalising whitespace and quotation marks; only the names for the regulated person listed in `addressees` may differ |
+| EQ9 | `reviewed`: a written `rationale` in Chinese and English and a `reviewedOn` date |
+| EQ10 | Members of a group are not also marked `overlaps` or `related` with each other |
+
+The rules are necessary conditions, not a proof: whether two differently-worded provisions are *substantively*
+equivalent is a human judgement, which is why `reviewed` groups must write their reasoning down.
+
+In practice this is strict. The SFC wrote Part XII of the VATP Guidelines closely along the lines of the Hacking
+Risks Guidelines, but in most matching paragraphs the VATP version adds something — endpoint detection and response,
+control of storage media, annual testing of the contingency plan — so those pairs are marked as overlapping, not
+merged. Only five pairs were found to be substantively the same. A platform operator that ticks VASP and internet
+trading sees 90 applicable provisions as **85** cards. MAS's three Notices on Cyber Hygiene repeat paragraph 4
+word for word apart from the name of the regulated entity, so those merge: selecting all three Singapore licences,
+the 59 MAS controls show as **47** cards. Selecting every licence and characteristic, the 412 provisions show as
+**393** cards.
 
 > **Deployment note**: do not delete `.nojekyll` in the repository root. GitHub Pages processes sites with
 > Jekyll by default, and Jekyll ignores paths beginning with an underscore — which would make
@@ -292,7 +310,18 @@ overlay files in `data/i18n/`:
   quoteStatus: 'excerpt',               // verbatim | excerpt | summary
   applicability: { licenses: [...], attributes: [...] },
   deadline: '2027-07-08',              // optional compliance deadline
-  crossRefs: ['SFC-PH-A1', 'HKMA-TME1-4.1']
+  overlaps: ['SFC-PH-A1', 'HKMA-TME1-4.1'],  // partly overlapping requirements — tag only
+  related: ['SFC-COC-18']              // related or useful to read together — tag only
+}
+```
+
+Equivalence — the only relationship that merges cards — is recorded as a group in `data/equivalence.js`:
+
+```js
+{
+  id: 'eq-sfc-2fa-login', basis: 'reviewed', reviewedOn: '2026-10-07',
+  members: ['SFC-IT-1.1', 'SFC-VATP-12.12b'],
+  rationale: '……'                      // why they are substantively the same (English in data/i18n/en.js)
 }
 ```
 
@@ -324,8 +353,8 @@ node tools/validate.mjs
 node --test tests/*.test.mjs
 ```
 
-It checks that IDs are unique, sources exist, domains / licences / characteristics are valid, cross
-references resolve, required fields and source-text classifications are present, every source has a
+It checks that IDs are unique, sources exist, domains / licences / characteristics are valid, `overlaps` /
+`related` references resolve, required fields and source-text classifications are present, every source has a
 `verifiedOn`, **and that the English and Traditional layers are complete** — a control added without its
 translations fails the build. Unit tests cover applicability, merging, v1 migration, project validation,
 due dates and CSV injection protection. Sources unchecked for more than 180 days raise a warning.

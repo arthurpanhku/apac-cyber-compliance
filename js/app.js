@@ -15,6 +15,7 @@
     { id: 'na', key: 'statusNa', cls: 's-na' }
   ];
   const byId = new Map(HKCC.controls.map(c => [c.id, c]));
+  const relationIndex = E.indexRelations(HKCC.controls);
   const licenseById = new Map(HKCC.licenses.map(l => [l.id, l]));
   const attributeLicenseIndex = E.indexAttributeLicenses(HKCC.controls);
   const definitions = {
@@ -129,7 +130,7 @@
       }
       const legacy = localStorage.getItem(LEGACY_STORE_KEY);
       if (!legacy) return;
-      const migrated = E.migrateV1(JSON.parse(legacy), HKCC.controls);
+      const migrated = E.migrateV1(JSON.parse(legacy), HKCC.controls, HKCC.equivalence);
       hydrate({
         project: migrated.project,
         scope: { licenses: migrated.licenses, attributes: migrated.attributes },
@@ -459,7 +460,7 @@
     $('#domain-filter').value = state.domain;
 
     const active = HKCC.controls.filter(applies);
-    const allGroups = E.cluster(active, byId, state.merge);
+    const allGroups = E.cluster(active, HKCC.equivalence, state.merge);
     let visible = allGroups.filter(matchesQuery);
     if (state.jurisdiction) {
       visible = visible.filter(group => group.some(c => controlJurisdictionId(c) === state.jurisdiction));
@@ -558,6 +559,20 @@
 
     const tags = el('div', 'tags');
     if (group.length > 1) tags.appendChild(el('span', 'tag merged', t('tagMerged', { n: group.length })));
+    // 部分重叠／相关只作标签提示，不合并；指向的条文不一定在当前适用范围内。
+    const memberIds = new Set(group.map(c => c.id));
+    for (const [type, cls, key] of [['overlaps', 'overlap', 'tagOverlaps'], ['related', 'related', 'tagRelated']]) {
+      const refs = new Set();
+      for (const control of group) {
+        for (const ref of relationIndex.get(control.id)?.[type] || []) if (!memberIds.has(ref)) refs.add(ref);
+      }
+      for (const ref of [...refs].sort()) {
+        const tag = el('span', 'tag ' + cls, t(key, { id: ref }));
+        const target = byId.get(ref);
+        if (target) tag.title = trControl(target).title;
+        tags.appendChild(tag);
+      }
+    }
     const licenceIds = new Set();
     const attributeIds = new Set();
     for (const control of group) {
@@ -581,6 +596,15 @@
     }).filter(Boolean);
     for (const noteText of [...new Set(notes)]) {
       card.appendChild(el('p', 'control-note', t('notePrefix') + noteText));
+    }
+
+    const equivalence = state.merge ? E.equivalenceFor(group, HKCC.equivalence) : null;
+    if (equivalence) {
+      const basis = equivalence.basis === 'reviewed' ?
+        t('basisReviewed', { date: equivalence.reviewedOn }) :
+        t(equivalence.basis === 'same-provision' ? 'basisSameProvision' : 'basisIdenticalText');
+      const rationale = HKCC.tr('equivalence', equivalence.id, equivalence).rationale || '';
+      card.appendChild(el('p', 'control-note equivalence-basis', t('equivalenceBasis', { basis, rationale })));
     }
     return card;
   }
