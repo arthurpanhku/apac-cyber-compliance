@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 482 84" width="482" height="84"
-     role="img" aria-label="APAC Cyber Compliance Assistant">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 374 84" width="374" height="84"
+     role="img" aria-label="亚太网络安全合规助手">
   <defs>
     <linearGradient id="hkcc" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#06b6d4"/>
@@ -24,8 +24,8 @@
           stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <!-- textLength 锁定字宽，使不同系统字体下锁形宽度一致 -->
-  <text x="78" y="43" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="25" font-weight="650"
-        fill="#e6e9ee" textLength="396" lengthAdjust="spacing">APAC Cyber Compliance Assistant</text>
-  <text x="79" y="65" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12.5"
-        fill="#9aa4b2" textLength="332" lengthAdjust="spacing">Cyber controls by jurisdiction, cited to official sources</text>
+  <text x="78" y="43" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans CJK SC',sans-serif" font-size="29" font-weight="650"
+        fill="#14181f" textLength="290" lengthAdjust="spacing">亚太网络安全合规助手</text>
+  <text x="79" y="65" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans CJK SC',sans-serif" font-size="12.5"
+        fill="#5a6472" textLength="264" lengthAdjust="spacing">按司法管辖区生成控制点 · 逐条标注官方出处</text>
 </svg>

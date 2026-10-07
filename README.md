@@ -1,7 +1,7 @@
 <div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
-    <img src="assets/logo.svg" alt="APAC Cyber Compliance Assistant" width="374">
+    <img src="assets/logo.svg" alt="APAC Cyber Compliance Assistant" width="482">
   </picture>
   <p><strong>Generate the cybersecurity controls APAC regulators require of your firm, by jurisdiction, licence and business profile</strong></p>
   <p>

@@ -1,145 +1,161 @@
-# 贡献指南
+# Contributing
 
-本项目的价值取决于条文的准确性。以下规则围绕这一点。
+**English** · [简体中文](CONTRIBUTING.zh-Hans.md)
 
-## 基本原则
+This project is only as valuable as its provisions are accurate. The rules below all follow from that.
 
-1. **每条控制点必须可追溯到官方原文。** `sourceId` 指向 `data/<jurisdiction>/sources.js` 中一份有官方链接的文件，
-   `clause` 填写条文中的实际条款编号（如 `1.1`、`(B)(iii)`、`7.3.4`）。不接受「综合业界实践」类条目。
-2. **`quote` 字段须诚实分类。** 逐字原文用 `quoteStatus: 'verbatim'`，删节内容用 `excerpt`，
-   章节标题或来源说明用 `summary`。不要把标题或摘要标成逐字原文；中文说明写在 `requirement`。
-   如中文说明与英文原文有出入，以原文为准——这是工具的立身之本。
-3. **不要凭记忆填日期。** 发布日期（`issued`）以监管机构官网显示为准。
-   每份出处另有自己的 `verifiedOn`——你**实际打开官网核对过链接与版本**的那一天。
-   只改动某一份出处时，只推进那一份的 `verifiedOn`，不要顺手改别人的：
-   这个字段的全部价值就在于诚实反映每份条文各自的复核时间。
-   页首显示的是其中**最早**的一个（以最弱的一环为准），由 `HKCC.verifiedOn()` 算出，
-   无需手动维护全局日期。
-4. **法律地位要写清楚。** `legalStatus` 需区分法定指引、非法定指引、通函、实务守则、法例——
-   合规后果不同，不能混为一谈。
+## Basic principles
 
-## 提交前必做
+1. **Every control must trace back to the official text.** `sourceId` points to a document with an official link in
+   `data/<jurisdiction>/sources.js`, and `clause` holds the actual clause number used in that document (e.g. `1.1`,
+   `(B)(iii)`, `7.3.4`). Entries of the "synthesis of industry practice" kind are not accepted.
+2. **Label the `quote` field honestly.** Use `quoteStatus: 'verbatim'` for word-for-word text, `excerpt` for text with
+   omissions, and `summary` for a section heading or a description of the source. Never label a heading or summary as
+   verbatim text; the Chinese explanation goes in `requirement`. Where the Chinese explanation differs from the
+   official text, the official text governs — that is what this tool stands on.
+3. **Don't fill in dates from memory.** The issue date (`issued`) is whatever the regulator's own website shows.
+   Each source also has its own `verifiedOn` — the day you **actually opened the official website and checked the link
+   and version**. When you change one source, advance only that source's `verifiedOn`, never anyone else's: the whole
+   value of the field is that it honestly reflects when each document was last checked.
+   The header shows the **earliest** of them (the weakest link), computed by `HKCC.verifiedOn()`, so there is no global
+   date to maintain by hand.
+4. **State the legal status clearly.** `legalStatus` must distinguish statutory guidelines, non-statutory guidelines,
+   circulars, codes of practice and legislation — the compliance consequences differ, and they must not be lumped
+   together.
+
+## Before you submit
 
 ```bash
 node tools/validate.mjs
 node --test tests/*.test.mjs
 ```
 
-校验项：ID 唯一、出处存在、控制域／牌照／业务特征有效、交叉引用可解析、必填字段齐全、
-日期格式正确、每份出处都有 `verifiedOn`，**以及英文层与繁体层是否完整**。
-超过 180 天未复核的出处会出现提示（不影响通过，但值得处理）。
+The checks cover: unique IDs, sources exist, valid control domains / licences / business characteristics, resolvable
+cross-references, required fields present, date formats, a `verifiedOn` on every source, **and completeness of the
+English and Traditional Chinese layers**. Sources not re-checked for more than 180 days produce a warning (it doesn't
+fail the run, but it is worth dealing with).
 
-这些检查由 `.github/workflows/ci.yml` 在每个 PR 上自动运行，同时会确认繁体生成物是最新的；
-校验不通过的 PR 不会合并。
+These checks run automatically on every PR via `.github/workflows/ci.yml`, which also confirms that the generated
+Traditional Chinese files are up to date. PRs that fail validation are not merged.
 
-另有链接巡检（每周一自动运行，也可手动触发）：
+There is also a link check (runs automatically every Monday, and can be triggered manually):
 
 ```bash
 node tools/check-links.mjs
 ```
 
-只有确定失效（404／410／域名解析不了）才会失败；403／429 多为机器人防护，
-5xx 与超时多为暂时性故障，只报告。**发现链接失效时，请到监管机构官网找回新地址，
-并同步推进该出处的 `verifiedOn`。**
+It fails only on a definite failure (404 / 410 / DNS failure); 403 / 429 are usually bot protection, and 5xx and
+timeouts are usually transient, so those are only reported. **When you find a broken link, track down the new address on
+the regulator's website and advance that source's `verifiedOn` at the same time.**
 
-## 连不上监管机构网站时
+## When you can't reach a regulator's website
 
-撰写控制点必须逐字对照官方原文，但受限的开发环境（容器、代理、公司网络）
-常把监管机构的官网整域拦掉——不止 `www.sfc.hk`、`brdr.hkma.gov.hk`、`occics.gov.hk`，
-`www.mas.gov.sg` 同样常被拦。GitHub Actions 的 runner 没有这个限制，
-所以取文这一步可以放到 CI 里跑：
+Writing controls requires checking the official text word for word, but restricted development environments
+(containers, proxies, corporate networks) often block regulators' websites entirely — not only `www.sfc.hk`,
+`brdr.hkma.gov.hk` and `occics.gov.hk`, but often `www.mas.gov.sg`, `apra.gov.au` and `bnm.gov.my` too. GitHub Actions
+runners don't have this restriction, so fetching the text can be done in CI:
 
-**Actions → 取回条文原文 → Run workflow**，填入出处 ID（与 `data/<jurisdiction>/sources.js`
-一致，如 `sfc-vatp-guidelines`、`mas-cyber-hygiene`），PDF 可另填页码范围如 `1-20`。
-本地同样可用：
+**Actions → 取回条文原文 (fetch source text) → Run workflow**, entering a source ID (as in
+`data/<jurisdiction>/sources.js`, e.g. `sfc-vatp-guidelines`, `mas-cyber-hygiene`), and optionally a PDF page range
+such as `1-20`. It also works locally:
 
 ```bash
 node tools/fetch-source.mjs sfc-vatp-guidelines 1-20
 ```
 
-原文会转成纯文本，同时写进作业日志（不需额外出网即可阅读）与构建产物
-`source-text`（完整全文，保留 14 天）。只接受各 `data/<jurisdiction>/sources.js` 里
-已登记的出处 ID，不接受任意 URL——它是取官方原文的工具，不是通用抓取代理。
-日志只印正文的前 1200 行；文件较长时（如指引类文件动辄五六十页）请用页码范围分几次取，
-或直接下载 `source-text` 构建产物看全文。
+The text is converted to plain text and written both to the job log (readable without any extra network access) and to
+the `source-text` build artifact (full text, kept for 14 days). Only source IDs already registered in a
+`data/<jurisdiction>/sources.js` are accepted, never arbitrary URLs — it is a tool for fetching official text, not a
+general-purpose fetching proxy. The log prints only the first 1,200 lines of the body; for longer documents (guidelines
+often run to 50 or 60 pages), fetch in several page ranges or download the `source-text` artifact.
 
-**取回的原文不要提交进仓库**（`out/` 已在 `.gitignore` 中）。版权属于各监管机构，
-本项目只以结构化形式引述条文并链接官方出处。
+To add a new source you can't reach locally: register it in `sources.js` and push your branch first, then run the
+workflow against that branch.
 
-若改动过任何中文文字，还须重新生成繁体层：
+**Do not commit the fetched text to the repository** (`out/` is in `.gitignore`). Copyright belongs to the regulators;
+this project only quotes provisions in structured form and links to the official source.
+
+If you changed any Chinese text, regenerate the Traditional Chinese layer:
 
 ```bash
 pip install opencc-python-reimplemented
 python3 tools/gen-hant.py
 ```
 
-改动界面逻辑时请在浏览器中实测（双击 `index.html` 即可，不需要服务器）：
-至少验证「选择牌照 → 出现控制点 → 自评 → 导出 CSV」这条主路径，
-并用 `index.html?lang=en`、`?lang=zh-Hant`、`?lang=zh-Hans` 各看一遍。
+When you change UI logic, test it in a browser (double-click `index.html`; no server needed). At minimum check the main
+path "select a licence → controls appear → self-assess → export CSV", and look at `index.html?lang=en`,
+`?lang=zh-Hant` and `?lang=zh-Hans` once each.
 
-## 多语言
+## Languages
 
-基础数据（`data/<jurisdiction>/taxonomy.js`、`data/<jurisdiction>/sources.js`、
-`data/<jurisdiction>/controls/*.js`、共用的 `data/domains.js`、`data/jurisdictions.js`）
-一律以**简体中文**撰写，
-其余语言以覆盖层形式放在 `data/i18n/`：
+The base data (`data/<jurisdiction>/taxonomy.js`, `data/<jurisdiction>/sources.js`,
+`data/<jurisdiction>/controls/*.js`, and the shared `data/domains.js` and `data/jurisdictions.js`) is always written in
+**Simplified Chinese**. Other languages are overlays in `data/i18n/`:
 
-| 文件 | 维护方式 |
+| File | How it is maintained |
 | --- | --- |
-| `data/i18n/zh-Hans.js` | 手写。只有界面字符串——基础数据本身即简体 |
-| `data/i18n/en.js` | 手写。界面字符串 + 全部控制点的 `title` / `requirement`（及有值时的 `clause` / `note`） |
-| `data/i18n/zh-Hant.js` | **自动生成，请勿手改。** 由 `tools/gen-hant.py` 转换而来，手改会在下次生成时丢失 |
-| `README.zh-Hant.md` | **自动生成**，由 `README.zh-Hans.md` 转换而来 |
+| `data/i18n/zh-Hans.js` | Hand-written. UI strings only — the base data is already Simplified Chinese |
+| `data/i18n/en.js` | Hand-written. UI strings + `title` / `requirement` for every control (plus `clause` / `note` where present) |
+| `data/i18n/zh-Hant.js` | **Generated — do not edit by hand.** Converted by `tools/gen-hant.py`; manual edits are lost on the next run |
+| `README.zh-Hant.md` | **Generated** from `README.zh-Hans.md` |
 
-几条规则：
+A few rules:
 
-1. **`quote` 永不翻译。** 它是监管机构发布的英文原文，任何语言下都原样显示。
-2. **英文不是从中文翻译过来的。** SFC 通函、HKMA 监管政策手册与各实务守则本身即以英文发布，
-   `en.js` 应对照英文原始文件撰写，用词与读者在原文中看到的一致；不要把中文说明直译回英文。
-3. **新增控制点必须同时补 `en.js`。** 否则校验失败（繁体层由脚本生成，不需要手动补）。
-4. 繁体的个别字形若不合香港监管文件的写法，请改 `tools/gen-hant.py` 的 `OVERRIDES` 表并重新生成，
-   不要直接改生成结果。
-5. **`js/engine.js` 里不写任何一种语言的面向用户文字。** 引擎同时服务三种语言的页面与
-   Node 测试，写死一种语言就会让另外两种语言的使用者在对话框里读到外语。
-   检查结果一律以 `diag('diagXxx', { … })` 回传代码与参数，代码登记在
-   `DIAGNOSTIC_CODES`，文字写在 `data/i18n/zh-Hans.js` 与 `en.js`，
-   由页面的 `formatDiagnostic()` 经 `t()` 取用。校验器会确认每个代码都已登记、
-   且三种语言都有文案——漏了文案对话框会直接显示 `diagXxx`。
+1. **`quote` is never translated.** It is the regulator's own published text and is shown unchanged in every language.
+2. **The English is not translated from the Chinese.** SFC circulars, the HKMA Supervisory Policy Manual and the codes
+   of practice are published in English, as are the MAS, APRA and BNM documents. Write `en.js` against the original
+   English document, using the words readers will see there; don't translate the Chinese explanation back into English.
+3. **New controls must come with `en.js` entries.** Otherwise validation fails (the Traditional Chinese layer is
+   generated, so it needs no manual work).
+4. If a Traditional Chinese character form or term doesn't match Hong Kong regulatory usage, change the `OVERRIDES`
+   table in `tools/gen-hant.py` and regenerate — don't edit the generated output.
+5. **`js/engine.js` contains no user-facing text in any language.** The engine serves pages in all three languages as
+   well as the Node tests; hard-coding one language would leave users of the other two reading a foreign language in
+   dialogs. Results are always returned as codes and parameters via `diag('diagXxx', { … })`. Codes are registered in
+   `DIAGNOSTIC_CODES`, the text lives in `data/i18n/zh-Hans.js` and `en.js`, and the page reads it through
+   `formatDiagnostic()` → `t()`. The validator confirms every code is registered and has text in all three languages —
+   a missing one would show up in the dialog as a bare `diagXxx`.
 
-## 关于交叉引用（`crossRefs`）
+## About cross-references (`crossRefs`)
 
-`crossRefs` 有两种用途，取决于是否双向：
+`crossRefs` has two uses, depending on whether the reference is mutual:
 
-- **双向**（A 引用 B 且 B 引用 A）→ 界面会**合并**为一张卡片，视为同一项要求
-- **单向** → 只显示为「另见」标签，不合并
+- **Bidirectional** (A references B and B references A) → the UI **merges** them into one card, treated as the same
+  requirement
+- **One-way** → shown only as a "see also" tag, not merged
 
-**只在两条条文确实要求同一件事时才建立双向引用。** 若一方范围明显更宽（例如 TM-G-1 第 3 节「保安管理」
-之于 PDPO DPP4），请用单向引用。错误的双向引用会让使用者误以为满足一方即满足另一方。
+**Only create a bidirectional reference when the two provisions genuinely require the same thing.** If one is clearly
+broader (for example, TM-G-1 section 3 "Security management" compared with PDPO DPP4), use a one-way reference. A
+wrong bidirectional reference would lead users to believe that satisfying one satisfies the other.
 
-## 新增一份法规
+## Adding a regulation
 
-1. 在对应司法管辖区的 `data/<jurisdiction>/sources.js` 加入出处条目（含官方链接、发布日期、法律地位）
-2. 在 `data/<jurisdiction>/controls/` 新建或扩充对应文件；牌照/业务特征不存在时先在
-   `data/<jurisdiction>/taxonomy.js` 补上（`jurisdiction` 字段须与目录一致）
-3. 在 `index.html` 的 `<script>` 列表中加入新文件
-4. 在 `data/i18n/en.js` 补上新控制点、新牌照/业务特征的英文
-5. 运行 `python3 tools/gen-hant.py` 生成繁体层
-6. 更新 `README.md` 与 `README.zh-Hans.md` 的覆盖范围表格与徽章中的控制点数量
-   （`README.zh-Hant.md` 由脚本生成，不必手改）
-7. 运行校验并在浏览器实测
+1. Add the source to the relevant `data/<jurisdiction>/sources.js` (with official link, issue date and legal status)
+2. Create or extend a file under `data/<jurisdiction>/controls/`; if a licence or business characteristic doesn't exist
+   yet, add it first in `data/<jurisdiction>/taxonomy.js` (its `jurisdiction` field must match the directory)
+3. Add the new file to the `<script>` list in `index.html`
+4. Add English for the new controls, licences and business characteristics in `data/i18n/en.js`
+5. Run `python3 tools/gen-hant.py` to generate the Traditional Chinese layer
+6. Update the coverage tables and the control-count badges in `README.md` and `README.zh-Hans.md`
+   (`README.zh-Hant.md` is generated by the script)
+7. Run the checks and test in a browser
 
-## 新增一个司法管辖区
+## Adding a jurisdiction
 
-1. 在 `data/jurisdictions.js` 登记新的司法管辖区 ID 与显示名称
-2. 新建 `data/<jurisdiction>/{sources.js,taxonomy.js,controls/}`，牌照与业务特征的
-   `jurisdiction` 字段须填新 ID；能复用的控制域优先复用 `data/domains.js` 里已有的，
-   只有确实不同类别的概念才新增
-3. 在 `data/i18n/en.js` 的 `jurisdictions` 里补上新管辖区的英文名，运行
-   `python3 tools/gen-hant.py` 生成繁体层（`jurisdictions.label` 会自动转换）
-4. 其余步骤同「新增一份法规」
+1. Register the new jurisdiction ID and display name in `data/jurisdictions.js`
+2. Create `data/<jurisdiction>/{sources.js,taxonomy.js,controls/}`, setting the `jurisdiction` field of licences and
+   business characteristics to the new ID; reuse existing control domains in `data/domains.js` where possible, and add
+   a new one only for a genuinely different category
+3. Add the jurisdiction's English name under `jurisdictions` in `data/i18n/en.js`, and run
+   `python3 tools/gen-hant.py` to generate the Traditional Chinese layer (`jurisdictions.label` is converted
+   automatically)
+4. The remaining steps are the same as "Adding a regulation"
 
-## 什么不适合提交
+Recent examples: Australia (`data/au/`) and Malaysia (`data/my/`).
 
-- 没有官方出处的「最佳实践」建议
-- 对条文的个人解读或合规意见（本工具刻意不提供意见）
-- 需要构建步骤或引入运行时依赖的改动——零依赖、双击可用是本项目的硬约束
+## What isn't a good fit
+
+- "Best practice" suggestions with no official source
+- Personal interpretations of provisions or compliance opinions (this tool deliberately offers none)
+- Changes that need a build step or add runtime dependencies — zero dependencies and double-click-to-run are hard
+  constraints of this project

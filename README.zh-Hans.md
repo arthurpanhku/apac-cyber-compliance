@@ -1,7 +1,7 @@
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
-    <img src="assets/logo.svg" alt="亚太网络安全合规助手" width="374">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo.zh-Hans-dark.svg">
+    <img src="assets/logo.zh-Hans.svg" alt="亚太网络安全合规助手" width="374">
   </picture>
   <p><strong>按司法管辖区、牌照与业务特征，生成 APAC 监管机构的网络安全控制点要求</strong></p>
   <p>
@@ -316,7 +316,7 @@ node tools/check-links.mjs
 ```
 
 只有确定失效（404／410／域名解析不了）才会失败；403／429 多为机器人防护，5xx 与超时多为暂时性
-故障，只报告不失败——长期红着的检查很快就没人看了。详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+故障，只报告不失败——长期红着的检查很快就没人看了。详见 [CONTRIBUTING.zh-Hans.md](CONTRIBUTING.zh-Hans.md)。
 
 ## 授权
 

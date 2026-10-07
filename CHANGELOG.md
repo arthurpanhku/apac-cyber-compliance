@@ -2,6 +2,17 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [未发布]
+
+### 变更
+
+- **Logo 分英文与中文版本，默认英文。** `assets/logo.svg`／`logo-dark.svg` 改为英文字标
+  「APAC Cyber Compliance Assistant」；新增 `logo.zh-Hans*.svg` 与 `logo.zh-Hant*.svg`，
+  分别用于简体及繁体 README（繁体 README 由 `gen-hant.py` 自动换成繁体 Logo）。副标题改为
+  不随监管机构增减而过时的描述，取代原来已漏列 IA、APRA、BNM 的机构清单
+- **贡献指南新增英文版。** `CONTRIBUTING.md` 改为英文（GitHub 默认显示），中文原文移至
+  `CONTRIBUTING.zh-Hans.md`，两版互相链接
+
 ## [1.11.0] — 2026-10-07
 
 ### 新增
