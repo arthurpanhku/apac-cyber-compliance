@@ -2,5 +2,6 @@
 HKCC.addJurisdictions([
   { id: 'hk', label: '香港', regulators: 'SFC · HKMA · IA · PCPD · 关键基础设施条例' },
   { id: 'sg', label: '新加坡', regulators: 'MAS' },
-  { id: 'au', label: '澳大利亚', regulators: 'APRA' }
+  { id: 'au', label: '澳大利亚', regulators: 'APRA' },
+  { id: 'my', label: '马来西亚', regulators: 'BNM' }
 ]);
