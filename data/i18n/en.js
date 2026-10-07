@@ -82,6 +82,13 @@ HKCC.addI18n('en', {
     basisSameProvision: 'same provision',
     basisIdenticalText: 'identical text',
     basisReviewed: 'reviewed as substantively equivalent, {date}',
+    sharedRecordTitle: 'Shared implementation record — recorded once, applies to the {n} equivalent provisions below',
+    sharedStatus: 'Shared status',
+    recordSeparately: 'Record separately',
+    recordingSeparately: 'Recording these provisions separately.',
+    recordsDiverged: 'The records for these provisions differ, so they are shown separately.',
+    useSharedRecord: 'Use a shared record',
+    confirmUseShared: 'Overwrite the status and work record of the other {n} provision(s) in this group with those of {id}? Overwritten content cannot be recovered; you may want to export a project backup first.',
     tagApplies: 'Applies: {value}',
     tagTriggered: 'Triggered by: {value}',
 

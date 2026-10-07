@@ -38,6 +38,11 @@ Critical Infrastructures (Computer Systems) Ordinance. In Singapore: the Monetar
 Manual modules and codes of practice, and the same control is often demanded by several regulators in
 different words.
 
+**It is an offline tool first.** The whole application is a folder of static files: no installation, no
+server, no account, no network connection at runtime, and assessment data never leaves the browser. Any firm
+can download it and run it inside its own network — see
+[Offline and on-premises deployment](#offline-and-on-premises-deployment).
+
 **The goal: implement a security control once, reuse the same evidence to assess it against every
 framework that asks for it, and see clearly what each framework requires on top.** A regional group with
 licensed entities in Hong Kong, Singapore, Malaysia and Australia shouldn't have to prove the same MFA
@@ -49,21 +54,55 @@ licences your firm holds and its business characteristics, and you get the list 
 each one citing its **source document, clause number, issue date and official link** — which you can then
 self-assess and export. Controls that are substantively equivalent across regulators are merged into one
 card; controls that only partly overlap are flagged rather than merged, so the extra requirements stay
-visible (see [the three relationship types](#about-merge-duplicates-across-regulators)). Sharing one
-implementation record across equivalent controls, spelling out each overlap's extra requirements, and
-per-framework reports are on the roadmap — see section 1A of `DEVELOPMENT_PLAN.md` (Chinese). It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
+visible (see [the three relationship types](#about-merge-duplicates-across-regulators)). Equivalent
+controls share a single implementation record, so the status and evidence you record once count for every
+regulator in the group. Spelling out each overlap's extra requirements and per-framework reports are next on
+the roadmap — see section 1A of `DEVELOPMENT_PLAN.md` (Chinese).
+
+It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
 Ordinance), **Singapore** (MAS), **Australia** (APRA) and **Malaysia** (BNM), with the architecture built to add further APAC jurisdictions over time.
 
 ## Quick start
 
-Nothing to install, no build step:
+Nothing to install, no build step. Download the offline package from
+[Releases](https://github.com/arthurpanhku/apac-cyber-compliance/releases) (or clone the repository), unzip it and
+**double-click `index.html`**. Data is loaded as `.js` rather than `.json` precisely so that opening the page from
+`file://` is not blocked by the browser's CORS policy — no server needed.
 
-```bash
-git clone https://github.com/arthurpanhku/apac-cyber-compliance.git
+## Offline and on-premises deployment
+
+Running offline inside a firm's own environment is this project's first priority. Many of the people who need
+it work on machines with restricted or no internet access, and assessment records are sensitive.
+
+**What makes it safe to run offline**
+
+- The application is plain HTML, CSS and JavaScript — nothing to install, compile or configure
+- At runtime it makes **no network requests**: no CDN, web fonts, analytics or update checks. CI enforces this
+  (`tools/validate.mjs` fails on `fetch`/XHR/WebSocket, dynamic imports, external `<script>`/`<link>`/`<img>` and
+  external CSS `url()`/`@import`). The only outbound links are the official source links, opened when a user
+  clicks them
+- Assessment data is stored in the browser's `localStorage` and in project files the user exports
+  (`.hkcc.json`). Nothing is uploaded; evidence is recorded as text references, not files
+
+**Option 1 — on each computer.** Copy the unzipped folder to the computer (or a network share) and open
+`index.html` in Chrome, Edge, Firefox or Safari.
+
+**Option 2 — on an internal web server.** Serve the folder as static files from any web server (IIS, nginx,
+Apache, an internal static hosting service). No server-side code, database or outbound access is needed. The
+application works under a strict Content Security Policy, which you may set as a response header:
+
+```
+Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 ```
 
-Then **double-click `index.html`**. Data is loaded as `.js` rather than `.json` precisely so that opening
-the page from `file://` is not blocked by the browser's CORS policy — no server needed.
+**Verifying the package.** Each release has a `.zip` and a `.zip.sha256`. Check the checksum before
+distributing internally (`sha256sum -c apac-cyber-compliance-vX.Y.Z.zip.sha256`, or `Get-FileHash` on Windows).
+The package is built by `tools/package.sh` from the tagged commit with no build step, so its files are
+identical to the repository's and can be reviewed line by line.
+
+**Updating.** Browser storage belongs to one browser and one page location, so **export the project file before
+updating, moving the folder, changing the server address or switching browser**, then import it afterwards.
+Unzip the new version over a fresh folder rather than mixing files from two versions.
 
 It also deploys to GitHub Pages as-is (repository settings → Pages → publish from the `main` branch root).
 
@@ -78,6 +117,8 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 | **De-duplication and cross-mapping** | Where several regulators impose the same requirement, it is merged into a single card listing each one's own provision and clause number — whether that's Hong Kong's SFC and HKMA, or Singapore's MAS across its three near-identical Notices on Cyber Hygiene to different entity types |
 | **Traceable to source** | Every control carries a description, clause number, issue and verification dates, official link, and a verbatim / excerpt / summary label for its English source text |
 | **Assessment work record** | Record status, implementation notes, evidence references, owner and target date for each individual regulatory control |
+| **Shared implementation record** | Substantively equivalent provisions share one status and work record: record the control and its evidence once and it applies to every regulator in the group (you can still record them separately) |
+| **Offline and self-hosted** | Static files only — runs from `file://` or any internal web server with no network access; release packages come with a SHA-256 checksum |
 | **Remediation list** | Review unrated, partially implemented and unimplemented controls by domain, with overdue and 30-day due indicators |
 | **Portable project file** | Export or import a versioned `.hkcc.json` backup containing the full scope and assessment record |
 | **Three languages** | English, Traditional Chinese and Simplified Chinese, switchable in the header — including the CSV export |

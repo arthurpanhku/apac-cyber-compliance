@@ -152,11 +152,26 @@ for (const loc of TRANSLATED) {
   }
 }
 
-/* ---------- 离线运行约束 ---------- */
+/* ---------- 离线运行约束 ----------
+   离线、可在公司内自行部署是本项目的首要目标：页面在没有任何外网连接的环境中必须完整运行。
+   因此运行时不得发出任何网络请求，也不得加载 CDN、网络字体、外部图片或统计脚本。
+   （数据中的官方条文链接只在使用者点击时才打开，不属运行时请求。） */
 for (const path of ['js/engine.js', 'js/i18n.js', 'js/app.js']) {
   const code = readFileSync(join(root, path), 'utf8');
-  if (/\bfetch\s*\(|\bXMLHttpRequest\b/.test(code)) {
-    errors.push(`${path}: 不得在运行时读取本地数据，否则 file:// 模式会失效`);
+  if (/\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\b|\bEventSource\b|\bsendBeacon\b|\bimportScripts\b/.test(code)) {
+    errors.push(`${path}: 运行时不得发出网络请求（fetch／XHR／WebSocket 等），否则离线与 file:// 模式会失效`);
+  }
+  if (/\bimport\s*\(|https?:\/\//.test(code.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''))) {
+    errors.push(`${path}: 运行时代码不得动态载入模块或引用外部网址`);
+  }
+}
+{
+  const page = readFileSync(join(root, 'index.html'), 'utf8');
+  const external = [...page.matchAll(/<(script|link|img|iframe|source|video|audio)\b[^>]*\b(?:src|href|srcset)\s*=\s*["']\s*(?:https?:)?\/\//gi)];
+  for (const m of external) errors.push(`index.html: <${m[1]}> 载入外部资源，离线部署时会失效——请改为仓库内的本地文件`);
+  const css = readFileSync(join(root, 'css/app.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  if (/@import|url\(\s*["']?\s*(?:https?:)?\/\//i.test(css)) {
+    errors.push('css/app.css: 不得 @import 或以 url() 载入外部资源（如网络字体），离线部署时会失效');
   }
 }
 

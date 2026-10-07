@@ -132,6 +132,34 @@
     return (equivalence || []).find(g => group.every(c => (g.members || []).includes(c.id))) || null;
   }
 
+  /** 构成一条评估记录的字段；assessedAt 是记录时间，不参与比较。 */
+  const RECORD_FIELDS = ['status', 'implementationNote', 'evidenceRef', 'owner', 'targetDate'];
+
+  /**
+   * 一组控制点的评估记录是否完全相同（含全部为空）。
+   * 等价组以「写入每个成员」的方式共用记录，所以相同即视为共用中；
+   * 一旦有人分别修改，记录分歧，界面改为逐条显示。
+   */
+  function recordsShared(ids, assessments) {
+    const key = id => JSON.stringify(RECORD_FIELDS.map(f => (assessments[id] || {})[f] ?? null));
+    return new Set(ids.map(key)).size <= 1;
+  }
+
+  /**
+   * 以 sourceId 的记录覆盖其余成员，返回新的 assessments（不修改传入对象）。
+   * 只复制记录字段；assessedAt 随状态一并复制，表示同一次评估。
+   */
+  function shareRecord(ids, sourceId, assessments) {
+    const next = { ...assessments };
+    const source = assessments[sourceId];
+    for (const id of ids) {
+      if (id === sourceId) continue;
+      if (source && Object.keys(source).length) next[id] = { ...source };
+      else delete next[id];
+    }
+    return next;
+  }
+
   function pendingCount(group, assessments) {
     return group.filter(control => {
       const status = assessments[control.id]?.status;
@@ -347,6 +375,9 @@
     cluster,
     indexRelations,
     equivalenceFor,
+    RECORD_FIELDS,
+    recordsShared,
+    shareRecord,
     pendingCount,
     migrateV1,
     csvCell,

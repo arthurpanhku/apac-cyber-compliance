@@ -1,0 +1,57 @@
+name: 发布离线安装包
+
+# 离线、可在公司内自行部署是本项目的首要目标。推送版本标签（如 v1.12.0）时，
+# 打包只含运行所需文件的压缩档并附 SHA-256 校验值，发布到 GitHub Releases，
+# 供各机构下载后在内网或无外网的电脑上使用。手动触发时只产出构建产物，不发布。
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: 校验并打包
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      # 发布前跑与 CI 相同的检查：数据完整性、离线约束、等价性规则、单元测试。
+      - name: 校验
+        run: |
+          node tools/validate.mjs
+          node tools/check-equivalence.mjs
+          node --test tests/*.test.mjs
+
+      # 标签须与 data/_registry.js 的版本号一致，避免压缩档名称与页面显示的版本不符。
+      - name: 核对版本号
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          VERSION=$(node -e "global.window = {}; require('./data/_registry.js'); process.stdout.write(window.HKCC.meta.version)")
+          if [ "$GITHUB_REF_NAME" != "v$VERSION" ]; then
+            echo "::error::标签 $GITHUB_REF_NAME 与 data/_registry.js 的版本 v$VERSION 不一致"
+            exit 1
+          fi
+
+      - name: 打包
+        run: bash tools/package.sh
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: offline-package
+          path: dist/*.zip*
+
+      - name: 发布到 GitHub Releases
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/*.zip dist/*.zip.sha256 \
+            --verify-tag --title "$GITHUB_REF_NAME" \
+            --notes "离线安装包：下载 zip 并核对 .sha256 后解压，双击 index.html 即可使用，无需网络、安装或服务器。部署说明见 README「Offline and on-premises deployment」一节；变更见 CHANGELOG.md。"

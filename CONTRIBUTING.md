@@ -189,3 +189,6 @@ Recent examples: Australia (`data/au/`) and Malaysia (`data/my/`).
 - Personal interpretations of provisions or compliance opinions (this tool deliberately offers none)
 - Changes that need a build step or add runtime dependencies — zero dependencies and double-click-to-run are hard
   constraints of this project
+- Anything that makes a network request at runtime (CDN scripts, web fonts, analytics, update checks, remote data).
+  Running fully offline inside a firm's own environment is the project's first priority, and `tools/validate.mjs`
+  enforces it
