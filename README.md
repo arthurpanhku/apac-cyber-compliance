@@ -43,11 +43,13 @@ server, no account, no network connection at runtime, and assessment data never 
 can download it and run it inside its own network — see
 [Offline and on-premises deployment](#offline-and-on-premises-deployment).
 
-**The goal: implement a security control once, reuse the same evidence to assess it against every
-framework that asks for it, and see clearly what each framework requires on top.** A regional group with
-licensed entities in Hong Kong, Singapore, Malaysia and Australia shouldn't have to prove the same MFA
-rollout or patching process four times — but it also mustn't miss the regulator that asks for a shorter
-deadline or one more measure.
+**The goal: a trustworthy baseline of the requirements that apply to you — every one traceable to the
+official text — plus a clear statement of what each additional regulator adds on top.** Regulators rarely ask
+for exactly the same thing; they ask for broadly the same thing with different details. A firm supervised in
+several places doesn't mainly lose time doing one control three times — it loses time, or leaves gaps, because
+it doesn't know exactly what differs. Where requirements genuinely are the same, they merge and share one
+record; everywhere else the tool should show the difference rather than pretend there is none. The
+[case study](#case-study-a-bank-supervised-by-hkma-mas-and-apra) shows where this stands today.
 
 This tool breaks those provisions down into **checkable controls**. Pick a jurisdiction, select the
 licences your firm holds and its business characteristics, and you get the list of controls that apply —
@@ -56,8 +58,8 @@ self-assess and export. Controls that are substantively equivalent across regula
 card; controls that only partly overlap are flagged rather than merged, so the extra requirements stay
 visible (see [the three relationship types](#about-merge-duplicates-across-regulators)). Equivalent
 controls share a single implementation record, so the status and evidence you record once count for every
-regulator in the group. Spelling out each overlap's extra requirements and per-framework reports are next on
-the roadmap — see section 1A of `DEVELOPMENT_PLAN.md` (Chinese).
+regulator in the group. Writing down each overlap's extra requirements — across jurisdictions as well as
+within them — is the next step on the roadmap; see section 1A of `DEVELOPMENT_PLAN.md` (Chinese).
 
 It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
 Ordinance), **Singapore** (MAS), **Australia** (APRA) and **Malaysia** (BNM), with the architecture built to add further APAC jurisdictions over time.
@@ -124,6 +126,48 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 | **Three languages** | English, Traditional Chinese and Simplified Chinese, switchable in the header — including the CSV export |
 | **Export** | Export a formula-safe CSV or print to PDF, including project details and work-record fields |
 | **Stored locally** | Project data is saved in browser localStorage; nothing is uploaded |
+
+## Case study: a bank supervised by HKMA, MAS and APRA
+
+A bank that is an authorized institution in Hong Kong, a bank in Singapore and an ADI in Australia, offering
+e-banking and online financial services, processing personal data, and using outsourcing and cloud services
+whose information assets are partly managed by third parties. How does running its assessment in this tool
+compare with keeping three separate spreadsheets, one per regulator?
+
+The numbers below are for v1.12.0 and are produced by `node tools/case-study.mjs` — rerun it to check them.
+
+| Work | Three separate spreadsheets | This tool today |
+| --- | --- | --- |
+| Finding what applies | Read the 25 source documents covering Hong Kong, Singapore and Australia and judge applicability yourself | Tick 3 entity types and 5 business characteristics: **101** of the 294 provisions apply (HKMA 22, PCPD 8, MAS 47, APRA 24); the other **193** are screened out |
+| Citing the source | Copy document names, clause numbers and text by hand | Every provision carries its document, clause, issue and verification dates and official link; **40** come with the official text (36 verbatim, 4 excerpts), **61** only with a summary so far |
+| Provisions to assess and evidence to attach | 101, across three workbooks | **Still 101**, in one project. None of the 101 is substantively equivalent to another, so nothing merges and no evidence is shared yet |
+| Knowing how the regulators differ | Compare the texts by hand | **Not yet.** No relationships have been mapped between these three regulators' provisions |
+| Remediation and handover | Three files to reconcile | One project file, a remediation list with overdue / due-soon flags, per-control CSV and print |
+
+**What this tells us.**
+
+- **The saving today is in finding and citing, not in duplicate assessment.** Narrowing 294 provisions in 25
+  documents to the 101 that apply — with each one traceable to its source — is the expert work the tool
+  already does. For this bank it does **not** yet reduce the number of things to assess or prove.
+- **Regulators rarely ask for exactly the same thing.** They ask for broadly the same thing with different
+  details: APRA CPS 234 paragraph 35 requires notifying APRA within 72 hours of a material incident; MAS FSM-N05
+  paragraph 7 requires notifying MAS within 1 hour. Treating these as "the same control" would hide exactly the
+  difference a regulator would ask about. The real cost for a multi-regulator firm is not knowing what differs —
+  which leads either to three separate evidence packs or to gaps.
+- **The differences sit in almost every area.** In 9 of the 10 control domains that apply to this bank, two or
+  more of these regulators have requirements: governance, data protection and third-party management (all four),
+  hardening, monitoring, incident response and assurance (three each), access control and resilience (two each).
+- **61 of the 101 provisions still rest on summaries.** Equivalence can't be asserted on a summary (rule EQ6),
+  and a baseline is only as trustworthy as its sources.
+
+**What would change these numbers** (see section 1A of `DEVELOPMENT_PLAN.md`):
+
+1. Replace the summaries with official text (#20, #21)
+2. Map the overlaps between HKMA, MAS and APRA provisions and write down each one's extra requirements (#22) —
+   then the bank would see, for each area, what it must add for each additional regulator
+3. Let evidence recorded for one provision be reused on overlapping ones, with only the difference to confirm
+
+We'll rerun this case as each step lands and update the table, so it doubles as a progress measure.
 
 ## Coverage
 
