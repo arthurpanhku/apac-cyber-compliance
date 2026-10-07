@@ -38,10 +38,20 @@ Critical Infrastructures (Computer Systems) Ordinance. In Singapore: the Monetar
 Manual modules and codes of practice, and the same control is often demanded by several regulators in
 different words.
 
+**The goal: implement a security control once, reuse the same evidence to assess it against every
+framework that asks for it, and see clearly what each framework requires on top.** A regional group with
+licensed entities in Hong Kong, Singapore, Malaysia and Australia shouldn't have to prove the same MFA
+rollout or patching process four times — but it also mustn't miss the regulator that asks for a shorter
+deadline or one more measure.
+
 This tool breaks those provisions down into **checkable controls**. Pick a jurisdiction, select the
 licences your firm holds and its business characteristics, and you get the list of controls that apply —
 each one citing its **source document, clause number, issue date and official link** — which you can then
-self-assess and export. It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
+self-assess and export. Controls that are substantively equivalent across regulators are merged into one
+card; controls that only partly overlap are flagged rather than merged, so the extra requirements stay
+visible (see [the three relationship types](#about-merge-duplicates-across-regulators)). Sharing one
+implementation record across equivalent controls, spelling out each overlap's extra requirements, and
+per-framework reports are on the roadmap — see section 1A of `DEVELOPMENT_PLAN.md` (Chinese). It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
 Ordinance), **Singapore** (MAS), **Australia** (APRA) and **Malaysia** (BNM), with the architecture built to add further APAC jurisdictions over time.
 
 ## Quick start
