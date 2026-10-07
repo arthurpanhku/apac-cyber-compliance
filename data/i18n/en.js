@@ -185,7 +185,8 @@ HKCC.addI18n('en', {
 
   jurisdictions: {
     hk: { label: 'Hong Kong' },
-    sg: { label: 'Singapore' }
+    sg: { label: 'Singapore' },
+    au: { label: 'Australia' }
   },
 
   licenses: {
