@@ -10,7 +10,7 @@
  * （已实测 20 份出处全部可达），所以取文这一步放到 CI 里跑：
  * `.github/workflows/fetch-source.yml` 手动触发，结果同时写进日志与构建产物。
  *
- * 只接受 data/{hk,sg}/sources.js 里已登记的出处 ID，不接受任意 URL：
+ * 只接受 data/<jurisdiction>/sources.js 里已登记的出处 ID，不接受任意 URL：
  * 这个工具的用途是取回官方原文，不是做一个通用的对外抓取代理。
  *
  * 取回的原文**不提交进仓库**——版权属于各监管机构，本项目只以结构化形式

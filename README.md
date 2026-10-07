@@ -11,10 +11,10 @@
   <p>
     <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
-    <img src="https://img.shields.io/badge/version-1.9.0-0ea5e9" alt="Version 1.9.0">
-    <img src="https://img.shields.io/badge/controls-270-16a34a" alt="270 controls">
-    <img src="https://img.shields.io/badge/sources-29-64748B" alt="29 sources">
-    <img src="https://img.shields.io/badge/jurisdictions-HK%20%C2%B7%20SG-0ea5e9" alt="Two jurisdictions">
+    <img src="https://img.shields.io/badge/version-1.10.0-0ea5e9" alt="Version 1.10.0">
+    <img src="https://img.shields.io/badge/controls-294-16a34a" alt="294 controls">
+    <img src="https://img.shields.io/badge/sources-30-64748B" alt="30 sources">
+    <img src="https://img.shields.io/badge/jurisdictions-HK%20%C2%B7%20SG%20%C2%B7%20AU-0ea5e9" alt="Three jurisdictions">
     <img src="https://img.shields.io/badge/languages-EN%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E7%AE%80-7c3aed" alt="Three languages">
     <img src="https://img.shields.io/badge/zero%20dependencies-double--click%20to%20run-7c3aed" alt="Zero dependency">
     <img src="https://img.shields.io/badge/sources%20verified-2026--09--21-64748B" alt="Verified 2026-09-21">
@@ -34,7 +34,7 @@ Financial institutions across APAC often answer to several regulators, in severa
 cybersecurity at once. In Hong Kong: the Securities and Futures Commission (SFC), the Hong Kong Monetary
 Authority (HKMA), the Privacy Commissioner for Personal Data (PCPD), and — from 2026 — the Protection of
 Critical Infrastructures (Computer Systems) Ordinance. In Singapore: the Monetary Authority of Singapore
-(MAS). The requirements are scattered across guidelines, circulars, statutory notices, Supervisory Policy
+(MAS). In Australia: the Australian Prudential Regulation Authority (APRA). The requirements are scattered across guidelines, circulars, statutory notices, Supervisory Policy
 Manual modules and codes of practice, and the same control is often demanded by several regulators in
 different words.
 
@@ -42,7 +42,7 @@ This tool breaks those provisions down into **checkable controls**. Pick a juris
 licences your firm holds and its business characteristics, and you get the list of controls that apply —
 each one citing its **source document, clause number, issue date and official link** — which you can then
 self-assess and export. It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
-Ordinance) and **Singapore** (MAS), with the architecture built to add further APAC jurisdictions over time.
+Ordinance), **Singapore** (MAS) and **Australia** (APRA), with the architecture built to add further APAC jurisdictions over time.
 
 ## Quick start
 
@@ -61,10 +61,10 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 
 | Feature | Description |
 | --- | --- |
-| **Jurisdiction-first scope builder** | Switch between Hong Kong and Singapore, expand entities by regulator, and see only the business characteristics relevant to the selected entities; licences from several jurisdictions can remain selected at once |
-| **Jurisdiction result filter** | Focus the control list on Hong Kong or Singapore without changing the saved assessment scope |
-| **Filter by licence** | 18 licence / entity types: 15 in Hong Kong (SFC regulated activities, VASP, authorized institutions, stored value facilities, IA-authorized insurers, general companies) + 3 in Singapore (banks, capital markets services licensees and related entities, licensed digital token service providers) |
-| **Narrow by business profile** | 8 characteristics (internet trading, e-banking, personal data processing, CI designation, outsourcing/cloud, use of AI models, IA CRAF scope, online financial services over the internet) decide whether a provision applies to a given licence |
+| **Jurisdiction-first scope builder** | Switch between Hong Kong, Singapore and Australia, expand entities by regulator, and see only the business characteristics relevant to the selected entities; licences from several jurisdictions can remain selected at once |
+| **Jurisdiction result filter** | Focus the control list on a single jurisdiction without changing the saved assessment scope |
+| **Filter by licence** | 23 licence / entity types: 15 in Hong Kong (SFC regulated activities, VASP, authorized institutions, stored value facilities, IA-authorized insurers, general companies) + 3 in Singapore (banks, capital markets services licensees and related entities, licensed digital token service providers) + 5 in Australia (ADIs, general insurers, life companies, private health insurers, RSE licensees) |
+| **Narrow by business profile** | 9 characteristics (internet trading, e-banking, personal data processing, CI designation, outsourcing/cloud, use of AI models, IA CRAF scope, online financial services over the internet, information assets managed by related or third parties) decide whether a provision applies to a given licence |
 | **De-duplication and cross-mapping** | Where several regulators impose the same requirement, it is merged into a single card listing each one's own provision and clause number — whether that's Hong Kong's SFC and HKMA, or Singapore's MAS across its three near-identical Notices on Cyber Hygiene to different entity types |
 | **Traceable to source** | Every control carries a description, clause number, issue and verification dates, official link, and a verbatim / excerpt / summary label for its English source text |
 | **Assessment work record** | Record status, implementation notes, evidence references, owner and target date for each individual regulatory control |
@@ -76,7 +76,7 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 
 ## Coverage
 
-v1.9.0 contains **270 controls** drawn from **29** official documents, across Hong Kong and Singapore.
+v1.10.0 contains **294 controls** drawn from **30** official documents, across Hong Kong, Singapore and Australia.
 Each source carries its own `verifiedOn` — the day its link and version were last checked against the
 regulator's website — because the documents span 2001 to 2026 and are re-checked at different times. The
 header shows the **earliest** of those dates, so the freshness claimed is the weakest link, never the most
@@ -148,6 +148,14 @@ recently touched one. A scheduled workflow re-checks every link weekly.
 | [FSM-N05 Notice on Technology Risk Management (to banks in Singapore)](https://www.mas.gov.sg/-/media/mas-media-library/regulation/notices/trpd/notice-fsm-n05/mas-notice-fsm-n05.pdf?sc_lang=en) | 2024-05-09 | Framework to identify critical systems, unscheduled downtime capped at **4 hours** a year, **4-hour** recovery time objective, MAS notified within **1 hour**, root cause report within **14 days**, protection of customer information |
 | [Technology Risk Management Guidelines](https://www.mas.gov.sg/-/media/MAS/Regulations-and-Financial-Stability/Regulatory-and-Supervisory-Framework/Risk-Management/TRM-Guidelines-18-January-2021.pdf) | 2021-01-18 | Non-statutory guidelines; governance and oversight, third-party management, IT resilience, access control, cryptography, data and infrastructure security, cyber security operations and assessment, online financial services, IT audit |
 
+## Australia
+
+### APRA (24 controls)
+
+| Document | Date | Notes |
+| --- | --- | --- |
+| [Prudential Standard CPS 234 Information Security](https://www.apra.gov.au/system/files/cps_234_july_2019_for_public_release.pdf) | 2018-11-07 | Binding prudential standard, in force from **2019-07-01**; applies to ADIs, general insurers, life companies, private health insurers and RSE licensees. Paragraphs 13–36 in full: Board accountability, information security capability, policy framework, asset classification, controls, incident management, control testing, internal audit, and notifying APRA within **72 hours** of a material incident and within **10 business days** of a material control weakness that cannot be remediated in time. Paragraphs 16, 22, 28 and 34 (related and third parties) apply when information assets are managed by others |
+
 ## How applicability is decided
 
 Each control's `applicability` has two parts:
@@ -171,7 +179,7 @@ operations under severe but plausible scenarios", say, or merging the mandatory 
 notification with voluntary notification under the PDPO. Those are different obligations, and merging them
 would mislead.
 
-Selecting every licence and characteristic, the 270 provisions collapse to **219** distinct requirements. A
+Selecting every licence and characteristic, the 294 provisions collapse to **243** distinct requirements. A
 platform operator that ticks VASP and internet trading sees 90 applicable provisions collapse to **61** —
 the SFC wrote Part XII of the VATP Guidelines closely along the lines of the Hacking Risks Guidelines, so
 most of it is the same obligation stated twice, and merging is what keeps the list honest.
@@ -241,13 +249,18 @@ data/
 │       ├── svf.js                     SVF Guideline and Practice Note
 │       ├── pdpo.js                    the six Data Protection Principles
 │       └── critical-infrastructure.js the three categories of CI obligation
-└── sg/                    Singapore: 3 licences · 1 business characteristic
-    ├── sources.js        5 source documents
-    ├── taxonomy.js       licences and business characteristics
+├── sg/                    Singapore: 3 licences · 1 business characteristic
+│   ├── sources.js        5 source documents
+│   ├── taxonomy.js       licences and business characteristics
+│   └── controls/
+│       ├── cyber-hygiene.js    FSM-N06 / N22 / N31 Notices on Cyber Hygiene
+│       ├── trm-notice.js       FSM-N05 Notice on Technology Risk Management
+│       └── trm-guidelines.js   Technology Risk Management Guidelines
+└── au/                    Australia: 5 entity types · 1 business characteristic
+    ├── sources.js        1 source document
+    ├── taxonomy.js       entity types and business characteristics
     └── controls/
-        ├── cyber-hygiene.js    FSM-N06 / N22 / N31 Notices on Cyber Hygiene
-        ├── trm-notice.js       FSM-N05 Notice on Technology Risk Management
-        └── trm-guidelines.js   Technology Risk Management Guidelines
+        └── cps-234.js          APRA CPS 234 Information Security, paragraphs 13–36
 ```
 
 A single control looks like this — authored in Simplified Chinese, with other languages supplied by the
@@ -305,7 +318,7 @@ translations fails the build. Unit tests cover applicability, merging, v1 migrat
 due dates and CSV injection protection. Sources unchecked for more than 180 days raise a warning.
 
 `.github/workflows/ci.yml` runs this on every pull request, and also confirms the generated Traditional
-files are up to date. A separate weekly workflow re-checks all 29 source links:
+files are up to date. A separate weekly workflow re-checks all 30 source links:
 
 ```bash
 node tools/check-links.mjs
