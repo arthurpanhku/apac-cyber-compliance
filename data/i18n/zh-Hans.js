@@ -76,6 +76,13 @@ HKCC.addI18n('zh-Hans', {
     basisSameProvision: '同一条文',
     basisIdenticalText: '原文相同',
     basisReviewed: '经人工评审实质等价，{date}',
+    sharedRecordTitle: '共用实施记录：一次记录，适用于以下 {n} 条等价条文',
+    sharedStatus: '共用状态',
+    recordSeparately: '分别记录',
+    recordingSeparately: '正在分别记录本组条文。',
+    recordsDiverged: '本组条文的记录不同，正在分别记录。',
+    useSharedRecord: '改为共用记录',
+    confirmUseShared: '以 {id} 的状态与工作记录覆盖本组其余 {n} 条条文的记录？被覆盖的内容无法复原，可先导出项目备份。',
     tagApplies: '适用：{value}',
     tagTriggered: '触发：{value}',
 

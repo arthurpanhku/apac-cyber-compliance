@@ -49,6 +49,8 @@
   let projectPanelOpen = false;
   let scopeDrawerOpen = false;
   let headerMoreOpen = false;
+  /** 使用者选择「分别记录」的等价组；只在本次浏览有效，不写入项目。 */
+  const separateGroups = new Set();
   let scopeReturnFocus = null;
   const licenseGroupState = new Map();
   const mobileScopeQuery = window.matchMedia('(max-width: 900px)');
@@ -174,14 +176,20 @@
     return state.assessments[id] || {};
   }
 
-  function updateAssessment(id, field, value) {
-    const record = { ...assessment(id) };
-    if (value == null || value === '' || (field === 'status' && value === 'none')) delete record[field];
-    else record[field] = value;
-    if (field === 'status') record.assessedAt = value === 'none' ? undefined : today();
-    for (const key of Object.keys(record)) if (record[key] == null || record[key] === '') delete record[key];
-    if (Object.keys(record).length) state.assessments[id] = record;
-    else delete state.assessments[id];
+  /**
+   * 更新一条或多条控制点的评估记录。传入多个 ID 即共用记录：同一值写入每个成员，
+   * 状态仍逐控制 ID 保存（DEVELOPMENT_PLAN 第 4.1 节），导出与项目文件格式不变。
+   */
+  function updateAssessment(ids, field, value) {
+    for (const id of [].concat(ids)) {
+      const record = { ...assessment(id) };
+      if (value == null || value === '' || (field === 'status' && value === 'none')) delete record[field];
+      else record[field] = value;
+      if (field === 'status') record.assessedAt = value === 'none' ? undefined : today();
+      for (const key of Object.keys(record)) if (record[key] == null || record[key] === '') delete record[key];
+      if (Object.keys(record).length) state.assessments[id] = record;
+      else delete state.assessments[id];
+    }
     save();
   }
 
@@ -538,7 +546,9 @@
     }
 
     const members = el('div', 'assessment-members');
-    for (const control of group) members.appendChild(renderMember(control));
+    const equivalence = state.merge ? E.equivalenceFor(group, HKCC.equivalence) : null;
+    if (equivalence) members.appendChild(renderSharedControls(group, equivalence));
+    else for (const control of group) members.appendChild(renderMember(control));
     card.appendChild(members);
 
     const quoted = group.filter(c => c.quote);
@@ -598,7 +608,6 @@
       card.appendChild(el('p', 'control-note', t('notePrefix') + noteText));
     }
 
-    const equivalence = state.merge ? E.equivalenceFor(group, HKCC.equivalence) : null;
     if (equivalence) {
       const basis = equivalence.basis === 'reviewed' ?
         t('basisReviewed', { date: equivalence.reviewedOn }) :
@@ -609,12 +618,56 @@
     return card;
   }
 
-  function renderMember(control) {
+  /**
+   * 等价组：默认共用一次实施记录（状态、实施说明、证据引用、负责人、目标日期写入每个成员）。
+   * 成员记录不一致，或使用者选择「分别记录」时，改为逐条显示。
+   */
+  function renderSharedControls(group, equivalence) {
+    const ids = group.map(c => c.id);
+    const shared = E.recordsShared(ids, state.assessments);
+    const wrap = el('div', 'shared-controls');
+
+    if (shared && !separateGroups.has(equivalence.id)) {
+      const member = el('section', 'assessment-member shared-record');
+      const head = el('div', 'shared-head');
+      head.appendChild(el('strong', null, t('sharedRecordTitle', { n: ids.length })));
+      const split = el('button', 'link-button', t('recordSeparately'));
+      split.type = 'button';
+      split.addEventListener('click', () => { separateGroups.add(equivalence.id); render(); });
+      head.appendChild(split);
+      member.appendChild(head);
+      for (const control of group) member.appendChild(renderSourceLine(control));
+      const top = el('div', 'member-top');
+      top.append(el('span', 'shared-label', t('sharedStatus')), renderAssess(ids, 'shared-' + equivalence.id));
+      member.appendChild(top);
+      member.appendChild(renderWorkRecord(ids, assessment(ids[0])));
+      wrap.appendChild(member);
+      return wrap;
+    }
+
+    const bar = el('div', 'shared-head');
+    bar.appendChild(el('span', null, shared ? t('recordingSeparately') : t('recordsDiverged')));
+    const join = el('button', 'link-button', t('useSharedRecord'));
+    join.type = 'button';
+    join.addEventListener('click', () => {
+      if (!shared) {
+        const others = ids.length - 1;
+        if (!confirm(t('confirmUseShared', { id: ids[0], n: others }))) return;
+        state.assessments = E.shareRecord(ids, ids[0], state.assessments);
+        save();
+      }
+      separateGroups.delete(equivalence.id);
+      render();
+    });
+    bar.appendChild(join);
+    wrap.appendChild(bar);
+    for (const control of group) wrap.appendChild(renderMember(control));
+    return wrap;
+  }
+
+  function renderSourceLine(control) {
     const source = trSource(control.sourceId);
     const translatedControl = trControl(control);
-    const record = assessment(control.id);
-    const member = el('section', 'assessment-member');
-    const top = el('div', 'member-top');
     const sourceLine = el('div', 'source-line');
     sourceLine.appendChild(el('span', 'tag reg-' + regKey(source.regulator), source.regulator));
     if (source.verifiedOn) {
@@ -626,42 +679,52 @@
     link.rel = 'noopener noreferrer';
     sourceLine.append(link, el('span', 'clause', translatedControl.clause || control.clause));
     if (source.issued && source.issued !== '—') sourceLine.appendChild(el('span', 'clause', source.issued));
-    top.append(sourceLine, renderAssess(control.id));
-    member.appendChild(top);
+    return sourceLine;
+  }
 
+  function renderMember(control) {
+    const member = el('section', 'assessment-member');
+    const top = el('div', 'member-top');
+    top.append(renderSourceLine(control), renderAssess([control.id], control.id));
+    member.appendChild(top);
+    member.appendChild(renderWorkRecord([control.id], assessment(control.id)));
+    return member;
+  }
+
+  /** 工作记录栏；ids 多于一个时为共用记录，输入同时写入每个成员。 */
+  function renderWorkRecord(ids, record) {
     const details = el('details', 'work-record');
     if (record.implementationNote || record.evidenceRef || record.owner || record.targetDate) details.open = true;
     const summaryText = record.implementationNote || record.evidenceRef || record.owner || record.targetDate ?
       t('recordFilled') : t('recordEmpty');
     details.appendChild(el('summary', null, summaryText));
     const grid = el('div', 'record-grid');
-    grid.appendChild(recordField(control.id,
+    grid.appendChild(recordField(ids,
       record.status === 'na' ? t('naReason') : t('implementationNote'), 'implementationNote', 'textarea',
       record.implementationNote, t('implementationPlaceholder'), 10000));
-    grid.appendChild(recordField(control.id, t('evidenceRef'), 'evidenceRef', 'textarea', record.evidenceRef,
+    grid.appendChild(recordField(ids, t('evidenceRef'), 'evidenceRef', 'textarea', record.evidenceRef,
       t('evidencePlaceholder'), 10000));
-    grid.appendChild(recordField(control.id, t('owner'), 'owner', 'text', record.owner,
+    grid.appendChild(recordField(ids, t('owner'), 'owner', 'text', record.owner,
       t('ownerPlaceholder'), 200));
-    grid.appendChild(recordField(control.id, t('targetDate'), 'targetDate', 'date', record.targetDate));
+    grid.appendChild(recordField(ids, t('targetDate'), 'targetDate', 'date', record.targetDate));
     details.appendChild(grid);
 
     const due = E.dueState(record.targetDate, state.project.asOfDate);
     if (due) details.appendChild(el('span', `tag ${due}`, due === 'overdue' ? t('overdue') : t('dueSoon')));
-    member.appendChild(details);
-    return member;
+    return details;
   }
 
-  function renderAssess(id) {
+  function renderAssess(ids, nameKey) {
     const box = el('div', 'assess');
-    const current = assessment(id).status || 'none';
+    const current = assessment(ids[0]).status || 'none';
     for (const status of STATUSES) {
       const label = el('label', status.cls);
       const input = el('input');
       input.type = 'radio';
-      input.name = `as-${id}`;
+      input.name = `as-${nameKey}`;
       input.checked = current === status.id;
       input.addEventListener('change', () => {
-        updateAssessment(id, 'status', status.id);
+        updateAssessment(ids, 'status', status.id);
         render();
       });
       const labelText = t(status.key);
@@ -672,7 +735,7 @@
     return box;
   }
 
-  function recordField(id, labelText, key, type, value, placeholder, maxlength) {
+  function recordField(ids, labelText, key, type, value, placeholder, maxlength) {
     const label = el('label', 'record-field');
     label.appendChild(el('span', null, labelText));
     const input = el(type === 'textarea' ? 'textarea' : 'input');
@@ -681,7 +744,7 @@
     if (placeholder) input.placeholder = placeholder;
     if (maxlength) input.maxLength = maxlength;
     input.addEventListener(type === 'date' ? 'change' : 'input', event => {
-      updateAssessment(id, key, event.target.value);
+      updateAssessment(ids, key, event.target.value);
       if (type === 'date') render();
     });
     label.appendChild(input);

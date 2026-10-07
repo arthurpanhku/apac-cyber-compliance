@@ -38,6 +38,10 @@ jobs:
       - name: node --test
         run: node --test tests/*.test.mjs
 
+      # README「案例」一节的数字由此脚本产生；这里确保它随数据更新仍可运行。
+      - name: 案例数字可重现
+        run: node tools/case-study.mjs
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.x'

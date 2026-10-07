@@ -38,32 +38,73 @@ Critical Infrastructures (Computer Systems) Ordinance. In Singapore: the Monetar
 Manual modules and codes of practice, and the same control is often demanded by several regulators in
 different words.
 
-**The goal: implement a security control once, reuse the same evidence to assess it against every
-framework that asks for it, and see clearly what each framework requires on top.** A regional group with
-licensed entities in Hong Kong, Singapore, Malaysia and Australia shouldn't have to prove the same MFA
-rollout or patching process four times — but it also mustn't miss the regulator that asks for a shorter
-deadline or one more measure.
+**It is an offline tool first.** The whole application is a folder of static files: no installation, no
+server, no account, no network connection at runtime, and assessment data never leaves the browser. Any firm
+can download it and run it inside its own network — see
+[Offline and on-premises deployment](#offline-and-on-premises-deployment).
+
+**The goal: a trustworthy baseline of the requirements that apply to you — every one traceable to the
+official text — plus a clear statement of what each additional regulator adds on top.** Regulators rarely ask
+for exactly the same thing; they ask for broadly the same thing with different details. A firm supervised in
+several places doesn't mainly lose time doing one control three times — it loses time, or leaves gaps, because
+it doesn't know exactly what differs. Where requirements genuinely are the same, they merge and share one
+record; everywhere else the tool should show the difference rather than pretend there is none. The
+[case study](#case-study-a-bank-supervised-by-hkma-mas-and-apra) shows where this stands today.
 
 This tool breaks those provisions down into **checkable controls**. Pick a jurisdiction, select the
 licences your firm holds and its business characteristics, and you get the list of controls that apply —
 each one citing its **source document, clause number, issue date and official link** — which you can then
 self-assess and export. Controls that are substantively equivalent across regulators are merged into one
 card; controls that only partly overlap are flagged rather than merged, so the extra requirements stay
-visible (see [the three relationship types](#about-merge-duplicates-across-regulators)). Sharing one
-implementation record across equivalent controls, spelling out each overlap's extra requirements, and
-per-framework reports are on the roadmap — see section 1A of `DEVELOPMENT_PLAN.md` (Chinese). It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
+visible (see [the three relationship types](#about-merge-duplicates-across-regulators)). Equivalent
+controls share a single implementation record, so the status and evidence you record once count for every
+regulator in the group. Writing down each overlap's extra requirements — across jurisdictions as well as
+within them — is the next step on the roadmap; see section 1A of `DEVELOPMENT_PLAN.md` (Chinese).
+
+It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
 Ordinance), **Singapore** (MAS), **Australia** (APRA) and **Malaysia** (BNM), with the architecture built to add further APAC jurisdictions over time.
 
 ## Quick start
 
-Nothing to install, no build step:
+Nothing to install, no build step. Download the offline package from
+[Releases](https://github.com/arthurpanhku/apac-cyber-compliance/releases) (or clone the repository), unzip it and
+**double-click `index.html`**. Data is loaded as `.js` rather than `.json` precisely so that opening the page from
+`file://` is not blocked by the browser's CORS policy — no server needed.
 
-```bash
-git clone https://github.com/arthurpanhku/apac-cyber-compliance.git
+## Offline and on-premises deployment
+
+Running offline inside a firm's own environment is this project's first priority. Many of the people who need
+it work on machines with restricted or no internet access, and assessment records are sensitive.
+
+**What makes it safe to run offline**
+
+- The application is plain HTML, CSS and JavaScript — nothing to install, compile or configure
+- At runtime it makes **no network requests**: no CDN, web fonts, analytics or update checks. CI enforces this
+  (`tools/validate.mjs` fails on `fetch`/XHR/WebSocket, dynamic imports, external `<script>`/`<link>`/`<img>` and
+  external CSS `url()`/`@import`). The only outbound links are the official source links, opened when a user
+  clicks them
+- Assessment data is stored in the browser's `localStorage` and in project files the user exports
+  (`.hkcc.json`). Nothing is uploaded; evidence is recorded as text references, not files
+
+**Option 1 — on each computer.** Copy the unzipped folder to the computer (or a network share) and open
+`index.html` in Chrome, Edge, Firefox or Safari.
+
+**Option 2 — on an internal web server.** Serve the folder as static files from any web server (IIS, nginx,
+Apache, an internal static hosting service). No server-side code, database or outbound access is needed. The
+application works under a strict Content Security Policy, which you may set as a response header:
+
+```
+Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 ```
 
-Then **double-click `index.html`**. Data is loaded as `.js` rather than `.json` precisely so that opening
-the page from `file://` is not blocked by the browser's CORS policy — no server needed.
+**Verifying the package.** Each release has a `.zip` and a `.zip.sha256`. Check the checksum before
+distributing internally (`sha256sum -c apac-cyber-compliance-vX.Y.Z.zip.sha256`, or `Get-FileHash` on Windows).
+The package is built by `tools/package.sh` from the tagged commit with no build step, so its files are
+identical to the repository's and can be reviewed line by line.
+
+**Updating.** Browser storage belongs to one browser and one page location, so **export the project file before
+updating, moving the folder, changing the server address or switching browser**, then import it afterwards.
+Unzip the new version over a fresh folder rather than mixing files from two versions.
 
 It also deploys to GitHub Pages as-is (repository settings → Pages → publish from the `main` branch root).
 
@@ -78,11 +119,55 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 | **De-duplication and cross-mapping** | Where several regulators impose the same requirement, it is merged into a single card listing each one's own provision and clause number — whether that's Hong Kong's SFC and HKMA, or Singapore's MAS across its three near-identical Notices on Cyber Hygiene to different entity types |
 | **Traceable to source** | Every control carries a description, clause number, issue and verification dates, official link, and a verbatim / excerpt / summary label for its English source text |
 | **Assessment work record** | Record status, implementation notes, evidence references, owner and target date for each individual regulatory control |
+| **Shared implementation record** | Substantively equivalent provisions share one status and work record: record the control and its evidence once and it applies to every regulator in the group (you can still record them separately) |
+| **Offline and self-hosted** | Static files only — runs from `file://` or any internal web server with no network access; release packages come with a SHA-256 checksum |
 | **Remediation list** | Review unrated, partially implemented and unimplemented controls by domain, with overdue and 30-day due indicators |
 | **Portable project file** | Export or import a versioned `.hkcc.json` backup containing the full scope and assessment record |
 | **Three languages** | English, Traditional Chinese and Simplified Chinese, switchable in the header — including the CSV export |
 | **Export** | Export a formula-safe CSV or print to PDF, including project details and work-record fields |
 | **Stored locally** | Project data is saved in browser localStorage; nothing is uploaded |
+
+## Case study: a bank supervised by HKMA, MAS and APRA
+
+A bank that is an authorized institution in Hong Kong, a bank in Singapore and an ADI in Australia, offering
+e-banking and online financial services, processing personal data, and using outsourcing and cloud services
+whose information assets are partly managed by third parties. How does running its assessment in this tool
+compare with keeping three separate spreadsheets, one per regulator?
+
+The numbers below are for v1.12.0 and are produced by `node tools/case-study.mjs` — rerun it to check them.
+
+| Work | Three separate spreadsheets | This tool today |
+| --- | --- | --- |
+| Finding what applies | Read the 25 source documents covering Hong Kong, Singapore and Australia and judge applicability yourself | Tick 3 entity types and 5 business characteristics: **101** of the 294 provisions apply (HKMA 22, PCPD 8, MAS 47, APRA 24); the other **193** are screened out |
+| Citing the source | Copy document names, clause numbers and text by hand | Every provision carries its document, clause, issue and verification dates and official link; **40** come with the official text (36 verbatim, 4 excerpts), **61** only with a summary so far |
+| Provisions to assess and evidence to attach | 101, across three workbooks | **Still 101**, in one project. None of the 101 is substantively equivalent to another, so nothing merges and no evidence is shared yet |
+| Knowing how the regulators differ | Compare the texts by hand | **Not yet.** No relationships have been mapped between these three regulators' provisions |
+| Remediation and handover | Three files to reconcile | One project file, a remediation list with overdue / due-soon flags, per-control CSV and print |
+
+**What this tells us.**
+
+- **The saving today is in finding and citing, not in duplicate assessment.** Narrowing 294 provisions in 25
+  documents to the 101 that apply — with each one traceable to its source — is the expert work the tool
+  already does. For this bank it does **not** yet reduce the number of things to assess or prove.
+- **Regulators rarely ask for exactly the same thing.** They ask for broadly the same thing with different
+  details: APRA CPS 234 paragraph 35 requires notifying APRA within 72 hours of a material incident; MAS FSM-N05
+  paragraph 7 requires notifying MAS within 1 hour. Treating these as "the same control" would hide exactly the
+  difference a regulator would ask about. The real cost for a multi-regulator firm is not knowing what differs —
+  which leads either to three separate evidence packs or to gaps.
+- **The differences sit in almost every area.** In 9 of the 10 control domains that apply to this bank, two or
+  more of these regulators have requirements: governance, data protection and third-party management (all four),
+  hardening, monitoring, incident response and assurance (three each), access control and resilience (two each).
+- **61 of the 101 provisions still rest on summaries.** Equivalence can't be asserted on a summary (rule EQ6),
+  and a baseline is only as trustworthy as its sources.
+
+**What would change these numbers** (see section 1A of `DEVELOPMENT_PLAN.md`):
+
+1. Replace the summaries with official text (#20, #21)
+2. Map the overlaps between HKMA, MAS and APRA provisions and write down each one's extra requirements (#22) —
+   then the bank would see, for each area, what it must add for each additional regulator
+3. Let evidence recorded for one provision be reused on overlapping ones, with only the difference to confirm
+
+We'll rerun this case as each step lands and update the table, so it doubles as a progress measure.
 
 ## Coverage
 

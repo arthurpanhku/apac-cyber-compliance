@@ -211,3 +211,23 @@ test('migrateV1 rejects non-objects with a coded diagnostic', () => {
   assert.throws(() => E.migrateV1('not an object', controls),
     error => error.diagnostic?.code === 'diagLegacyNotObject');
 });
+
+test('recordsShared compares record fields and ignores assessedAt', () => {
+  assert.equal(E.recordsShared(['A', 'B'], {}), true);
+  assert.equal(E.recordsShared(['A', 'B'], {
+    A: { status: 'done', evidenceRef: 'MFA-001', assessedAt: '2026-10-01' },
+    B: { status: 'done', evidenceRef: 'MFA-001', assessedAt: '2026-10-07' }
+  }), true);
+  assert.equal(E.recordsShared(['A', 'B'], { A: { status: 'done' } }), false);
+  assert.equal(E.recordsShared(['A', 'B'], { A: { status: 'done', owner: 'x' }, B: { status: 'done' } }), false);
+});
+
+test('shareRecord copies one member to the rest without mutating the input', () => {
+  const before = { A: { status: 'done', evidenceRef: 'MFA-001' }, B: { status: 'gap' }, C: { status: 'na' } };
+  const after = E.shareRecord(['A', 'B'], 'A', before);
+  assert.deepEqual(after.B, { status: 'done', evidenceRef: 'MFA-001' });
+  assert.deepEqual(after.C, { status: 'na' });
+  assert.deepEqual(before.B, { status: 'gap' });
+  assert.notEqual(after.B, after.A);
+  assert.equal(E.shareRecord(['A', 'B'], 'X', before).B, undefined);
+});
