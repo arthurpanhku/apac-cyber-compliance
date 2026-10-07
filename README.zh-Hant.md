@@ -11,10 +11,10 @@
   <p>
     <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
-    <img src="https://img.shields.io/badge/version-1.9.0-0ea5e9" alt="Version 1.9.0">
-    <img src="https://img.shields.io/badge/控制點-270-16a34a" alt="270 controls">
-    <img src="https://img.shields.io/badge/條文出處-29-64748B" alt="29 sources">
-    <img src="https://img.shields.io/badge/司法管轄區-HK%20%C2%B7%20SG-0ea5e9" alt="Two jurisdictions">
+    <img src="https://img.shields.io/badge/version-1.10.0-0ea5e9" alt="Version 1.10.0">
+    <img src="https://img.shields.io/badge/控制點-294-16a34a" alt="294 controls">
+    <img src="https://img.shields.io/badge/條文出處-30-64748B" alt="30 sources">
+    <img src="https://img.shields.io/badge/司法管轄區-HK%20%C2%B7%20SG%20%C2%B7%20AU-0ea5e9" alt="Three jurisdictions">
     <img src="https://img.shields.io/badge/語言-EN%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E7%AE%80-7c3aed" alt="Three languages">
     <img src="https://img.shields.io/badge/零依賴-雙擊即用-7c3aed" alt="Zero dependency">
     <img src="https://img.shields.io/badge/條文核驗-2026--09--21-64748B" alt="Verified 2026-09-21">
@@ -30,13 +30,13 @@
 
 亞太地區的金融機構往往同時受多個司法管轄區、多個監管機構的網絡安全要求約束。以香港為例，
 證監會（SFC）、金管局（HKMA）、私隱專員公署（PCPD），2026 年起還有《保護關鍵基礎設施
-（電腦系統）條例》；新加坡則有金融管理局（MAS）。條文散落在指引、通函、法定通知、監管政策
+（電腦系統）條例》；新加坡有金融管理局（MAS）；澳洲則有審慎監管局（APRA）。條文散落在指引、通函、法定通知、監管政策
 手冊和實務守則中，同一項控制往往被多個機構以不同措辭重複要求。
 
 本工具把這些條文拆解為**可勾選的控制點**：先選擇司法管轄區，再勾選貴公司持有的牌照與業務
 特徵，即時得到適用的控制點清單，每條都標註**來源法規、條款編號、發佈日期與官方原文連結**，
 並可自評打分、匯出底稿。目前覆蓋**香港**（SFC / HKMA / PCPD / 關鍵基礎設施條例）與
-**新加坡**（MAS）；架構已支持逐步加入其他 APAC 司法管轄區。
+**新加坡**（MAS）與**澳洲**（APRA）；架構已支持逐步加入其他 APAC 司法管轄區。
 
 ## 快速開始
 
@@ -55,10 +55,10 @@ git clone https://github.com/arthurpanhku/apac-cyber-compliance.git
 
 | 功能 | 說明 |
 | --- | --- |
-| **司法管轄區優先的範圍菜單** | 先切換香港／新加坡，再按監管機構展開實體類型；只顯示與已選實體有關的業務特徵，同時保留多地選擇 |
-| **結果轄區篩選** | 不改變已保存的評估範圍，單獨聚焦香港或新加坡控制點 |
-| **按牌照篩選** | 18 種牌照／實體類型：香港 15 種（SFC 各類受規管活動、VASP、認可機構、儲值支付工具、IA 獲授權保險人、一般企業）+ 新加坡 3 種（銀行、資本市場服務持牌人及相關實體、持牌數字代幣服務提供者） |
-| **按業務特徵細分** | 8 項特徵（互聯網交易、電子銀行、處理個人資料、關鍵基礎設施指定、外判／雲端、使用 AI 模型、IA CRAF 適用範圍、透過互聯網提供網上金融服務）決定同一牌照下條文是否適用 |
+| **司法管轄區優先的範圍菜單** | 先切換香港／新加坡／澳洲，再按監管機構展開實體類型；只顯示與已選實體有關的業務特徵，同時保留多地選擇 |
+| **結果轄區篩選** | 不改變已保存的評估範圍，單獨聚焦某一司法管轄區的控制點 |
+| **按牌照篩選** | 23 種牌照／實體類型：香港 15 種（SFC 各類受規管活動、VASP、認可機構、儲值支付工具、IA 獲授權保險人、一般企業）+ 新加坡 3 種（銀行、資本市場服務持牌人及相關實體、持牌數字代幣服務提供者）+ 澳洲 5 種（ADI、一般保險人、人壽保險公司、私人醫療保險人、RSE 持牌人） |
+| **按業務特徵細分** | 9 項特徵（互聯網交易、電子銀行、處理個人資料、關鍵基礎設施指定、外判／雲端、使用 AI 模型、IA CRAF 適用範圍、透過互聯網提供網上金融服務、資訊資產由關聯方或第三方管理）決定同一牌照下條文是否適用 |
 | **控制點去重與交叉映射** | 同一項要求被多個監管機構同時規定時合併為一張卡片，並逐一列出各自的條文出處與條款編號——不論是香港 SFC 與 HKMA 之間，還是新加坡 MAS 致不同實體類型近乎逐字相同的三份《網絡衞生通知》之間 |
 | **條文可追溯** | 每條控制附說明、條款、發佈及核驗日期、官方連結，並標明英文來源文字屬於原文、節錄或說明 |
 | **評估工作記錄** | 每個監管控制可記錄狀態、實施說明、證據引用、負責人及目標完成日期 |
@@ -70,7 +70,7 @@ git clone https://github.com/arthurpanhku/apac-cyber-compliance.git
 
 ## 覆蓋範圍
 
-v1.9.0 共 **270 條控制點**，來自 **29 份**官方文件，涵蓋香港與新加坡兩個司法管轄區。
+v1.10.0 共 **294 條控制點**，來自 **30 份**官方文件，涵蓋香港、新加坡與澳洲三個司法管轄區。
 每份出處各有自己的 `verifiedOn`——最近一次實際打開官網核對連結與版本的日期。條文發佈跨
 2001 至 2026 年、複核節奏各不相同，用一個全局日期會讓剛複核過的和多年沒碰的看起來一樣新。
 頁首顯示的是其中**最早**的一個，即以最弱的一環為準；另有每週自動巡檢全部連結的工作流。
@@ -141,6 +141,14 @@ v1.9.0 共 **270 條控制點**，來自 **29 份**官方文件，涵蓋香港�
 | [FSM-N05《科技風險管理通知》（致新加坡銀行）](https://www.mas.gov.sg/-/media/mas-media-library/regulation/notices/trpd/notice-fsm-n05/mas-notice-fsm-n05.pdf?sc_lang=en) | 2024-05-09 | 關鍵系統識別框架、年度非計劃停機上限 **4 小時**、恢復時限目標 **4 小時**、**1 小時**內通報金管局、**14 日**內提交根因及影響分析報告、保護客戶資料 |
 | [《科技風險管理指引》](https://www.mas.gov.sg/-/media/MAS/Regulations-and-Financial-Stability/Regulatory-and-Supervisory-Framework/Risk-Management/TRM-Guidelines-18-January-2021.pdf) | 2021-01-18 | 不具法律約束力的指引；治理監督、第三方管理、資訊科技韌性、存取控制、密碼技術、資料與基礎設施保安、網絡保安運作與評估、網上金融服務、資訊科技審計 |
 
+## 澳洲
+
+### 審慎監管局 APRA（24 條）
+
+| 文件 | 日期 | 說明 |
+| --- | --- | --- |
+| [審慎標準 CPS 234《資訊保安》](https://www.apra.gov.au/system/files/cps_234_july_2019_for_public_release.pdf) | 2018-11-07 | 具法律約束力的審慎標準，**2019-07-01** 生效；適用於認可接受存款機構（ADI）、一般保險人、人壽保險公司、私人醫療保險人及退休金受託人（RSE 持牌人）。完整收錄第 13–36 段：董事會問責、資訊保安能力、政策框架、資產分類、控制措施、事故管理、控制測試、內部審計，以及重大事故 **72 小時**內、無法及時修補的重大控制弱點 **10 個營業日**內通知 APRA。第 16、22、28、34 段（關聯方及第三方）只在資訊資產由他方管理時適用 |
+
 ## 適用性判定規則
 
 每條控制點的 `applicability` 由兩部分組成：
@@ -160,7 +168,7 @@ v1.9.0 共 **270 條控制點**，來自 **29 份**官方文件，涵蓋香港�
 例如把「每日離線備份」和「在嚴重情景下測試關鍵業務交付能力」合併，或把強制的 12 小時法定事故通報
 與《私隱條例》下的自願通報合併。兩者性質不同，合併會造成合規誤讀。
 
-在勾選全部牌照與業務特徵的最大範圍下，270 條條文合併為 **219 項**獨立要求。
+在勾選全部牌照與業務特徵的最大範圍下，294 條條文合併為 **243 項**獨立要求。
 平台營運者若勾選「虛擬資產服務提供者」與「互聯網交易」，90 條適用條文會合併為 **61 項**——
 證監會撰寫《虛擬資產交易平台營運者指引》第 XII 部時顯然以《黑客入侵風險指引》為藍本，
 大部分是同一項要求寫了兩遍，合併正是為了不讓清單虛胖。
@@ -225,13 +233,18 @@ data/
 │       ├── svf.js                     儲值支付工具指引與實務備考
 │       ├── pdpo.js                    六項保障資料原則
 │       └── critical-infrastructure.js 關鍵基礎設施條例三類責任
-└── sg/                   新加坡：3 種牌照 · 1 項業務特徵
-    ├── sources.js        5 份條文出處
-    ├── taxonomy.js       牌照與業務特徵
+├── sg/                   新加坡：3 種牌照 · 1 項業務特徵
+│   ├── sources.js        5 份條文出處
+│   ├── taxonomy.js       牌照與業務特徵
+│   └── controls/
+│       ├── cyber-hygiene.js    FSM-N06 / N22 / N31《網絡衞生通知》
+│       ├── trm-notice.js       FSM-N05《科技風險管理通知》
+│       └── trm-guidelines.js   《科技風險管理指引》
+└── au/                   澳洲：5 種實體類型 · 1 項業務特徵
+    ├── sources.js        1 份條文出處
+    ├── taxonomy.js       實體類型與業務特徵
     └── controls/
-        ├── cyber-hygiene.js    FSM-N06 / N22 / N31《網絡衞生通知》
-        ├── trm-notice.js       FSM-N05《科技風險管理通知》
-        └── trm-guidelines.js   《科技風險管理指引》
+        └── cps-234.js          APRA CPS 234《資訊保安》第 13–36 段
 ```
 
 單條控制點的形態（以簡體撰寫，其餘語言由 `data/i18n/` 的覆蓋層提供）：
