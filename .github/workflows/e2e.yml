@@ -1,0 +1,49 @@
+name: 浏览器冒烟测试
+
+# CONTRIBUTING 要求改动界面逻辑时在浏览器里跑一遍主路径。这里把那一步交给 CI，
+# 而不是靠人工点击；适用性规则（例如马来西亚 RMiT 的豁免）也由它守住。
+# 测试直接以 file:// 打开 index.html——本项目没有构建步骤，页面必须能双击打开
+# （见 DEVELOPMENT_PLAN.md 第 2 节）。
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    name: Playwright + Chromium
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tests/e2e
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tests/e2e/package-lock.json
+
+      # 用 npm ci 而非 npm install：版本由 package-lock.json 钉住，
+      # 不会每次跑到不同的 Playwright 版本。
+      - name: 安装测试依赖
+        run: npm ci
+
+      - name: 安装 Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: 运行浏览器冒烟测试
+        run: npx playwright test
+
+      # 失败时的截图与 trace 是排查问题的主要线索。
+      - uses: actions/upload-artifact@v6
+        if: failure()
+        with:
+          name: playwright-results
+          path: tests/e2e/test-results
+          retention-days: 7
