@@ -42,6 +42,7 @@
       <p id="ph-project"></p>
       <p id="ph-scope"></p>
       <p id="ph-attrs"></p>
+      <p id="ph-regulator"></p>
       <p id="ph-date"></p>
     </div>
 
@@ -49,9 +50,12 @@
 
     <div class="panel summary" id="summary"></div>
 
+    <section class="panel coverage" id="coverage" hidden></section>
+
     <div class="panel toolbar">
       <input type="search" id="q">
       <select id="jurisdiction-filter"></select>
+      <select id="regulator-filter"></select>
       <select id="domain-filter"></select>
       <label class="inline"><input type="checkbox" id="merge"> <span id="merge-label"></span></label>
       <label class="inline"><input type="checkbox" id="gaps"> <span id="gaps-label"></span></label>
@@ -88,6 +92,7 @@
 <script src="data/my/taxonomy.js"></script>
 <script src="data/my/controls/rmit.js"></script>
 <script src="data/equivalence.js"></script>
+<script src="data/overlaps.js"></script>
 <script src="data/i18n/zh-Hans.js"></script>
 <script src="data/i18n/zh-Hant.js"></script>
 <script src="data/i18n/en.js"></script>

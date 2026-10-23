@@ -15,7 +15,8 @@
     { id: 'na', key: 'statusNa', cls: 's-na' }
   ];
   const byId = new Map(HKCC.controls.map(c => [c.id, c]));
-  const relationIndex = E.indexRelations(HKCC.controls);
+  const relationIndex = E.indexRelations(HKCC.controls, HKCC.overlaps);
+  const deltaIndex = E.indexOverlapDeltas(HKCC.overlaps);
   const licenseById = new Map(HKCC.licenses.map(l => [l.id, l]));
   const attributeLicenseIndex = E.indexAttributeLicenses(HKCC.controls);
   const definitions = {
@@ -40,6 +41,7 @@
     gapsOnly: false,
     query: '',
     jurisdiction: '',
+    regulator: '',
     domain: '',
     storageAvailable: true,
     quarantined: false
@@ -72,6 +74,12 @@
   const trAttribute = attribute => HKCC.tr('attributes', attribute.id, attribute);
   const trDomain = domain => HKCC.tr('domains', domain.id, domain);
   const trJurisdiction = jurisdiction => HKCC.tr('jurisdictions', jurisdiction.id, jurisdiction);
+  /** 监管机构以出处的基础数据（简体）为键，显示时再按当前语言取名。 */
+  const regulatorOf = control => HKCC.sources[control.sourceId].regulator;
+  const regulatorLabel = regulator => {
+    const sourceId = Object.keys(HKCC.sources).find(id => HKCC.sources[id].regulator === regulator);
+    return sourceId ? trSource(sourceId).regulator : regulator;
+  };
   const jurisdictionLabel = id => {
     const item = HKCC.jurisdictions.find(j => j.id === id);
     return item ? trJurisdiction(item).label : id;
@@ -473,11 +481,17 @@
     if (state.jurisdiction) {
       visible = visible.filter(group => group.some(c => controlJurisdictionId(c) === state.jurisdiction));
     }
+    if (state.regulator) visible = visible.filter(group => group.some(c => regulatorOf(c) === state.regulator));
     if (state.domain) visible = visible.filter(group => group.some(c => c.domain === state.domain));
     if (state.gapsOnly) visible = visible.filter(group => E.pendingCount(group, state.assessments) > 0);
     visible.sort(compareGroups);
     currentVisibleGroups = visible;
+    currentCoverage = E.regulatorCoverage(active, {
+      equivalence: HKCC.equivalence, relations: relationIndex, regulatorOf, assessments: state.assessments
+    });
     renderSummary(active, allGroups);
+    renderCoverage(currentCoverage);
+    renderRegulatorOptions(active);
 
     const out = $('#results');
     out.innerHTML = '';
@@ -551,6 +565,12 @@
     else for (const control of group) members.appendChild(renderMember(control));
     card.appendChild(members);
 
+    const memberIds = new Set(group.map(c => c.id));
+    const deltas = group.flatMap(control => (deltaIndex.get(control.id) || [])
+      .filter(entry => !memberIds.has(entry.other))
+      .map(entry => ({ ...entry, self: control.id })));
+    if (deltas.length) card.appendChild(renderDeltas(deltas));
+
     const quoted = group.filter(c => c.quote);
     if (quoted.length) {
       const details = el('details', 'quote');
@@ -570,11 +590,14 @@
     const tags = el('div', 'tags');
     if (group.length > 1) tags.appendChild(el('span', 'tag merged', t('tagMerged', { n: group.length })));
     // 部分重叠／相关只作标签提示，不合并；指向的条文不一定在当前适用范围内。
-    const memberIds = new Set(group.map(c => c.id));
+    // 已写差额的部分重叠在上方差额栏显示，不再重复成标签。
+    const withDelta = new Set(deltas.map(entry => entry.other));
     for (const [type, cls, key] of [['overlaps', 'overlap', 'tagOverlaps'], ['related', 'related', 'tagRelated']]) {
       const refs = new Set();
       for (const control of group) {
-        for (const ref of relationIndex.get(control.id)?.[type] || []) if (!memberIds.has(ref)) refs.add(ref);
+        for (const ref of relationIndex.get(control.id)?.[type] || []) {
+          if (!memberIds.has(ref) && !(type === 'overlaps' && withDelta.has(ref))) refs.add(ref);
+        }
       }
       for (const ref of [...refs].sort()) {
         const tag = el('span', 'tag ' + cls, t(key, { id: ref }));
@@ -616,6 +639,41 @@
       card.appendChild(el('p', 'control-note equivalence-basis', t('equivalenceBasis', { basis, rationale })));
     }
     return card;
+  }
+
+  /** 部分重叠的差额：两条条文各自另要求什么（data/overlaps.js）。 */
+  function deltaParts(entry) {
+    const translated = HKCC.tr('overlaps', entry.group.id, entry.group).delta || {};
+    return {
+      self: translated[entry.self] ?? entry.group.delta[entry.self],
+      other: translated[entry.other] ?? entry.group.delta[entry.other]
+    };
+  }
+
+  function renderDeltas(deltas) {
+    const box = el('section', 'deltas');
+    box.appendChild(el('h4', null, t('deltaHeading')));
+    for (const entry of deltas) {
+      const target = byId.get(entry.other);
+      const parts = deltaParts(entry);
+      const item = el('div', 'delta');
+      const head = el('div', 'delta-head');
+      head.appendChild(el('span', null, t('deltaTitle', {
+        self: entry.self, other: entry.other, regulator: target ? trSource(target.sourceId).regulator : ''
+      })));
+      if (target && !applies(target)) head.appendChild(el('span', 'tag', t('deltaOutOfScope')));
+      if (target) head.title = trControl(target).title;
+      item.appendChild(head);
+      for (const [id, text] of [[entry.self, parts.self], [entry.other, parts.other]]) {
+        const line = el('p', 'delta-line');
+        line.appendChild(el('strong', null, t('deltaAdds', { id })));
+        line.appendChild(document.createTextNode(' ' + (text || t('deltaNone'))));
+        item.appendChild(line);
+      }
+      item.appendChild(el('p', 'control-note', t('deltaReviewed', { date: entry.group.reviewedOn })));
+      box.appendChild(item);
+    }
+    return box;
   }
 
   /**
@@ -809,7 +867,71 @@
     }
   }
 
+  /** 按监管机构对照：相对当前范围内其他监管机构，各自有多少条等价、部分重叠或独有。 */
+  function renderCoverage(coverage) {
+    const box = $('#coverage');
+    box.innerHTML = '';
+    box.hidden = coverage.rows.length < 2;
+    if (box.hidden) return;
+    box.appendChild(el('h2', null, t('coverageTitle')));
+    box.appendChild(el('p', 'coverage-note', t('coverageNote')));
+    const wrap = el('div', 'coverage-scroll');
+    const table = el('table', 'coverage-table');
+    const head = el('tr');
+    for (const key of ['coverageRegulator', 'coverageTotal', 'coverageEquivalent', 'coverageOverlaps',
+      'coverageUnique', 'coveragePending']) {
+      const th = el('th', null, t(key));
+      th.scope = 'col';
+      head.appendChild(th);
+    }
+    const thead = el('thead');
+    thead.appendChild(head);
+    const tbody = el('tbody');
+    for (const row of coverage.rows) {
+      const tr = el('tr');
+      tr.classList.toggle('active', state.regulator === row.regulator);
+      const name = el('th');
+      name.scope = 'row';
+      const button = el('button', 'link-button', regulatorLabel(row.regulator));
+      button.type = 'button';
+      button.setAttribute('aria-pressed', String(state.regulator === row.regulator));
+      button.title = t('coverageFilterTip', { regulator: regulatorLabel(row.regulator) });
+      button.addEventListener('click', () => {
+        state.regulator = state.regulator === row.regulator ? '' : row.regulator;
+        render();
+      });
+      name.appendChild(button);
+      tr.appendChild(name);
+      for (const value of [row.total, row.equivalent, row.overlaps, row.unique, row.pending]) {
+        tr.appendChild(el('td', null, String(value)));
+      }
+      tbody.appendChild(tr);
+    }
+    table.append(thead, tbody);
+    wrap.appendChild(table);
+    box.appendChild(wrap);
+  }
+
+  /** 监管机构筛选只列当前适用范围内的监管机构；已选的即使不在范围内也保留，以免选择悄悄消失。 */
+  function renderRegulatorOptions(active) {
+    const select = $('#regulator-filter');
+    const regulators = [...new Set(active.map(regulatorOf))];
+    if (state.regulator && !regulators.includes(state.regulator)) regulators.push(state.regulator);
+    select.innerHTML = '';
+    const all = el('option', null, t('allRegulators'));
+    all.value = '';
+    select.appendChild(all);
+    for (const regulator of regulators.sort((a, b) => regulatorLabel(a).localeCompare(regulatorLabel(b)))) {
+      const option = el('option', null, regulatorLabel(regulator));
+      option.value = regulator;
+      select.appendChild(option);
+    }
+    select.value = state.regulator;
+    select.setAttribute('aria-label', t('regulatorFilterAria'));
+  }
+
   let currentVisibleGroups = [];
+  let currentCoverage = { byControl: new Map(), rows: [] };
   function statusLabel(status) {
     const item = STATUSES.find(entry => entry.id === (status || 'none')) || STATUSES[0];
     return t(item.key);
@@ -847,10 +969,12 @@
       t('csvTitle'), t('csvRequirement'), t('csvApplicability'), t('csvRegulator'), t('csvSource'), t('csvClause'),
       t('csvIssued'), t('csvVerified'), t('csvDeadline'), t('csvUrl'), t('csvQuoteType'), t('csvQuote'),
       t('csvStatus'), t('csvImplementation'), t('csvEvidence'), t('csvOwner'), t('csvTargetDate'),
-      t('csvDueState')]];
+      t('csvDueState'), t('csvCrossRelation'), t('csvCrossRefs'), t('csvDeltas')]];
     for (const group of currentVisibleGroups) {
       for (const control of group) {
         if (state.gapsOnly && ['done', 'na'].includes(assessment(control.id).status)) continue;
+        // 按监管机构出具时，合并卡中其他监管机构的条文不列入
+        if (state.regulator && regulatorOf(control) !== state.regulator) continue;
         const source = trSource(control.sourceId);
         const translatedControl = trControl(control);
         const rawDomain = HKCC.domains.find(item => item.id === control.domain);
@@ -865,10 +989,31 @@
           translatedControl.clause || control.clause, source.issued, source.verifiedOn || '', control.deadline || '',
           source.url, quoteType, control.quote || '', statusLabel(record.status), record.implementationNote || '',
           record.evidenceRef || '', record.owner || '', record.targetDate || '',
-          due === 'overdue' ? t('overdue') : due === 'due-soon' ? t('dueSoon') : '']);
+          due === 'overdue' ? t('overdue') : due === 'due-soon' ? t('dueSoon') : '',
+          ...crossColumns(control)]);
       }
     }
     return '\ufeff' + rows.map(row => row.map(E.csvCell).join(',')).join('\r\n');
+  }
+
+  /** CSV 的跨监管三栏：关系类别、其他监管机构的对应条文、差额说明。 */
+  function crossColumns(control) {
+    const cross = currentCoverage.byControl.get(control.id);
+    const kind = cross ? t({ equivalent: 'relEquivalent', overlaps: 'relOverlaps', unique: 'relUnique' }[cross.kind]) : '';
+    const refs = (cross?.refs || []).map(id => {
+      const target = byId.get(id);
+      return target ? `${id} (${trSource(target.sourceId).regulator})` : id;
+    }).join('; ');
+    const deltas = (deltaIndex.get(control.id) || []).map(entry => {
+      const parts = deltaParts({ ...entry, self: control.id });
+      const target = byId.get(entry.other);
+      const scope = target && !applies(target) ? ` (${t('deltaOutOfScope')})` : '';
+      return `${t('deltaTitle', { self: control.id, other: entry.other,
+        regulator: target ? trSource(target.sourceId).regulator : '' })}${scope}\n` +
+        `${t('deltaAdds', { id: control.id })} ${parts.self || t('deltaNone')}\n` +
+        `${t('deltaAdds', { id: entry.other })} ${parts.other || t('deltaNone')}`;
+    }).join('\n\n');
+    return [kind, refs, deltas];
   }
 
   function download(name, content, mime) {
@@ -952,6 +1097,8 @@
     $('#ph-project').textContent = t('phProject', { name: state.project.name || t('unnamedProject') });
     $('#ph-scope').textContent = t('phScope') + (licences.join(separator) || t('phNone'));
     $('#ph-attrs').textContent = t('phAttrs') + (attributes.join(separator) || t('phNone'));
+    // 按监管机构出具时注明，免得读者以为这是完整清单
+    $('#ph-regulator').textContent = state.regulator ? t('phRegulator', { regulator: regulatorLabel(state.regulator) }) : '';
     $('#ph-date').textContent = t('phAssessmentDate', {
       date: state.project.asOfDate || today(), version: HKCC.meta.version, verified: HKCC.verifiedOn()
     });
@@ -1098,6 +1245,10 @@
       state.jurisdiction = event.target.value;
       render();
     });
+    $('#regulator-filter').addEventListener('change', event => {
+      state.regulator = event.target.value;
+      render();
+    });
     $('#export-csv').addEventListener('click', () =>
       download(`${safeFileName(state.project.name)}-${today()}.csv`, toCSV(), 'text/csv;charset=utf-8'));
     $('#export-project').addEventListener('click', exportProject);
@@ -1121,6 +1272,7 @@
       state.unresolvedAssessments = Object.create(null);
       state.query = '';
       state.jurisdiction = '';
+      state.regulator = '';
       state.domain = '';
       state.gapsOnly = false;
       $('#q').value = '';

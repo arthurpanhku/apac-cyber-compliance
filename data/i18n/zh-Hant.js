@@ -55,6 +55,8 @@ HKCC.addI18n('zh-Hant', {
     "domainFilterAria": "按控制領域篩選",
     "allJurisdictions": "所有司法管轄區",
     "jurisdictionFilterAria": "按司法管轄區篩選",
+    "allRegulators": "所有監管機構",
+    "regulatorFilterAria": "按監管機構篩選",
     "emptyNoLicenseTitle": "請先在左側選擇牌照",
     "emptyNoLicenseNote": "勾選貴公司持有的牌照與業務特徵，工具會列出適用的控制點要求。",
     "emptyNoMatchTitle": "沒有符合條件的控制點",
@@ -74,6 +76,21 @@ HKCC.addI18n('zh-Hant', {
     "tagOverlaps": "部分重疊：{id}",
     "tagRelated": "相關：{id}",
     "equivalenceBasis": "合併依據（{basis}）：{rationale}",
+    "deltaHeading": "與其他監管機構的差額",
+    "deltaTitle": "{self} 與 {other}（{regulator}）部分重疊",
+    "deltaAdds": "{id} 另要求：",
+    "deltaNone": "無額外要求",
+    "deltaOutOfScope": "不在當前適用範圍",
+    "deltaReviewed": "差額只比較這兩條條文本身；逐段對照原文於 {date}。",
+    "coverageTitle": "監管機構對照",
+    "coverageNote": "相對當前範圍內的其他監管機構：「等價」可共用一次記錄；「部分重疊」可沿用證據，但差額須另行確認；「獨有」只有該監管機構要求。點選監管機構可只看其條文，CSV 亦只匯出該監管機構的條文。",
+    "coverageRegulator": "監管機構",
+    "coverageTotal": "適用條文",
+    "coverageEquivalent": "等價",
+    "coverageOverlaps": "部分重疊",
+    "coverageUnique": "獨有",
+    "coveragePending": "待處理",
+    "coverageFilterTip": "只顯示 {regulator} 的條文；再按一次取消",
     "basisSameProvision": "同一條文",
     "basisIdenticalText": "原文相同",
     "basisReviewed": "經人工評審實質等價，{date}",
@@ -115,6 +132,7 @@ HKCC.addI18n('zh-Hant', {
     "verifiedRangeTip": "各出處的核驗日期介乎 {from} 至 {to}；此處顯示最早的一個。",
     "phScope": "牌照範圍：",
     "phAttrs": "業務特徵：",
+    "phRegulator": "只列 {regulator} 的條文（按監管機構出具）",
     "phNone": "（未選擇）",
     "phDate": "生成日期：{today}　·　條文核驗日期：{verified}",
     "phProject": "項目：{name}",
@@ -174,6 +192,12 @@ HKCC.addI18n('zh-Hant', {
     "csvOwner": "負責人",
     "csvTargetDate": "目標完成日期",
     "csvDueState": "到期狀態",
+    "csvCrossRelation": "跨監管關係",
+    "csvCrossRefs": "其他監管機構的對應條文",
+    "csvDeltas": "差額說明",
+    "relEquivalent": "等價",
+    "relOverlaps": "部分重疊",
+    "relUnique": "獨有",
     "disclaimerLabel": "免責聲明：",
     "disclaimerBody": "本工具為開源參考工具，不構成法律或合規意見。所列控制點為對公開監管條文的結構化整理，不能取代對條文原文的閱讀，亦不能取代具備資格的法律或合規專業人士的判斷。監管要求會持續更新，請以各監管機構官方網站發佈的最新版本為準。",
     "langNoteLabel": "關於條文語言：",
@@ -2737,6 +2761,44 @@ HKCC.addI18n('zh-Hant', {
     },
     "eq-bnm-rmit-13.3": {
       "rationale": "RMiT 第 13.3 段同一條文；按第 2.2(c) 段，三類支付機構只在獲指定為 NCII 時須遵守，故拆成兩條控制點。"
+    }
+  },
+  "overlaps": {
+    "ov-incident-notify-mas-apra": {
+      "delta": {
+        "MAS-N05-7": "時限短得多：發現相關事故後最遲 1 小時內通知新加坡金管局（MAS），APRA 為知悉後最遲 72 小時；「相關事故」也包括嚴重或廣泛影響營運或客戶服務的系統故障，不限於資訊保安事故。",
+        "APRA-234-35": "觸發範圍更廣：凡已經或可能對實體或客戶利益造成重大財務或非財務影響的資訊保安事故均須通知，不以已造成嚴重影響為限；另凡已通知澳洲或其他司法管轄區監管機構的資訊保安事故亦須通知——已就同一事故通知 MAS 的，仍須於 72 小時內通知 APRA。"
+      }
+    },
+    "ov-incident-plan-mas-apra": {
+      "delta": {
+        "MAS-TRMG-12.3": "計劃須能迅速隔離及消除網絡威脅並安全恢復受影響服務；須調查並識別導致事故的控制缺失、評估事故的全面影響；須利用網絡情報及事故經驗教訓改進現有控制或計劃。",
+        "APRA-234-25": "須訂明向董事會、其他管治機構及負責事故管理與監督的個人上報及報告事故的機制；屬具約束力的審慎標準（must），MAS 科技風險管理指引為指引性質（should）。"
+      }
+    },
+    "ov-cirp-bnm-apra": {
+      "delta": {
+        "BNM-RMIT-11.13": "須設立網絡緊急應變小組（CERT），訂明其管治、彙報架構、職責及啟動程序；須保存足夠鑑證證據；須訂明遏制及根除措施，以多重策略及應變計劃復原，並於事後制訂長遠緩解措施。",
+        "APRA-234-25": "須明確訂明向董事會及其他管治機構上報及報告資訊保安事故的機制。"
+      }
+    },
+    "ov-cirp-bnm-mas": {
+      "delta": {
+        "BNM-RMIT-11.13": "須設立網絡緊急應變小組（CERT），訂明其管治、彙報架構、職責、啟動及上報程序；須保存足夠鑑證證據；復原須採用多重策略及應變計劃；屬強制要求（must），MAS 科技風險管理指引為指引性質（should）。",
+        "MAS-TRMG-12.3": "計劃須針對合理的網絡威脅情景訂明溝通、協調及回應程序；須利用網絡情報改進現有控制或計劃。"
+      }
+    },
+    "ov-ir-testing-bnm-apra": {
+      "delta": {
+        "BNM-RMIT-11.16": "須以網絡演練方式測試，並有董事會成員、高級管理層及相關第三方服務提供者參與；須測試帶外通訊；情景須涵蓋不同影響程度下的上報、內外溝通及決策，以及 CERT 與第三方支援復原的準備程度；結果須及時向董事會彙報。",
+        "APRA-234-26": "除測試外，還須每年檢討應對計劃，確保其仍然有效及切合目的。"
+      }
+    },
+    "ov-incident-report-mas-ci": {
+      "delta": {
+        "MAS-N05-8": "報告內容有明確要求：事故概要、根因分析、對遵守法規、營運及客戶服務的影響，以及針對根因及後果的補救措施；適用於「相關事故」，包括系統故障；MAS 可批准更長期限。",
+        "CI-CAT3-4": "須使用指定表格（附件 F 或行業專用表格），並經指定安全渠道提交。"
+      }
     }
   }
 });

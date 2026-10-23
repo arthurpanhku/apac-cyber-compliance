@@ -58,6 +58,8 @@ HKCC.addI18n('en', {
     domainFilterAria: 'Filter by control domain',
     allJurisdictions: 'All jurisdictions',
     jurisdictionFilterAria: 'Filter by jurisdiction',
+    allRegulators: 'All regulators',
+    regulatorFilterAria: 'Filter by regulator',
 
     emptyNoLicenseTitle: 'Select a licence to begin',
     emptyNoLicenseNote: 'Tick the licences your firm holds and its business characteristics, and the applicable control requirements will be listed here.',
@@ -79,6 +81,21 @@ HKCC.addI18n('en', {
     tagOverlaps: 'Overlaps: {id}',
     tagRelated: 'Related: {id}',
     equivalenceBasis: 'Merged as equivalent ({basis}): {rationale}',
+    deltaHeading: 'Differences from other regulators',
+    deltaTitle: '{self} overlaps {other} ({regulator})',
+    deltaAdds: '{id} also requires:',
+    deltaNone: 'nothing further',
+    deltaOutOfScope: 'Not in current scope',
+    deltaReviewed: 'Compares these two provisions only; reviewed against the official text on {date}.',
+    coverageTitle: 'Regulator comparison',
+    coverageNote: 'Relative to the other regulators in scope: “equivalent” provisions can share one record; “overlapping” ones can reuse evidence, but the difference must be confirmed separately; “unique” ones are required by that regulator alone. Select a regulator to show only its provisions — the CSV export then contains only that regulator’s provisions too.',
+    coverageRegulator: 'Regulator',
+    coverageTotal: 'Applicable',
+    coverageEquivalent: 'Equivalent',
+    coverageOverlaps: 'Overlapping',
+    coverageUnique: 'Unique',
+    coveragePending: 'Pending',
+    coverageFilterTip: 'Show only {regulator} provisions; select again to clear',
     basisSameProvision: 'same provision',
     basisIdenticalText: 'identical text',
     basisReviewed: 'reviewed as substantively equivalent, {date}',
@@ -125,6 +142,7 @@ HKCC.addI18n('en', {
 
     phScope: 'Licence scope: ',
     phAttrs: 'Business characteristics: ',
+    phRegulator: 'Provisions of {regulator} only (issued by regulator)',
     phNone: '(none selected)',
     phDate: 'Generated: {today}　·　Sources verified: {verified}',
     phProject: 'Project: {name}',
@@ -188,6 +206,12 @@ HKCC.addI18n('en', {
     csvOwner: 'Owner',
     csvTargetDate: 'Target completion date',
     csvDueState: 'Due status',
+    csvCrossRelation: 'Cross-regulator relation',
+    csvCrossRefs: 'Corresponding provisions of other regulators',
+    csvDeltas: 'Differences',
+    relEquivalent: 'Equivalent',
+    relOverlaps: 'Overlapping',
+    relUnique: 'Unique',
 
     disclaimerLabel: 'Disclaimer: ',
     disclaimerBody: 'This is an open-source reference tool and does not constitute legal or compliance advice. The controls listed are a structured reading of publicly available regulatory provisions; they are not a substitute for reading the source documents, nor for the judgement of a qualified legal or compliance professional. Regulatory requirements change — always check the latest version published on the regulator’s own website.',
@@ -1263,5 +1287,35 @@ HKCC.addI18n('en', {
     'eq-sfc-incident-escalation': { rationale: 'Both require written policies and procedures for escalating suspected or actual cybersecurity incidents internally and externally, with external parties including clients and the SFC.' },
     'eq-bnm-rmit-10.31': { rationale: 'The same RMiT paragraph 10.31, split into two controls because e-money issuers, merchant acquirers and intermediary remittance institutions must comply only when designated as NCII.' },
     'eq-bnm-rmit-13.3': { rationale: 'The same RMiT paragraph 13.3, split into two controls because under paragraph 2.2(c) the three payment-type institutions must comply only when designated as NCII.' }
+  }
+});
+
+/* ---- Overlaps and their deltas (data/overlaps.js) ---- */
+HKCC.addI18n('en', {
+  overlaps: {
+    'ov-incident-notify-mas-apra': { delta: {
+      'MAS-N05-7': 'A far shorter deadline: notify MAS within 1 hour of discovering a relevant incident, against APRA’s 72 hours after becoming aware. A relevant incident also covers system malfunctions with a severe and widespread impact on operations or customer service, not only information security incidents.',
+      'APRA-234-35': 'A wider trigger: any information security incident that materially affected, or had the potential to materially affect, the entity or its customers, financially or non-financially — not only incidents that have already had a severe impact; and any information security incident already notified to another regulator in Australia or elsewhere. An incident reported to MAS must still be notified to APRA within 72 hours.'
+    } },
+    'ov-incident-plan-mas-apra': { delta: {
+      'MAS-TRMG-12.3': 'The plan should enable swift isolation and neutralisation of the threat and secure resumption of affected services; the control deficiencies behind the incident should be investigated and its full impact evaluated; cyber intelligence and lessons learnt should be used to enhance controls or the plan.',
+      'APRA-234-25': 'Mechanisms for escalating and reporting incidents to the Board, other governing bodies and the individuals responsible for incident management and oversight. It is a binding prudential standard (“must”), whereas the MAS TRM Guidelines are guidance (“should”).'
+    } },
+    'ov-cirp-bnm-apra': { delta: {
+      'BNM-RMIT-11.13': 'A Cyber Emergency Response Team (CERT) with defined governance, reporting structure, roles and invocation procedures; preservation of sufficient forensic evidence; containment and eradication; recovery through multiple strategies and contingency plans; and long-term mitigations after the incident.',
+      'APRA-234-25': 'Explicit mechanisms for escalating and reporting information security incidents to the Board and other governing bodies.'
+    } },
+    'ov-cirp-bnm-mas': { delta: {
+      'BNM-RMIT-11.13': 'A Cyber Emergency Response Team (CERT) with defined governance, reporting structure, roles, invocation and escalation procedures; preservation of sufficient forensic evidence; recovery through multiple strategies and contingency plans. It is mandatory (“must”), whereas the MAS TRM Guidelines are guidance (“should”).',
+      'MAS-TRMG-12.3': 'Communication, coordination and response procedures for plausible cyber threat scenarios; cyber intelligence used to enhance existing controls or the plan.'
+    } },
+    'ov-ir-testing-bnm-apra': { delta: {
+      'BNM-RMIT-11.16': 'Testing by cyber drill involving board members, senior management and relevant third-party service providers; out-of-band communication tested; scenarios covering escalation, internal and external communication and decision-making at different impact levels, and the readiness of CERT and third parties to support recovery; results reported to the board in a timely manner.',
+      'APRA-234-26': 'An annual review of the response plans, not only a test, to ensure they remain effective and fit-for-purpose.'
+    } },
+    'ov-incident-report-mas-ci': { delta: {
+      'MAS-N05-8': 'Prescribed report content: an executive summary, root cause analysis, the impact on compliance with laws and regulations, operations and customer service, and the remedial measures taken against the root cause and its consequences. It covers relevant incidents, including system malfunctions, and MAS may allow a longer period.',
+      'CI-CAT3-4': 'The report must use the specified form (Annex F or a sector-specific form) and be submitted through the designated secure channel.'
+    } }
   }
 });

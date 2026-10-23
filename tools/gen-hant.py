@@ -77,6 +77,7 @@ def dump_base():
       }
     }
     require('./data/equivalence.js');
+    require('./data/overlaps.js');
     require('./data/i18n/zh-Hans.js');
     process.stdout.write(JSON.stringify({
       ui: HKCC.i18n['zh-Hans'].ui,
@@ -86,7 +87,8 @@ def dump_base():
       attributes: HKCC.attributes,
       domains: HKCC.domains,
       controls: HKCC.controls,
-      equivalence: HKCC.equivalence
+      equivalence: HKCC.equivalence,
+      overlaps: HKCC.overlaps
     }));
     '''
     res = subprocess.run([ 'node', '-e', script ], cwd=ROOT,
@@ -130,6 +132,9 @@ def main():
         'controls': {c['id']: pick(c, ('title', 'requirement', 'note', 'clause'))
                      for c in base['controls']},
         'equivalence': {g['id']: pick(g, ('rationale',)) for g in base['equivalence']},
+        # null 差额表示「无额外要求」，原样保留。
+        'overlaps': {g['id']: {'delta': {k: conv(v) for k, v in g['delta'].items()}}
+                     for g in base['overlaps']},
     }
 
     body = json.dumps(out, ensure_ascii=False, indent=2)

@@ -407,3 +407,32 @@ details.work-record > summary { color: var(--accent); font-size: 12px; cursor: p
   margin-bottom: 16px; }
 .print-header h1 { font-size: 17px; margin: 0 0 5px; }
 .print-header p { font-size: 11px; margin: 2px 0; color: #333; }
+
+/* ---------- 部分重叠的差额 ---------- */
+.deltas { margin-top: 12px; padding: 10px 12px; border: 1px dashed var(--border-strong);
+  border-radius: 8px; background: var(--surface-2); }
+.deltas h4 { margin: 0 0 6px; font-size: 12px; color: var(--text-dim); font-weight: 650; }
+.delta + .delta { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.delta-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  font-size: 12.5px; color: var(--accent); }
+.delta-line { margin: 5px 0 0; font-size: 13px; line-height: 1.55; }
+.delta-line strong { font-family: var(--mono); font-size: 11.5px; font-weight: 600; }
+
+/* ---------- 监管机构对照 ---------- */
+.coverage { padding: 14px 16px; margin-bottom: 16px; }
+.coverage h2 { margin: 0; font-size: 14px; }
+.coverage-note { margin: 4px 0 10px; font-size: 12px; color: var(--text-faint); }
+.coverage-scroll { overflow-x: auto; }
+.coverage-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.coverage-table th, .coverage-table td { padding: 6px 8px; border-top: 1px solid var(--border);
+  text-align: right; white-space: nowrap; }
+.coverage-table thead th { border-top: 0; color: var(--text-faint); font-weight: 600; font-size: 11.5px; }
+.coverage-table th:first-child { text-align: left; }
+.coverage-table td { font-variant-numeric: tabular-nums; }
+.coverage-table tr.active { background: var(--accent-soft); }
+@media print { .coverage .link-button { display: inline !important; color: inherit; } }
+@media (max-width: 620px) {
+  .coverage-table { font-size: 12px; }
+  .coverage-table th, .coverage-table td { padding: 6px 3px; }
+  .coverage-table thead th { white-space: normal; vertical-align: bottom; font-size: 10px; }
+}
