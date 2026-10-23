@@ -58,8 +58,9 @@ self-assess and export. Controls that are substantively equivalent across regula
 card; controls that only partly overlap are flagged rather than merged, so the extra requirements stay
 visible (see [the three relationship types](#about-merge-duplicates-across-regulators)). Equivalent
 controls share a single implementation record, so the status and evidence you record once count for every
-regulator in the group. Writing down each overlap's extra requirements — across jurisdictions as well as
-within them — is the next step on the roadmap; see section 1A of `DEVELOPMENT_PLAN.md` (Chinese).
+regulator in the group. For partly overlapping provisions the card states what each side requires beyond the
+other; six such cross-jurisdiction differences are written so far, all in incident response, and the other domains
+are the next step on the roadmap — see section 1A of `DEVELOPMENT_PLAN.md` (Chinese).
 
 It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
 Ordinance), **Singapore** (MAS), **Australia** (APRA) and **Malaysia** (BNM), with the architecture built to add further APAC jurisdictions over time.
@@ -143,6 +144,8 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 | **De-duplication and cross-mapping** | Where several regulators impose the same requirement, it is merged into a single card listing each one's own provision and clause number — whether that's Hong Kong's SFC and HKMA, or Singapore's MAS across its three near-identical Notices on Cyber Hygiene to different entity types |
 | **Traceable to source** | Every control carries a description, clause number, issue and verification dates, official link, and a verbatim / excerpt / summary label for its English source text |
 | **Assessment work record** | Record status, implementation notes, evidence references, owner and target date for each individual regulatory control |
+| **Cross-regulator differences** | For two partly overlapping provisions, the card states what each requires beyond the other (for example MAS: notify within 1 hour; APRA: 72 hours, but a wider trigger), in every language, with the date each pair was reviewed |
+| **Regulator comparison** | For each regulator in scope, how many applicable provisions are equivalent to, overlap with, or are unique against the other regulators; select a regulator to see only its provisions and export a CSV of just those, with the cross-regulator relation and differences |
 | **Shared implementation record** | Substantively equivalent provisions share one status and work record: record the control and its evidence once and it applies to every regulator in the group (you can still record them separately) |
 | **Offline and self-hosted** | Static files only — runs from `file://` or any internal web server with no network access; release packages come with a SHA-256 checksum |
 | **Remediation list** | Review unrated, partially implemented and unimplemented controls by domain, with overdue and 30-day due indicators |
@@ -158,14 +161,14 @@ e-banking and online financial services, processing personal data, and using out
 whose information assets are partly managed by third parties. How does running its assessment in this tool
 compare with keeping three separate spreadsheets, one per regulator?
 
-The numbers below are for v1.12.0 and are produced by `node tools/case-study.mjs` — rerun it to check them.
+The numbers below are for the current data on `main` (after v1.12.0) and are produced by `node tools/case-study.mjs` — rerun it to check them.
 
 | Work | Three separate spreadsheets | This tool today |
 | --- | --- | --- |
 | Finding what applies | Read the 25 source documents covering Hong Kong, Singapore and Australia and judge applicability yourself | Tick 3 entity types and 5 business characteristics: **101** of the 294 provisions apply (HKMA 22, PCPD 8, MAS 47, APRA 24); the other **193** are screened out |
 | Citing the source | Copy document names, clause numbers and text by hand | Every provision carries its document, clause, issue and verification dates and official link; **40** come with the official text (36 verbatim, 4 excerpts), **61** only with a summary so far |
 | Provisions to assess and evidence to attach | 101, across three workbooks | **Still 101**, in one project. None of the 101 is substantively equivalent to another, so nothing merges and no evidence is shared yet |
-| Knowing how the regulators differ | Compare the texts by hand | **Not yet.** No relationships have been mapped between these three regulators' provisions |
+| Knowing how the regulators differ | Compare the texts by hand | **Started.** In incident response, **2** MAS–APRA overlaps now carry written differences (notification deadline and trigger; incident response plans), shown on the cards and in the CSV. The regulator comparison shows 2 of MAS's 47 and 2 of APRA's 24 provisions overlapping the other; the rest are still unique. The other 8 domains with several regulators have no relationships yet |
 | Remediation and handover | Three files to reconcile | One project file, a remediation list with overdue / due-soon flags, per-control CSV and print |
 
 **What this tells us.**
@@ -188,14 +191,15 @@ The numbers below are for v1.12.0 and are produced by `node tools/case-study.mjs
 
 1. Replace the summaries with official text (#20, #21)
 2. Map the overlaps between HKMA, MAS and APRA provisions and write down each one's extra requirements (#22) —
-   then the bank would see, for each area, what it must add for each additional regulator
+   then the bank would see, for each area, what it must add for each additional regulator. This has started with
+   incident response
 3. Let evidence recorded for one provision be reused on overlapping ones, with only the difference to confirm
 
 We'll rerun this case as each step lands and update the table, so it doubles as a progress measure.
 
 ## Coverage
 
-v1.11.0 contains **412 controls** drawn from **31** official documents, across Hong Kong, Singapore, Australia and Malaysia.
+The tool currently contains **412 controls** drawn from **31** official documents, across Hong Kong, Singapore, Australia and Malaysia.
 Each source carries its own `verifiedOn` — the day its link and version were last checked against the
 regulator's website — because the documents span 2001 to 2026 and are re-checked at different times. The
 header shows the **earliest** of those dates, so the freshness claimed is the weakest link, never the most
@@ -302,7 +306,7 @@ Controls from different regulators relate to each other in one of three ways:
 | Relationship | Meaning | Merged? | Where it is recorded |
 | --- | --- | --- | --- |
 | **Equivalent** | The two requirements are substantively the same | Yes — one card | `data/equivalence.js` |
-| **Overlaps** | The requirements partly overlap (e.g. one adds a measure, a shorter deadline or a wider scope) | No — tag only | the control's `overlaps` field |
+| **Overlaps** | The requirements partly overlap (e.g. one adds a measure, a shorter deadline or a wider scope) | No — the card states each side's differences | `data/overlaps.js` (older pairs without a written difference remain in the control's `overlaps` field, tag only) |
 | **Related** | Connected, or useful to read together | No — tag only | the control's `related` field |
 
 Merging tells the user "satisfy one and you satisfy the group", so only equivalence groups are merged, and every
@@ -324,6 +328,22 @@ group must pass explicit rules checked in CI (`node tools/check-equivalence.mjs`
 
 The rules are necessary conditions, not a proof: whether two differently-worded provisions are *substantively*
 equivalent is a human judgement, which is why `reviewed` groups must write their reasoning down.
+
+The value of an overlap lies in the difference: what the second regulator adds once you meet the first. Overlaps are
+therefore recorded in `data/overlaps.js`, exactly two provisions per entry, each with what it requires beyond the
+other. CI checks them too (rules in `tools/lib/overlap-rules.mjs`):
+
+| Rule | Requirement |
+| --- | --- |
+| OV1 | Exactly two distinct, existing members; each pair recorded once |
+| OV2 | `delta` names both members, with the difference as text, or `null` where one side is fully covered by the other |
+| OV3 | `null` on both sides is equivalence and belongs in `data/equivalence.js` |
+| OV4 | Every difference has an English text |
+| OV5 | A `reviewedOn` date |
+| OV6 | Not also equivalent or related |
+| OV7 | Tag-only `overlaps` on a control are limited to the 33 pairs that existed in v1.12.0; the list can only shrink |
+
+A difference compares the two provisions only: what the same regulator requires in other provisions is not part of it.
 
 In practice this is strict. The SFC wrote Part XII of the VATP Guidelines closely along the lines of the Hacking
 Risks Guidelines, but in most matching paragraphs the VATP version adds something — endpoint detection and response,

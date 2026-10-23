@@ -126,11 +126,32 @@ A few rules:
 | Relationship | Meaning | Merged? | Where to record it |
 | --- | --- | --- | --- |
 | **Equivalent** | The two requirements are substantively the same | Yes — one card | a group in `data/equivalence.js` |
-| **Overlaps** | The requirements partly overlap | No — tag only | the control's `overlaps` field |
+| **Overlaps** | The requirements partly overlap | No — each side's difference is shown | a pair in `data/overlaps.js`, with a written difference |
 | **Related** | Connected, or useful to read together | No — tag only | the control's `related` field |
 
-`overlaps` and `related` only need to be written on one side; the UI shows the tag on both. (The old `crossRefs`
-field is no longer accepted by the validator.)
+`related` only needs to be written on one side; the UI shows the tag on both. (The old `crossRefs` field is no longer
+accepted by the validator.)
+
+**A new overlap goes in `data/overlaps.js`, never in a control's `overlaps` field.** An overlap is only useful if it
+says what differs, so each entry names exactly two provisions and, for each, what it requires beyond the other:
+
+```js
+{
+  id: 'ov-incident-notify-mas-apra', reviewedOn: '2026-10-23',
+  members: ['MAS-N05-7', 'APRA-234-35'],
+  delta: {
+    'MAS-N05-7': '时限短得多：……',     // what MAS-N05-7 requires beyond APRA-234-35
+    'APRA-234-35': '触发范围更广：……'   // what APRA-234-35 requires beyond MAS-N05-7
+  }
+}
+```
+
+Write the differences by comparing the two official texts, in Simplified Chinese in `data/overlaps.js` and in English
+under `overlaps` in `data/i18n/en.js`; then run `python3 tools/gen-hant.py`. Use `null` for a side that adds nothing
+(`null` on both sides means the provisions are equivalent). Compare only these two provisions: what the same regulator
+requires elsewhere is not part of the difference. The rules (OV1–OV7, in `tools/lib/overlap-rules.mjs`) also freeze
+the 33 older tag-only `overlaps` pairs in Hong Kong: when you write the difference for one, move it to
+`data/overlaps.js` and remove it from the control and from `LEGACY_WITHOUT_DELTA`.
 
 **Only record a group as Equivalent when the provisions genuinely require the same thing.** If either side adds
 anything of substance — one more measure, a shorter deadline, a wider scope, a different trigger — use `overlaps`.

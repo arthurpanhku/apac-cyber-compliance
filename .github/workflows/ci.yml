@@ -31,7 +31,8 @@ jobs:
       # 只有 data/equivalence.js 登记的等价组会合并为一张卡片，所以每组都必须通过
       # tools/lib/equivalence-rules.mjs 的规则（控制域、义务强度、截止日期一致，
       # 有原文依据，原文相同或经人工评审并写明理由等）。不通过的组请改为 overlaps 或 related。
-      - name: 等价性规则检查
+      # 部分重叠登记在 data/overlaps.js，每组须写明双方差额（tools/lib/overlap-rules.mjs）。
+      - name: 等价性与差额规则检查
         run: node tools/check-equivalence.mjs
 
       # 引擎逻辑与等价性规则的单元测试（零依赖，Node 内置 test runner）。

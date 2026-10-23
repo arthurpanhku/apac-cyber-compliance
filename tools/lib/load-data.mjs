@@ -12,7 +12,7 @@ export function loadData() {
   const HKCC = {
     baseLocale: 'zh-Hans',
     sources: {}, jurisdictions: [], licenses: [], attributes: [], domains: [], controls: [],
-    equivalence: [], i18n: {},
+    equivalence: [], overlaps: [], i18n: {},
     addSources(o) { Object.assign(this.sources, o); },
     addJurisdictions(a) { this.jurisdictions.push(...a); },
     addLicenses(a) { this.licenses.push(...a); },
@@ -20,6 +20,7 @@ export function loadData() {
     addDomains(a) { this.domains.push(...a); },
     addControls(a) { this.controls.push(...a); },
     addEquivalence(a) { this.equivalence.push(...a); },
+    addOverlaps(a) { this.overlaps.push(...a); },
     addI18n(loc, obj) {
       const b = this.i18n[loc] || (this.i18n[loc] = {});
       for (const [k, v] of Object.entries(obj)) Object.assign(b[k] || (b[k] = {}), v);
@@ -38,6 +39,7 @@ export function loadData() {
     }
   }
   load('data/equivalence.js');
+  load('data/overlaps.js');
   for (const f of readdirSync(join(root, 'data/i18n')).filter(f => f.endsWith('.js')).sort()) {
     load(`data/i18n/${f}`);
   }

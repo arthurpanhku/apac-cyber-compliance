@@ -139,3 +139,47 @@ test('en: a marked control is exported in the CSV', async ({ page }) => {
   // The status column carries the localised label for "done".
   expect(csv).toContain('Implemented');
 });
+
+// 6. Cross-regulator deltas and the per-regulator view, for a bank supervised
+// by MAS and APRA. The scope is seeded through localStorage, in the same shape
+// the app saves, so the test does not depend on the order of licence labels.
+test('en: MAS × APRA deltas, regulator comparison and per-regulator CSV', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('hkcc.state.v2', JSON.stringify({
+      schemaVersion: 2,
+      project: { name: 'Delta check', asOfDate: '2026-10-23' },
+      scope: { licenses: ['sg-bank', 'au-adi'], attributes: [] },
+      assessments: {},
+      unresolvedAssessments: {},
+      preferences: { merge: true }
+    }));
+  });
+  await page.goto(pageUrl('en'));
+
+  // The MAS 1-hour notification card states what each side adds over the other.
+  const card = page.locator('#results article.control')
+    .filter({ has: page.locator('.control-ids', { hasText: /^MAS-N05-7$/ }) });
+  const deltas = card.locator('.deltas');
+  await expect(deltas).toContainText('APRA-234-35');
+  await expect(deltas).toContainText('1 hour');
+  await expect(deltas).toContainText('72 hours');
+
+  // Two regulators in scope: the comparison table has one row for each.
+  const rows = page.locator('#coverage tbody tr');
+  await expect(rows).toHaveCount(2);
+
+  // Selecting APRA filters both the cards and the CSV to APRA's provisions.
+  await page.locator('#coverage tbody th button', { hasText: 'APRA' }).click();
+  await expect(page.locator('#regulator-filter')).toHaveValue('APRA');
+  await expect(page.locator('#results .control-ids', { hasText: 'MAS-N05-7' })).toHaveCount(0);
+
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.click('#export-csv'),
+  ]);
+  const csv = await readFile(await download.path(), 'utf8');
+  expect(csv).toContain('APRA-234-35');
+  expect(csv).not.toContain('"MAS-N05-7"');
+  expect(csv).toContain('Cross-regulator relation');
+  expect(csv).toContain('APRA-234-35 overlaps MAS-N05-7 (MAS)');
+});

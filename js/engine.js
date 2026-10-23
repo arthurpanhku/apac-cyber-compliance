@@ -105,7 +105,7 @@
    * 同一对若两种关系都有，以 overlaps 为准。
    * @returns {Map<string, {overlaps: Set<string>, related: Set<string>}>}
    */
-  function indexRelations(controls) {
+  function indexRelations(controls, overlaps) {
     const index = new Map();
     const entry = id => {
       if (!index.has(id)) index.set(id, { overlaps: new Set(), related: new Set() });
@@ -120,10 +120,76 @@
         }
       }
     }
+    // data/overlaps.js 登记的部分重叠（附差额）
+    for (const group of overlaps || []) {
+      const [a, b] = group.members || [];
+      if (!a || !b || a === b) continue;
+      entry(a).overlaps.add(b);
+      entry(b).overlaps.add(a);
+    }
     for (const value of index.values()) {
       for (const id of value.overlaps) value.related.delete(id);
     }
     return index;
+  }
+
+  /**
+   * 控制点 ID → 它所在的部分重叠组（data/overlaps.js），每项为 { group, other }。
+   * 差额文字仍在 group.delta 中，按当前语言取用由页面负责。
+   * @returns {Map<string, {group: object, other: string}[]>}
+   */
+  function indexOverlapDeltas(overlaps) {
+    const index = new Map();
+    for (const group of overlaps || []) {
+      const [a, b] = group.members || [];
+      if (!a || !b || a === b) continue;
+      for (const [self, other] of [[a, b], [b, a]]) {
+        if (!index.has(self)) index.set(self, []);
+        index.get(self).push({ group, other });
+      }
+    }
+    return index;
+  }
+
+  /**
+   * 按监管机构分类适用条文：相对「当前范围内其他监管机构」的条文，
+   *   equivalent  与其他监管机构的适用条文同属等价组（可共用一次记录）；
+   *   overlaps    与其他监管机构的适用条文部分重叠（须另行确认差额）；
+   *   unique      只有本监管机构要求。
+   * 两者皆有时以 equivalent 为准。同一监管机构内部的关系不算跨监管。
+   * @param {object[]} active       适用的控制点
+   * @param {object}   options      { equivalence, relations, regulatorOf, assessments }
+   * @returns {{ byControl: Map<string, {kind: string, refs: string[]}>,
+   *             rows: {regulator: string, total: number, equivalent: number, overlaps: number,
+   *                    unique: number, pending: number}[] }}
+   */
+  function regulatorCoverage(active, options) {
+    const { equivalence, relations, regulatorOf } = options;
+    const assessments = options.assessments || {};
+    const byId = new Map(active.map(c => [c.id, c]));
+    const groupOf = new Map();
+    for (const group of equivalence || []) for (const id of group.members || []) groupOf.set(id, group);
+
+    const byControl = new Map();
+    const rows = new Map();
+    for (const control of active) {
+      const regulator = regulatorOf(control);
+      const otherRegulator = id => byId.has(id) && regulatorOf(byId.get(id)) !== regulator;
+      const equivalentRefs = (groupOf.get(control.id)?.members || []).filter(otherRegulator);
+      const overlapRefs = [...(relations?.get(control.id)?.overlaps || [])].filter(otherRegulator).sort();
+      const kind = equivalentRefs.length ? 'equivalent' : overlapRefs.length ? 'overlaps' : 'unique';
+      byControl.set(control.id, { kind, refs: kind === 'equivalent' ? equivalentRefs : overlapRefs });
+
+      if (!rows.has(regulator)) {
+        rows.set(regulator, { regulator, total: 0, equivalent: 0, overlaps: 0, unique: 0, pending: 0 });
+      }
+      const row = rows.get(regulator);
+      row.total++;
+      row[kind]++;
+      const status = assessments[control.id]?.status;
+      if (status !== 'done' && status !== 'na') row.pending++;
+    }
+    return { byControl, rows: [...rows.values()].sort((a, b) => b.total - a.total || a.regulator.localeCompare(b.regulator)) };
   }
 
   /** 找出完全包含某合并卡片的等价组（用于显示合并依据）。 */
@@ -374,6 +440,8 @@
     indexAttributeLicenses,
     cluster,
     indexRelations,
+    indexOverlapDeltas,
+    regulatorCoverage,
     equivalenceFor,
     RECORD_FIELDS,
     recordsShared,

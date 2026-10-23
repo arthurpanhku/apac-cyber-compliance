@@ -29,6 +29,8 @@ window.HKCC = {
   controls: [],
   /** 实质等价的控制点组，见 data/equivalence.js；只有这些组会合并为一张卡片。 */
   equivalence: [],
+  /** 部分重叠及其差额说明，见 data/overlaps.js；永不合并，只显示各自的额外要求。 */
+  overlaps: [],
 
   /** locale -> { ui:{}, jurisdictions:{id:{...}}, licenses:{id:{...}}, attributes, domains, sources, controls } */
   i18n: {},
@@ -40,6 +42,7 @@ window.HKCC = {
   addDomains(arr) { this.domains.push(...arr); },
   addControls(arr) { this.controls.push(...arr); },
   addEquivalence(arr) { this.equivalence.push(...arr); },
+  addOverlaps(arr) { this.overlaps.push(...arr); },
 
   /**
    * 对外声称的核验日期取各出处中**最早**的一个。
@@ -67,7 +70,7 @@ window.HKCC = {
   /**
    * 取某条记录在当前语言下的字段。找不到译文时回落到基础数据（zh-Hans），
    * 使新增控制点在译文补齐前仍可显示，而不是留空。
-   * @param {string} kind  licenses | attributes | domains | sources | controls | equivalence
+   * @param {string} kind  licenses | attributes | domains | sources | controls | equivalence | overlaps
    * @param {string} id    记录 ID
    * @param {object} base  基础数据对象
    */

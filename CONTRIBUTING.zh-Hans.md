@@ -119,10 +119,30 @@ python3 tools/gen-hant.py
 | 关系 | 含义 | 是否合并 | 登记位置 |
 | --- | --- | --- | --- |
 | **Equivalent（实质等价）** | 两个监管要求实质相同 | 合并为一张卡片 | `data/equivalence.js` 的等价组 |
-| **Overlaps（部分重叠）** | 要求部分重叠 | 不合并，只显示标签 | 控制点的 `overlaps` 字段 |
+| **Overlaps（部分重叠）** | 要求部分重叠 | 不合并，显示双方各自的差额 | `data/overlaps.js` 的一组，须写明差额 |
 | **Related（相关）** | 存在关联或参考价值 | 不合并，只显示标签 | 控制点的 `related` 字段 |
 
-`overlaps` 与 `related` 只需写在一方，界面会在两边都显示标签。（旧的 `crossRefs` 字段已不被校验器接受。）
+`related` 只需写在一方，界面会在两边都显示标签。（旧的 `crossRefs` 字段已不被校验器接受。）
+
+**新的部分重叠一律登记到 `data/overlaps.js`，不要写在控制点的 `overlaps` 字段。** 部分重叠只有写明差在哪里才有用，
+所以每组恰好两条条文，并分别写明各自相对对方另要求什么：
+
+```js
+{
+  id: 'ov-incident-notify-mas-apra', reviewedOn: '2026-10-23',
+  members: ['MAS-N05-7', 'APRA-234-35'],
+  delta: {
+    'MAS-N05-7': '时限短得多：……',     // MAS-N05-7 相对 APRA-234-35 另要求的
+    'APRA-234-35': '触发范围更广：……'   // APRA-234-35 相对 MAS-N05-7 另要求的
+  }
+}
+```
+
+差额须逐段对照两条官方原文写成：简体写在 `data/overlaps.js`，英文写在 `data/i18n/en.js` 的 `overlaps`，再运行
+`python3 tools/gen-hant.py`。一方没有额外要求时写 `null`（两方皆为 `null` 即实质等价）。只比较这两条条文本身：
+同一监管机构在别的条文另有的要求，不算这一组的差额。规则（OV1–OV7，见 `tools/lib/overlap-rules.mjs`）同时冻结
+香港 33 组只有标签的旧 `overlaps`：为其中一组补写差额后，把它移到 `data/overlaps.js`，并从控制点及
+`LEGACY_WITHOUT_DELTA` 删除。
 
 **只有两条条文确实要求同一件事时才登记为等价。** 任何一方多出实质内容——多一项措施、时限更短、范围更广、
 触发条件不同——都请用 `overlaps`。错误的等价会让使用者误以为满足一方即满足另一方。拿不准时宁可不合并。

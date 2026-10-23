@@ -25,7 +25,7 @@ const activeIds = new Set(active.map(c => c.id));
 const cards = E.cluster(active, H.equivalence, true);
 const merged = cards.filter(g => g.length > 1);
 
-const relations = E.indexRelations(H.controls);
+const relations = E.indexRelations(H.controls, H.overlaps);
 const crossPairs = { overlaps: new Set(), related: new Set() };
 for (const c of active) {
   for (const type of ['overlaps', 'related']) {
@@ -47,7 +47,16 @@ console.log('三地全部条文', inScope.length, '→ 工具筛除', inScope.le
 console.log('须研读的官方文件', candidateSources.size, '→ 适用的', sources.size);
 console.log('引文分类', count(active, c => c.quoteStatus));
 console.log('卡片', cards.length, '· 合并的等价组', merged.length);
-console.log('跨辖区 部分重叠', crossPairs.overlaps.size, '· 相关', crossPairs.related.size);
+const withDelta = new Set(H.overlaps.map(g => [...g.members].sort().join(' ~ ')));
+console.log('跨辖区 部分重叠', crossPairs.overlaps.size,
+  `（已写差额 ${[...crossPairs.overlaps].filter(k => withDelta.has(k)).length}）`,
+  '· 相关', crossPairs.related.size);
+for (const key of [...crossPairs.overlaps].sort()) console.log('   ', key);
+const coverage = E.regulatorCoverage(active, { equivalence: H.equivalence, relations, regulatorOf });
+console.log('按监管机构（相对其他监管机构）:');
+for (const r of coverage.rows) {
+  console.log(`  ${r.regulator.padEnd(5)} 适用 ${r.total} · 等价 ${r.equivalent} · 部分重叠 ${r.overlaps} · 独有 ${r.unique}`);
+}
 console.log('有截止日期的条文', active.filter(c => c.deadline).length);
 console.log('\n按控制域 × 监管机构（多个监管机构同时有要求的领域，就是日后写「差额」的地方）:');
 const domains = {};
