@@ -225,7 +225,7 @@ HKCC.addI18n('en', {
   },
 
   jurisdictions: {
-    hksar: { label: 'Hong Kong' },
+    hksar: { label: 'Hong Kong, China' },
     sg: { label: 'Singapore' },
     au: { label: 'Australia' },
     my: { label: 'Malaysia' }

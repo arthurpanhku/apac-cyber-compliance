@@ -210,7 +210,7 @@ HKCC.addI18n('zh-Hant', {
   },
   "jurisdictions": {
     "hksar": {
-      "label": "香港"
+      "label": "中國香港"
     },
     "sg": {
       "label": "新加坡"

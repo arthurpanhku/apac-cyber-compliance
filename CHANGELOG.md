@@ -38,7 +38,8 @@
 
 ### 变更
 
-- **香港司法管辖区代号由 `hk` 改为 `hksar`**（`data/hk/` 改名为 `data/hksar/`），与中国内地的 `cn` 对应。
+- **香港司法管辖区代号由 `hk` 改为 `hksar`**（`data/hk/` 改名为 `data/hksar/`），与中国内地的 `cn` 对应；
+  界面显示名称改为「中国香港」（繁体「中國香港」，英文「Hong Kong, China」）。
   代号不写入项目文件，已保存的评估及导出的项目文件不受影响
 - **确定项目范围：** *面向亚太金融机构的开源、离线网络安全与科技风险监管要求映射及差距评估工具*
   （*Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC
