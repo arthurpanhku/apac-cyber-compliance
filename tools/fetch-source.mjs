@@ -22,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { createHash } from 'node:crypto';
+import { loadData } from './lib/load-data.mjs';
 
 const run = promisify(execFile);
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -170,4 +171,26 @@ console.log('─'.repeat(72));
 if (lines.length > MAX_LOG_LINES) {
   console.log(`\n日志只印了前 ${MAX_LOG_LINES} 行，其余见构建产物 ${sourceId}-text，` +
     '或以页码范围分次取回。');
+}
+
+/* 逐字核对：本出处中标为 verbatim／excerpt 的 quote，每一段都须在取回的原文里找得到。
+   比对前去掉全部空白（含全角空格与换行）——网页转文本时的断行和缩进不算差异，文字一个都不能差。
+   quote 按换行及「导语：（一）」处分段：节录常把条文导语与其中一项接在一起，而原文中两者之间隔着其他各项。
+   PDF 转出的文本常在行中断开英文单词，故此检查对中文网页原文最可靠；英文 PDF 的「未找到」须人手复核。 */
+const squash = text => text.replace(/\s+/g, '').replace(/&ensp;|&emsp;/g, '');
+const haystack = squash(text);
+const quoted = loadData().controls.filter(c => c.sourceId === sourceId && c.quote &&
+  ['verbatim', 'excerpt'].includes(c.quoteStatus));
+if (quoted.length) {
+  const missing = [];
+  for (const c of quoted) {
+    const segments = c.quote.split(/\n|(?<=：)(?=（[一二三四五六七八九十]+）)/).map(squash).filter(Boolean);
+    const absent = segments.filter(seg => !haystack.includes(seg));
+    if (absent.length) missing.push({ id: c.id, absent });
+  }
+  console.log(`\n逐字核对：${quoted.length} 条原文／节录，${quoted.length - missing.length} 条在原文中逐段找到。`);
+  for (const m of missing) {
+    console.log(`  ✗ ${m.id}`);
+    for (const seg of m.absent) console.log(`      ${seg.length > 120 ? seg.slice(0, 120) + '…' : seg}`);
+  }
 }

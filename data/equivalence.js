@@ -67,5 +67,12 @@ HKCC.addEquivalence([
     id: 'eq-bnm-rmit-13.3', basis: 'same-provision',
     members: ['BNM-RMIT-13.3', 'BNM-RMIT-13.3-NCII'],
     rationale: 'RMiT 第 13.3 段同一条文；按第 2.2(c) 段，三类支付机构只在获指定为 NCII 时须遵守，故拆成两条控制点。'
+  },
+
+  // ---- 中国内地：同一条文按适用对象拆分 ----
+  {
+    id: 'eq-cn-pipl-40', basis: 'same-provision',
+    members: ['CN-PIPL-40', 'CN-PIPL-40-VOL'],
+    rationale: '《个人信息保护法》第四十条同一条文；适用于关键信息基础设施运营者或处理个人信息达到国家网信部门规定数量的处理者，引擎无法表达「或」，故拆成两条控制点。'
   }
 ]);

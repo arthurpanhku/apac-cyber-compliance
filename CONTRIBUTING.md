@@ -17,6 +17,8 @@ of the README for what is in and out.
    omissions, and `summary` for a section heading or a description of the source. Never label a heading or summary as
    verbatim text; the Chinese explanation goes in `requirement`. Where the Chinese explanation differs from the
    official text, the official text governs — that is what this tool stands on.
+   Where the official text is Chinese (mainland China), quote the Chinese original and set `quoteLang: 'zh-Hans'`;
+   the interface then labels it as the official Chinese text. Omitting `quoteLang` means English.
 3. **Don't fill in dates from memory.** The issue date (`issued`) is whatever the regulator's own website shows.
    Each source also has its own `verifiedOn` — the day you **actually opened the official website and checked the link
    and version**. When you change one source, advance only that source's `verifiedOn`, never anyone else's: the whole
@@ -106,7 +108,8 @@ The base data (`data/<jurisdiction>/taxonomy.js`, `data/<jurisdiction>/sources.j
 
 A few rules:
 
-1. **`quote` is never translated.** It is the regulator's own published text and is shown unchanged in every language.
+1. **`quote` is never translated.** It is the regulator's own published text — English, or Chinese for mainland China
+   (`quoteLang: 'zh-Hans'`) — and is shown unchanged in every language.
 2. **The English is not translated from the Chinese.** SFC circulars, the HKMA Supervisory Policy Manual and the codes
    of practice are published in English, as are the MAS, APRA and BNM documents. Write `en.js` against the original
    English document, using the words readers will see there; don't translate the Chinese explanation back into English.

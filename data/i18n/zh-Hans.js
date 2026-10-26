@@ -6,7 +6,7 @@
 HKCC.addI18n('zh-Hans', {
   ui: {
     appTitle: '亚太网络安全合规助手',
-    metaDescription: '按司法管辖区、牌照与业务特征生成 SFC、HKMA、IA、PCPD、关键基础设施条例、MAS、APRA 及 BNM 的网络安全控制点要求，每条均标注官方条文出处。',
+    metaDescription: '按司法管辖区、牌照与业务特征生成 SFC、HKMA、IA、PCPD、关键基础设施条例、MAS、APRA、BNM 及中国内地（网信办、金融监管总局、证监会等）的网络安全控制点要求，每条均标注官方条文出处。',
     printTitle: '亚太网络安全合规控制点清单',
     versionLine: 'v{version} · 条文核验于 {date}',
 
@@ -69,6 +69,11 @@ HKCC.addI18n('zh-Hans', {
     quoteVerbatim: '英文条文原文',
     quoteExcerpt: '英文条文节录',
     quoteSummaryType: '英文来源说明',
+    quoteSummaryZh: '中文来源文字',
+    quoteSummaryMixed: '来源原文',
+    quoteVerbatimZh: '中文条文原文',
+    quoteExcerptZh: '中文条文节录',
+    quoteSummaryTypeZh: '中文来源说明',
     notePrefix: '注：',
     tagMerged: '跨监管合并 {n} 条',
     tagDeadline: '限期 {date}',
@@ -192,9 +197,9 @@ HKCC.addI18n('zh-Hans', {
     csvVerified: '条文核验日期',
     csvDeadline: '限期',
     csvUrl: '原文链接',
-    csvQuote: '英文原文',
+    csvQuote: '条文原文',
     csvStatus: '自评状态',
-    csvQuoteType: '英文来源类型',
+    csvQuoteType: '原文类型',
     csvImplementation: '实施说明／不适用理由',
     csvEvidence: '证据引用',
     csvOwner: '负责人',

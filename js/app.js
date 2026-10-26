@@ -574,14 +574,16 @@
     const quoted = group.filter(c => c.quote);
     if (quoted.length) {
       const details = el('details', 'quote');
-      details.appendChild(el('summary', null, t('quoteSummary')));
+      const chinese = quoted.filter(isChineseQuote).length;
+      details.appendChild(el('summary', null, t(chinese === 0 ? 'quoteSummary' :
+        chinese === quoted.length ? 'quoteSummaryZh' : 'quoteSummaryMixed')));
       for (const control of quoted) {
-        const label = control.quoteStatus === 'verbatim' ? t('quoteVerbatim') :
-          control.quoteStatus === 'excerpt' ? t('quoteExcerpt') : t('quoteSummaryType');
-        details.appendChild(el('div', 'quote-kind', label));
+        details.appendChild(el('div', 'quote-kind', quoteTypeLabel(control)));
         const quote = el('blockquote', null, control.quote);
+        quote.lang = isChineseQuote(control) ? 'zh-Hans' : 'en';
+        const source = HKCC.sources[control.sourceId];
         quote.appendChild(el('footer', 'source-line',
-          `— ${HKCC.sources[control.sourceId].titleEn}, ${control.clause}`));
+          `— ${isChineseQuote(control) ? source.titleZh : source.titleEn}, ${control.clause}`));
         details.appendChild(quote);
       }
       card.appendChild(details);
@@ -959,6 +961,17 @@
     return licenseById.get(licenceId)?.jurisdiction || '';
   }
 
+  /** 中国内地法规的正式文本为中文，quote 直接引述中文原文（quoteLang: 'zh-Hans'）；其余为英文。 */
+  function isChineseQuote(control) {
+    return control.quoteLang === 'zh-Hans';
+  }
+
+  function quoteTypeLabel(control) {
+    const suffix = isChineseQuote(control) ? 'Zh' : '';
+    return control.quoteStatus === 'verbatim' ? t('quoteVerbatim' + suffix) :
+      control.quoteStatus === 'excerpt' ? t('quoteExcerpt' + suffix) : t('quoteSummaryType' + suffix);
+  }
+
   function controlJurisdiction(control) {
     const id = controlJurisdictionId(control);
     return id ? jurisdictionLabel(id) : '';
@@ -981,8 +994,7 @@
         const domain = rawDomain ? trDomain(rawDomain) : null;
         const record = assessment(control.id);
         const due = E.dueState(record.targetDate, state.project.asOfDate);
-        const quoteType = control.quoteStatus === 'verbatim' ? t('quoteVerbatim') :
-          control.quoteStatus === 'excerpt' ? t('quoteExcerpt') : control.quote ? t('quoteSummaryType') : '';
+        const quoteType = control.quote ? quoteTypeLabel(control) : '';
         rows.push([state.project.name, state.project.asOfDate, controlJurisdiction(control), control.id,
           domain?.label || control.domain, translatedControl.title, translatedControl.requirement,
           applicabilityText(control), source.regulator, HKCC.sourceTitle(control.sourceId),
