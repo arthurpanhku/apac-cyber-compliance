@@ -17,7 +17,7 @@ const ATTRIBUTES = ['ebanking', 'personal-data', 'outsourcing', 'sg-online-finan
 
 const jurisdictionOf = c => H.licenses.find(l => c.applicability.licenses.includes(l.id))?.jurisdiction;
 const regulatorOf = c => H.sources[c.sourceId].regulator;
-const jur = ['hk', 'sg', 'au'];
+const jur = ['hksar', 'sg', 'au'];
 
 const inScope = H.controls.filter(c => jur.includes(jurisdictionOf(c)));
 const active = H.controls.filter(c => E.applies(c, new Set(LICENSES), new Set(ATTRIBUTES)));

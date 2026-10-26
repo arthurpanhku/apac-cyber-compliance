@@ -1,0 +1,29 @@
+/** 牌照/实体类型。用户可多选。 */
+HKCC.addLicenses([
+  { id: 'sfc-ra1', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 1 类：证券交易', note: 'Dealing in securities' },
+  { id: 'sfc-ra2', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 2 类：期货合约交易', note: 'Dealing in futures contracts' },
+  { id: 'sfc-ra3', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 3 类：杠杆式外汇交易', note: 'Leveraged foreign exchange trading（黑客风险指引只适用于持牌杠杆式外汇交易商）' },
+  { id: 'sfc-ra4', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 4 类：就证券提供意见', note: 'Advising on securities' },
+  { id: 'sfc-ra5', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 5 类：就期货合约提供意见', note: 'Advising on futures contracts' },
+  { id: 'sfc-ra6', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 6 类：就机构融资提供意见', note: 'Advising on corporate finance' },
+  { id: 'sfc-ra7', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 7 类：提供自动化交易服务', note: 'Providing automated trading services' },
+  { id: 'sfc-ra8', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 8 类：提供证券保证金融资', note: 'Securities margin financing' },
+  { id: 'sfc-ra9', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 9 类：提供资产管理', note: 'Asset management' },
+  { id: 'sfc-ra13', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: '第 13 类：为集体投资计划提供托管服务', note: 'Depositary of relevant CIS' },
+  { id: 'sfc-vasp', jurisdiction: 'hksar', group: 'SFC 持牌法团', label: 'SFC 持牌虚拟资产服务提供者 / 交易平台', note: 'VASP / VATP' },
+  { id: 'hkma-ai', jurisdiction: 'hksar', group: 'HKMA 认可机构', label: '认可机构（银行 / 有限制牌照银行 / 接受存款公司）', note: 'Authorized Institution' },
+  { id: 'hkma-svf', jurisdiction: 'hksar', group: 'HKMA 认可机构', label: '储值支付工具持牌人', note: 'Stored Value Facility licensee' },
+  { id: 'ia-authorized-insurer', jurisdiction: 'hksar', group: 'IA 获授权保险人', label: '获授权保险人', note: 'GL20 主体适用；不包括专属自保保险人及海事相互保险人' },
+  { id: 'other', jurisdiction: 'hksar', group: '其他', label: '无上述金融牌照（一般企业）', note: '仍受《个人资料（私隐）条例》约束' }
+]);
+
+/** 业务特征。决定同一牌照下条文是否适用。 */
+HKCC.addAttributes([
+  { id: 'internet-trading', jurisdiction: 'hksar', label: '提供互联网交易设施', note: '客户可透过网页或应用程式下达买卖指令；触发 SFC 黑客风险指引全套要求' },
+  { id: 'ebanking', jurisdiction: 'hksar', label: '提供电子银行服务', note: '网上银行、流动支付、自助终端等；触发 HKMA TM-E-1' },
+  { id: 'personal-data', jurisdiction: 'hksar', label: '收集或处理个人资料', note: '触发《个人资料（私隐）条例》DPP4 资料保安要求' },
+  { id: 'ci-designated', jurisdiction: 'hksar', label: '已被指定为关键基础设施营运者', note: '触发《保护关键基础设施（电脑系统）条例》三类法定责任' },
+  { id: 'outsourcing', jurisdiction: 'hksar', label: '使用第三方服务商或云端服务', note: '触发外判与供应链管理要求' },
+  { id: 'ai-models', jurisdiction: 'hksar', label: '在营运中使用 AI 语言模型', note: '触发 2026 年 SFC / HKMA 关于 AI 驱动网络攻击的通函' },
+  { id: 'ia-craf', jurisdiction: 'hksar', label: '须进行 IA 网络韧性评估（CRAF）', note: '适用于在香港或从香港经营保险业务且不属于 GL20 第 3.2 段豁免类别的获授权保险人' }
+]);

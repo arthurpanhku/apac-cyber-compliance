@@ -66,7 +66,7 @@ for (const language of ['en', 'zh-Hant', 'zh-Hans']) {
 
 // 2. Every jurisdiction has a working main path: pick the first entity type and
 // at least one control card appears.
-for (const jurisdiction of ['hk', 'sg', 'au', 'my', 'cn']) {
+for (const jurisdiction of ['hksar', 'sg', 'au', 'my', 'cn']) {
   test(`${jurisdiction}: selecting the first entity type shows control cards`, async ({ page }) => {
     await page.goto(pageUrl('en'));
 

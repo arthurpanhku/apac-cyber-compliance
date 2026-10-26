@@ -437,7 +437,7 @@ data/
 │   ├── zh-Hans.js        Simplified UI strings
 │   ├── zh-Hant.js        Traditional layer (generated)
 │   └── en.js             English layer
-├── hk/                    Hong Kong: 14 licences · 6 business characteristics
+├── hksar/                 Hong Kong: 14 licences · 6 business characteristics
 │   ├── sources.js        20 source documents (title, date, legal status, official link)
 │   ├── taxonomy.js       licences and business characteristics
 │   └── controls/
