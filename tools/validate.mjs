@@ -18,6 +18,8 @@ const sourceIds = new Set(Object.keys(HKCC.sources));
 const jurisdictionIds = new Set(HKCC.jurisdictions.map(j => j.id));
 const controlIds = new Set();
 const quoteStatuses = new Set(['verbatim', 'excerpt', 'summary']);
+/** quote 的语言：省略即为英文；中国内地法规的正式文本为中文，以 'zh-Hans' 标明。 */
+const quoteLangs = new Set(['en', 'zh-Hans']);
 
 for (const [kind, list] of [['licenses', HKCC.licenses], ['attributes', HKCC.attributes]]) {
   for (const x of list) {
@@ -42,9 +44,12 @@ for (const c of HKCC.controls) {
   for (const l of ap.licenses || []) if (!licenseIds.has(l)) errors.push(`${at}: 未知牌照 "${l}"`);
   for (const a of ap.attributes || []) if (!attrIds.has(a)) errors.push(`${at}: 未知业务特征 "${a}"`);
   if (c.deadline && !/^\d{4}-\d{2}-\d{2}$/.test(c.deadline)) errors.push(`${at}: deadline 格式须为 YYYY-MM-DD`);
-  if (!c.quote) warn.push(`${at}: 无英文原文引述`);
+  if (!c.quote) warn.push(`${at}: 无原文引述`);
   if (c.quote && !quoteStatuses.has(c.quoteStatus)) {
     errors.push(`${at}: quoteStatus 必须为 verbatim、excerpt 或 summary`);
+  }
+  if (c.quoteLang !== undefined && !quoteLangs.has(c.quoteLang)) {
+    errors.push(`${at}: quoteLang 只可为 ${[...quoteLangs].join('、')}（省略即为英文）`);
   }
   if (['verbatim', 'excerpt'].includes(c.quoteStatus) && !c.clause) {
     errors.push(`${at}: 原文或节录必须提供 clause`);

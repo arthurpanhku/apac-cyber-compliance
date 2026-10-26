@@ -59,13 +59,14 @@ for (const language of ['en', 'zh-Hant', 'zh-Hans']) {
     // The scope tabs are built from data/jurisdictions.js on load.
     await expect(page.locator('#scope-tab-au')).toBeAttached();
     await expect(page.locator('#scope-tab-my')).toBeAttached();
+    await expect(page.locator('#scope-tab-cn')).toBeAttached();
     await expect(page.locator('#export-csv')).toHaveText(/.+/);
   });
 }
 
 // 2. Every jurisdiction has a working main path: pick the first entity type and
 // at least one control card appears.
-for (const jurisdiction of ['hk', 'sg', 'au', 'my']) {
+for (const jurisdiction of ['hk', 'sg', 'au', 'my', 'cn']) {
   test(`${jurisdiction}: selecting the first entity type shows control cards`, async ({ page }) => {
     await page.goto(pageUrl('en'));
 
@@ -109,6 +110,27 @@ test('my: the NCII clause appears only once the NCII characteristic is ticked', 
   // translation. Ticking it removes the exemption.
   await panel.locator('.scope-attribute-options .opt').filter({ hasText: 'NCII' }).locator('input').check();
   await expect(page.locator('#results .control-ids').filter({ hasText: 'BNM-RMIT-13.3-NCII' })).not.toHaveCount(0);
+});
+
+// 4b. Mainland China: a banking institution sees the cross-sector laws plus the
+// NFRA measures; CII obligations appear only once the CII characteristic is
+// ticked. The official text is Chinese and is labelled as such, untranslated.
+test('cn: a bank yields 54 cards, 75 as a CII operator, with the Chinese official text', async ({ page }) => {
+  await page.goto(pageUrl('en'));
+
+  await selectFirstEntityType(page, 'cn');
+  await expect(page.locator('#results article.control')).toHaveCount(54);
+
+  // "Identified as a CII operator" is first in data/cn/taxonomy.js.
+  await page.locator('#scope-panel-cn .scope-attribute-options input[type=checkbox]').first().check();
+  await expect(page.locator('#results article.control')).toHaveCount(75);
+  await expect(page.locator('#results .control-ids').filter({ hasText: 'CN-CIIO-14' })).not.toHaveCount(0);
+
+  const card = page.locator('#results article.control')
+    .filter({ has: page.locator('.control-ids', { hasText: /^CN-CSL-27$/ }) });
+  await card.locator('details.quote > summary').click();
+  await expect(card.locator('.quote-kind').first()).toHaveText('Verbatim Chinese provision (official text)');
+  await expect(card.locator('blockquote[lang="zh-Hans"]')).toContainText('网络运营者应当制定网络安全事件应急预案');
 });
 
 // 5. Mark a control, export CSV, and find that control in the file.

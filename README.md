@@ -12,9 +12,9 @@
     <a href="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml"><img src="https://github.com/arthurpanhku/apac-cyber-compliance/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1d4ed8" alt="License: MIT"></a>
     <img src="https://img.shields.io/badge/version-1.12.0-0ea5e9" alt="Version 1.12.0">
-    <img src="https://img.shields.io/badge/controls-412-16a34a" alt="412 controls">
-    <img src="https://img.shields.io/badge/sources-31-64748B" alt="31 sources">
-    <img src="https://img.shields.io/badge/jurisdictions-HK%20%C2%B7%20SG%20%C2%B7%20AU%20%C2%B7%20MY-0ea5e9" alt="Four jurisdictions">
+    <img src="https://img.shields.io/badge/controls-563-16a34a" alt="563 controls">
+    <img src="https://img.shields.io/badge/sources-39-64748B" alt="39 sources">
+    <img src="https://img.shields.io/badge/jurisdictions-HK%20%C2%B7%20SG%20%C2%B7%20AU%20%C2%B7%20MY%20%C2%B7%20CN-0ea5e9" alt="Five jurisdictions">
     <img src="https://img.shields.io/badge/languages-EN%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E7%AE%80-7c3aed" alt="Three languages">
     <img src="https://img.shields.io/badge/zero%20dependencies-double--click%20to%20run-7c3aed" alt="Zero dependency">
     <img src="https://img.shields.io/badge/sources%20verified-2026--09--21-64748B" alt="Verified 2026-09-21">
@@ -34,7 +34,10 @@ Financial institutions across APAC often answer to several regulators, in severa
 cybersecurity at once. In Hong Kong: the Securities and Futures Commission (SFC), the Hong Kong Monetary
 Authority (HKMA), the Privacy Commissioner for Personal Data (PCPD), and — from 2026 — the Protection of
 Critical Infrastructures (Computer Systems) Ordinance. In Singapore: the Monetary Authority of Singapore
-(MAS). In Australia: the Australian Prudential Regulation Authority (APRA). In Malaysia: Bank Negara Malaysia (BNM). The requirements are scattered across guidelines, circulars, statutory notices, Supervisory Policy
+(MAS). In Australia: the Australian Prudential Regulation Authority (APRA). In Malaysia: Bank Negara Malaysia (BNM). In mainland China: the national Cybersecurity, Data Security and
+Personal Information Protection Laws, State Council regulations on critical information infrastructure and network
+data, the Cyberspace Administration of China (CAC), the National Financial Regulatory Administration (NFRA) and the
+China Securities Regulatory Commission (CSRC). The requirements are scattered across guidelines, circulars, statutory notices, Supervisory Policy
 Manual modules and codes of practice, and the same control is often demanded by several regulators in
 different words.
 
@@ -63,7 +66,8 @@ other; six such cross-jurisdiction differences are written so far, all in incide
 are the next step on the roadmap — see section 1A of `DEVELOPMENT_PLAN.md` (Chinese).
 
 It currently covers **Hong Kong** (SFC / HKMA / PCPD / the Critical Infrastructure
-Ordinance), **Singapore** (MAS), **Australia** (APRA) and **Malaysia** (BNM), with the architecture built to add further APAC jurisdictions over time.
+Ordinance), **Singapore** (MAS), **Australia** (APRA), **Malaysia** (BNM) and **mainland China** (the Cybersecurity, Data Security and Personal
+Information Protection Laws, the CII and Network Data Security Regulations, CAC incident reporting, NFRA and CSRC), with the architecture built to add further APAC jurisdictions over time.
 
 ## Scope
 
@@ -137,12 +141,12 @@ It also deploys to GitHub Pages as-is (repository settings → Pages → publish
 
 | Feature | Description |
 | --- | --- |
-| **Jurisdiction-first scope builder** | Switch between Hong Kong, Singapore, Australia and Malaysia, expand entities by regulator, and see only the business characteristics relevant to the selected entities; licences from several jurisdictions can remain selected at once |
+| **Jurisdiction-first scope builder** | Switch between Hong Kong, Singapore, Australia, Malaysia and mainland China, expand entities by regulator, and see only the business characteristics relevant to the selected entities; licences from several jurisdictions can remain selected at once |
 | **Jurisdiction result filter** | Focus the control list on a single jurisdiction without changing the saved assessment scope |
-| **Filter by licence** | 30 licence / entity types: 15 in Hong Kong (SFC regulated activities, VASP, authorized institutions, stored value facilities, IA-authorized insurers, general companies) + 3 in Singapore (banks, capital markets services licensees and related entities, licensed digital token service providers) + 5 in Australia (ADIs, general insurers, life companies, private health insurers, RSE licensees) + 7 in Malaysia (banks, insurers and takaful operators, development financial institutions, e-money issuers, designated payment system operators, merchant acquirers, intermediary remittance institutions) |
-| **Narrow by business profile** | 12 characteristics (internet trading, e-banking, personal data processing, CI designation, outsourcing/cloud, use of AI models, IA CRAF scope, online financial services over the internet, information assets managed by related or third parties, digital services, cloud services, NCII designation in Malaysia) decide whether a provision applies to a given licence |
+| **Filter by licence** | 35 licence / entity types: 15 in Hong Kong (SFC regulated activities, VASP, authorized institutions, stored value facilities, IA-authorized insurers, general companies) + 3 in Singapore (banks, capital markets services licensees and related entities, licensed digital token service providers) + 5 in Australia (ADIs, general insurers, life companies, private health insurers, RSE licensees) + 7 in Malaysia (banks, insurers and takaful operators, development financial institutions, e-money issuers, designated payment system operators, merchant acquirers, intermediary remittance institutions) + 5 in mainland China (banking financial institutions, insurance institutions, securities and futures business institutions, securities and futures market core institutions, other network operators) |
+| **Narrow by business profile** | 20 characteristics (internet trading, e-banking, personal data processing, CI designation, outsourcing/cloud, use of AI models, IA CRAF scope, online financial services over the internet, information assets managed by related or third parties, digital services, cloud services, NCII designation in Malaysia; and in mainland China CII operator status, personal information, the personal information volume thresholds, important data, cross-border transfers, outsourcing and AI) decide whether a provision applies to a given licence |
 | **De-duplication and cross-mapping** | Where several regulators impose the same requirement, it is merged into a single card listing each one's own provision and clause number — whether that's Hong Kong's SFC and HKMA, or Singapore's MAS across its three near-identical Notices on Cyber Hygiene to different entity types |
-| **Traceable to source** | Every control carries a description, clause number, issue and verification dates, official link, and a verbatim / excerpt / summary label for its English source text |
+| **Traceable to source** | Every control carries a description, clause number, issue and verification dates, official link, and a verbatim / excerpt / summary label for its source text — official English, or for mainland China the official Chinese text, never translated |
 | **Assessment work record** | Record status, implementation notes, evidence references, owner and target date for each individual regulatory control |
 | **Cross-regulator differences** | For two partly overlapping provisions, the card states what each requires beyond the other (for example MAS: notify within 1 hour; APRA: 72 hours, but a wider trigger), in every language, with the date each pair was reviewed |
 | **Regulator comparison** | For each regulator in scope, how many applicable provisions are equivalent to, overlap with, or are unique against the other regulators; select a regulator to see only its provisions and export a CSV of just those, with the cross-regulator relation and differences |
@@ -199,7 +203,7 @@ We'll rerun this case as each step lands and update the table, so it doubles as 
 
 ## Coverage
 
-The tool currently contains **412 controls** drawn from **31** official documents, across Hong Kong, Singapore, Australia and Malaysia.
+The tool currently contains **563 controls** drawn from **39** official documents, across Hong Kong, Singapore, Australia, Malaysia and mainland China.
 Each source carries its own `verifiedOn` — the day its link and version were last checked against the
 regulator's website — because the documents span 2001 to 2026 and are re-checked at different times. The
 header shows the **earliest** of those dates, so the freshness claimed is the weakest link, never the most
@@ -287,6 +291,36 @@ recently touched one. A scheduled workflow re-checks every link weekly.
 | --- | --- | --- |
 | [Policy Document on Risk Management in Technology (RMiT), BNM/RH/PD 028-98](https://www.bnm.gov.my/documents/20124/938039/pd-rmit-sep26.pdf) | 2026-09-25 | Every paragraph of Parts B and C (chapters 8–18), each labelled with its official **S** (standard, mandatory) or **G** (guidance) marker; supersedes the June 2023 RMiT. Board and CISO governance, project and SDLC controls, patch and end-of-life management, cryptography, data centre and network resilience, critical-system downtime of no more than **4 hours** a year and **120 minutes** per incident, early-warning and stand-in processing by **2027-09-30**, third-party and cloud risk, phishing-resistant MFA, SOC and threat intelligence, red teaming every **3 years**, digital fraud controls, technology audit, external DCRA and NRA, and the gap analysis due within **90 days** of issuance. Exemptions under paragraph 2.2 for payment-type institutions are modelled per entity type. Appendices 1–12 are not yet included |
 
+## Mainland China
+
+The official texts are in Chinese, so these controls quote the **Chinese original** (`quoteLang: 'zh-Hans'`,
+labelled as the official Chinese text) and give English summaries of each requirement. Article numbers of the
+Cybersecurity Law follow the **2025 amendment** (in force 2026-01-01), which renumbered the articles — for example
+graded protection moved from Article 21 to Article 23.
+
+### Cross-sector laws and regulations (67 controls)
+
+| Document | Date | Notes |
+| --- | --- | --- |
+| [Cybersecurity Law (as amended 2025)](https://www.cac.gov.cn/2025-12/29/c_1768735112911946.htm) | 2025-10-28 | Network operators' Multi-Level Protection Scheme (MLPS) obligations (policies, anti-malware, network logs kept at least **6 months**, data classification, backup and encryption), incident response, user and personal information security; CII operators' dedicated security body, background checks, training, disaster recovery, drills, national security review, confidentiality agreements, **data localisation** and **annual** testing and assessment. The MLPS standard GB/T 22239-2019 itself is not yet listed item by item |
+| [Data Security Law](http://www.npc.gov.cn/npc/c2/c30834/202106/t20210610_311888.html) | 2021-06-10 | Whole-process data security management, risk monitoring and incident handling, important data officers and periodic risk assessments, important data exports, and no provision of domestic data to foreign courts or law enforcement without approval |
+| [Personal Information Protection Law](http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html) | 2021-08-20 | Article 51 security measures, entrusted processing, sensitive personal information (including **financial accounts**), deletion, cross-border conditions and domestic storage, the protection officer, compliance audits, impact assessments and breach notification |
+| [Regulations on the Security Protection of Critical Information Infrastructure](https://www.gov.cn/gongbao/content/2021/content_5636138.htm) | 2021-07-30 | All of Chapter III (operator responsibilities); apply only when the characteristic "identified as a CII operator" is ticked |
+| [Regulations on Network Data Security Management](https://www.gov.cn/gongbao/2024/issue_11646/202410/content_6980863.html) | 2024-09-24 | General network data protection, incident notification, entrustment records kept **3 years**, important data officers, pre-provision risk assessments and **annual** risk reports, the **10 million**-person threshold, and personal information and important data exports |
+| [Administrative Measures for National Cybersecurity Incident Reporting](https://www.cac.gov.cn/2025-09/15/c_1759583017717009.htm) | 2025-09-11 | In force 2025-11-01. Relatively major or worse incidents: **1 hour** to the protection department and police when CII is involved, otherwise **4 hours** to the provincial cyberspace administration; contractual reporting duties for service providers; eight report elements; summary report within **30 days** |
+
+### NFRA (46 controls)
+
+| Document | Date | Notes |
+| --- | --- | --- |
+| [Measures for the Data Security Management of Banking and Insurance Institutions (金规〔2024〕24 号)](https://www.gov.cn/zhengce/zhengceku/202412/content_6995081.htm) | 2024-12-27 | Every institutional obligation in Chapters II–VII plus the filing duties in Chapter VIII: data security accountability and lead department, core / important / sensitive data grading, entrusted processing within IT outsourcing, backup segregation and verification, operation logs kept **1–3 years** with audits at least every **6 months**, no plaintext authentication data, AI model governance, open banking APIs, data security incidents reported within **2 hours** (written within **24 hours**, summary within **5 working days**), annual risk assessment and report by **15 January**, and a full data security audit at least every **3 years** |
+
+### CSRC (38 controls)
+
+| Document | Date | Notes |
+| --- | --- | --- |
+| [Measures for the Administration of Network and Information Security in the Securities and Futures Industry (CSRC Decree No. 218)](https://www.gov.cn/gongbao/2023/issue_10526/202306/content_6887131.html) | 2023-02-27 | In force 2023-05-01; applies to core institutions and business institutions. No changes to important systems in trading hours, business logs kept **5 years**, daily backups verified quarterly, annual stress tests with capacity at least **2×** the historical peak (**3×** for CII), supplier filing, investor personal information protection (biometrics may not be the sole authentication), incident response and reporting, CII protection, and the annual report by **30 April** |
+
 ## How applicability is decided
 
 Each control's `applicability` has two parts:
@@ -351,8 +385,8 @@ control of storage media, annual testing of the contingency plan — so those pa
 merged. Only five pairs were found to be substantively the same. A platform operator that ticks VASP and internet
 trading sees 90 applicable provisions as **85** cards. MAS's three Notices on Cyber Hygiene repeat paragraph 4
 word for word apart from the name of the regulated entity, so those merge: selecting all three Singapore licences,
-the 59 MAS controls show as **47** cards. Selecting every licence and characteristic, the 412 provisions show as
-**393** cards.
+the 59 MAS controls show as **47** cards. Selecting every licence and characteristic, the 563 provisions show as
+**543** cards.
 
 > **Deployment note**: do not delete `.nojekyll` in the repository root. GitHub Pages processes sites with
 > Jekyll by default, and Jekyll ignores paths beginning with an underscore — which would make
@@ -426,11 +460,23 @@ data/
 │   ├── taxonomy.js       entity types and business characteristics
 │   └── controls/
 │       └── cps-234.js          APRA CPS 234 Information Security, paragraphs 13–36
-└── my/                    Malaysia: 7 entity types · 3 business characteristics
-    ├── sources.js        1 source document
+├── my/                    Malaysia: 7 entity types · 3 business characteristics
+│   ├── sources.js        1 source document
+│   ├── taxonomy.js       entity types and business characteristics
+│   └── controls/
+│       └── rmit.js             BNM RMiT, Parts B and C (chapters 8–18)
+└── cn/                    Mainland China: 5 entity types · 8 business characteristics
+    ├── sources.js        8 source documents
     ├── taxonomy.js       entity types and business characteristics
     └── controls/
-        └── rmit.js             BNM RMiT, Parts B and C (chapters 8–18)
+        ├── csl.js                Cybersecurity Law (as amended 2025)
+        ├── dsl.js                Data Security Law
+        ├── pipl.js               Personal Information Protection Law
+        ├── ciio.js               CII Security Protection Regulations
+        ├── ndsr.js               Network Data Security Management Regulations
+        ├── incident-reporting.js CAC incident reporting measures
+        ├── nfra-data.js          NFRA data security measures for banks and insurers
+        └── csrc-netsec.js        CSRC network and information security measures
 ```
 
 A single control looks like this — authored in Simplified Chinese, with other languages supplied by the
@@ -445,7 +491,8 @@ overlay files in `data/i18n/`:
   clause: '1.1',                       // clause number in the source document
   title: '客户账户登录须实施双重认证',
   requirement: '……',
-  quote: 'A licensed or registered person should implement …',  // official English, never translated
+  quote: 'A licensed or registered person should implement …',  // official text, never translated
+  // quoteLang: 'zh-Hans',             // only when the official text is Chinese (mainland China); default English
   quoteStatus: 'excerpt',               // verbatim | excerpt | summary
   applicability: { licenses: [...], attributes: [...] },
   deadline: '2027-07-08',              // optional compliance deadline
@@ -499,7 +546,7 @@ translations fails the build. Unit tests cover applicability, merging, v1 migrat
 due dates and CSV injection protection. Sources unchecked for more than 180 days raise a warning.
 
 `.github/workflows/ci.yml` runs this on every pull request, and also confirms the generated Traditional
-files are up to date. A separate weekly workflow re-checks all 31 source links:
+files are up to date. A separate weekly workflow re-checks all 39 source links:
 
 ```bash
 node tools/check-links.mjs

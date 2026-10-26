@@ -6,7 +6,7 @@ import { loadData } from '../tools/lib/load-data.mjs';
 await import('../js/engine.js');
 const E = globalThis.HKCCEngine;
 
-const TODAY = '2026-10-23';
+const TODAY = '2026-10-26';
 const A = { id: 'A', sourceId: 's1' };
 const B = { id: 'B', sourceId: 's2' };
 const C = { id: 'C', sourceId: 's3' };
