@@ -43,6 +43,9 @@ jobs:
       - name: 案例数字可重现
         run: node tools/case-study.mjs
 
+      - name: 覆盖明细与运行时数据同步
+        run: node tools/coverage-matrix.mjs --check
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.x'

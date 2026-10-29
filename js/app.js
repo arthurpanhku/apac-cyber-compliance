@@ -274,6 +274,7 @@
     close.addEventListener('click', closeScopeDrawer);
     drawerHead.appendChild(close);
     box.appendChild(drawerHead);
+    box.appendChild(el('p', 'scope-intro', t('scopeHelp')));
 
     const project = el('details', 'scope-project');
     project.open = projectPanelOpen;
@@ -313,6 +314,7 @@
       button.id = `scope-tab-${jurisdiction.id}`;
       button.setAttribute('role', 'tab');
       button.setAttribute('aria-selected', String(activeScopeJurisdiction === jurisdiction.id));
+      button.tabIndex = activeScopeJurisdiction === jurisdiction.id ? 0 : -1;
       button.setAttribute('aria-controls', `scope-panel-${jurisdiction.id}`);
       button.setAttribute('aria-label', t('scopeJurisdictionTab', { name: jurisdictionLabel(jurisdiction.id) }));
       button.classList.toggle('active', activeScopeJurisdiction === jurisdiction.id);
@@ -322,6 +324,19 @@
       button.addEventListener('click', () => {
         activeScopeJurisdiction = jurisdiction.id;
         renderSidebar();
+        $(`#scope-tab-${jurisdiction.id}`).focus();
+      });
+      button.addEventListener('keydown', event => {
+        const keys = ['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Home', 'End'];
+        if (!keys.includes(event.key)) return;
+        event.preventDefault();
+        const ids = HKCC.jurisdictions.map(item => item.id);
+        const index = ids.indexOf(jurisdiction.id);
+        const next = event.key === 'Home' ? 0 : event.key === 'End' ? ids.length - 1 :
+          (index + (['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : -1) + ids.length) % ids.length;
+        activeScopeJurisdiction = ids[next];
+        renderSidebar();
+        $(`#scope-tab-${ids[next]}`).focus();
       });
       tabs.appendChild(button);
     }
@@ -492,6 +507,10 @@
     renderSummary(active, allGroups);
     renderCoverage(currentCoverage);
     renderRegulatorOptions(active);
+    $('#results-count').textContent = t('resultsCount', { visible: visible.length, total: allGroups.length });
+    $('.toolbar').hidden = !state.licenses.size;
+    $('.requirements-heading').hidden = !state.licenses.size;
+    document.body.classList.toggle('has-scope', Boolean(state.licenses.size));
 
     const out = $('#results');
     out.innerHTML = '';
@@ -531,8 +550,32 @@
 
   function emptyState(title, note) {
     const box = el('div', 'panel empty');
+    const mark = el('div', 'empty-mark');
+    const icon = el('img');
+    icon.src = 'assets/icon.svg';
+    icon.alt = '';
+    icon.width = 30;
+    icon.height = 30;
+    mark.appendChild(icon);
+    box.appendChild(mark);
     box.appendChild(el('strong', null, title));
-    box.appendChild(document.createTextNode(note));
+    box.appendChild(el('p', null, note));
+    if (!state.licenses.size) {
+      const steps = el('ol', 'empty-steps');
+      for (const key of ['emptyStepScope', 'emptyStepBusiness', 'emptyStepAssess']) {
+        steps.appendChild(el('li', null, t(key)));
+      }
+      const start = el('button', 'primary', t('btnConfigureScope'));
+      start.type = 'button';
+      start.addEventListener('click', () => {
+        if (mobileScopeQuery.matches) openScopeDrawer();
+        else {
+          $('#sidebar').scrollTo({ top: 0 });
+          $(`#scope-tab-${activeScopeJurisdiction}`)?.focus();
+        }
+      });
+      box.append(steps, start);
+    }
     return box;
   }
 
@@ -814,9 +857,24 @@
   function renderSummary(active, groups) {
     const box = $('#summary');
     box.innerHTML = '';
+    box.hidden = !state.licenses.size && state.storageAvailable && !state.quarantined &&
+      !Object.keys(state.unresolvedAssessments).length;
+    const tally = { done: 0, partial: 0, gap: 0, na: 0, none: 0 };
+    for (const control of active) tally[assessment(control.id).status || 'none']++;
+    const scored = active.length - tally.na;
+    const pct = scored ? Math.round(((tally.done + tally.partial * 0.5) / scored) * 100) : 0;
+    const jurisdictions = new Set([...state.licenses].map(id => licenseById.get(id)?.jurisdiction).filter(Boolean));
     const top = el('div', 'summary-top');
-    top.appendChild(el('span', 'summary-count', String(groups.length)));
-    top.appendChild(el('span', 'summary-label', t('summaryLabel')));
+    for (const [key, value] of [
+      ['metricControls', String(groups.length)],
+      ['metricJurisdictions', String(jurisdictions.size)],
+      ['metricPending', String(tally.none + tally.partial + tally.gap)],
+      ['metricCompletion', active.length ? `${pct}%` : '—']
+    ]) {
+      const metric = el('div', 'summary-metric');
+      metric.append(el('span', 'summary-label', t(key)), el('strong', 'summary-count', value));
+      top.appendChild(metric);
+    }
     box.appendChild(top);
     const merged = active.length - groups.length;
     box.appendChild(el('div', 'summary-note', merged > 0 ?
@@ -846,10 +904,6 @@
     if (regulators.childNodes.length) box.appendChild(regulators);
 
     if (active.length) {
-      const tally = { done: 0, partial: 0, gap: 0, na: 0, none: 0 };
-      for (const control of active) tally[assessment(control.id).status || 'none']++;
-      const scored = active.length - tally.na;
-      const pct = scored ? Math.round(((tally.done + tally.partial * 0.5) / scored) * 100) : 0;
       const wrap = el('div', 'progress-wrap');
       const progressHead = el('div', 'progress-head');
       progressHead.appendChild(el('span', null, t('progressLabel', { pct })));
@@ -857,6 +911,8 @@
         done: tally.done, partial: tally.partial, gap: tally.gap, none: tally.none
       })));
       const bar = el('div', 'progress');
+      bar.setAttribute('role', 'img');
+      bar.setAttribute('aria-label', t('progressLabel', { pct }));
       for (const [cls, count] of [['done', tally.done], ['partial', tally.partial], ['gap', tally.gap]]) {
         if (!count) continue;
         const segment = el('i', cls);
@@ -1146,6 +1202,14 @@
 
   function renderChrome() {
     $('#app-title').textContent = t('appTitle');
+    for (const [selector, key] of [
+      ['#skip-link', 'skipToAssessment'], ['#workspace-eyebrow', 'workspaceEyebrow'],
+      ['#workspace-title', 'workspaceTitle'], ['#workspace-description', 'workspaceDescription'],
+      ['#offline-label', 'offlineLabel'], ['#requirements-title', 'requirementsTitle'],
+      ['#search-label', 'searchAria'], ['#jurisdiction-label', 'filterJurisdiction'],
+      ['#regulator-label', 'filterRegulator'], ['#domain-label', 'filterDomain'],
+      ['#filter-toggle', 'filterOptions']
+    ]) $(selector).textContent = t(key);
     $('#export-project').textContent = t('btnExportProject');
     $('#import-project').textContent = t('btnImportProject');
     $('#export-csv').textContent = t('btnExport');
@@ -1210,6 +1274,17 @@
     const sidebar = $('#sidebar');
     sidebar.inert = isMobile && !open;
     sidebar.setAttribute('aria-hidden', String(isMobile && !open));
+    if (open) {
+      sidebar.setAttribute('role', 'dialog');
+      sidebar.setAttribute('aria-modal', 'true');
+      sidebar.setAttribute('aria-label', t('scopeTitle'));
+    } else {
+      sidebar.removeAttribute('role');
+      sidebar.removeAttribute('aria-modal');
+      sidebar.removeAttribute('aria-label');
+    }
+    $('main').inert = open;
+    $('.site-header').inert = open;
   }
 
   function openScopeDrawer() {
@@ -1232,7 +1307,8 @@
   function init() {
     load();
     activeScopeJurisdiction = preferredScopeJurisdiction();
-    projectPanelOpen = !state.project.name;
+    projectPanelOpen = false;
+    $('#filter-options').open = !mobileScopeQuery.matches;
     HKCC.applyDocumentLocale();
     const domainFilter = $('#domain-filter');
     const jurisdictionFilter = $('#jurisdiction-filter');
@@ -1310,11 +1386,27 @@
     });
     $('#scope-open').addEventListener('click', openScopeDrawer);
     $('#scope-backdrop').addEventListener('click', closeScopeDrawer);
-    mobileScopeQuery.addEventListener('change', syncScopeDrawer);
+    mobileScopeQuery.addEventListener('change', () => {
+      syncScopeDrawer();
+      $('#filter-options').open = !mobileScopeQuery.matches;
+    });
     document.addEventListener('click', event => {
       if (headerMoreOpen && !event.target.closest('.header-actions')) closeHeaderMore();
     });
     document.addEventListener('keydown', event => {
+      if (event.key === 'Tab' && scopeDrawerOpen && mobileScopeQuery.matches) {
+        const focusable = [...$('#sidebar').querySelectorAll('button, input, select, summary, [tabindex="0"]')]
+          .filter(node => !node.disabled && node.getClientRects().length);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if ((event.shiftKey && document.activeElement === first) ||
+            (!event.shiftKey && document.activeElement === last) ||
+            !$('#sidebar').contains(document.activeElement)) {
+          event.preventDefault();
+          (event.shiftKey ? last : first)?.focus();
+        }
+        return;
+      }
       if (event.key !== 'Escape') return;
       if (scopeDrawerOpen) closeScopeDrawer();
       else closeHeaderMore();

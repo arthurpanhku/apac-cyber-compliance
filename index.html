@@ -4,26 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>APAC Cyber Compliance Assistant</title>
-<meta name="description" content="Generate the cybersecurity control requirements that apply to your firm across APAC financial regulators — SFC, HKMA, IA, PCPD and the HK Critical Infrastructure Ordinance, MAS, APRA and BNM — every control cited to its official source.">
+<meta name="description" content="Map cybersecurity requirements across selected APAC jurisdictions for multinational enterprises, with Hong Kong and Singapore as the priority markets. Assess controls offline, with official sources and clear regulatory differences.">
 <link rel="stylesheet" href="css/app.css">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 </head>
 <body>
 
+<a class="skip-link" id="skip-link" href="#assessment-main">Skip to assessment</a>
+
 <header class="site-header">
   <div class="brand">
     <img class="brand-mark" src="assets/icon.svg" alt="" width="26" height="26">
-    <h1 id="app-title">APAC Cyber Compliance Assistant</h1>
-    <span class="sub" id="version"></span>
+    <div class="brand-copy">
+      <h1 id="app-title">APAC Cyber Compliance Assistant</h1>
+      <span class="sub" id="version"></span>
+    </div>
   </div>
   <div class="header-actions">
     <!-- 语言按钮由 app.js 依 HKCC.locales 生成 -->
     <div class="lang" id="lang" role="group"></div>
+    <button id="export-csv"></button>
     <button id="export-project" class="primary"></button>
     <button id="header-more-toggle" class="header-more-toggle" type="button" aria-controls="secondary-actions" aria-expanded="false"></button>
     <div class="secondary-actions" id="secondary-actions">
       <button id="import-project"></button>
-      <button id="export-csv"></button>
       <button id="print"></button>
       <button id="reset"></button>
       <button id="theme"></button>
@@ -32,11 +36,20 @@
   </div>
 </header>
 
+<section class="workspace-intro" aria-labelledby="workspace-title">
+  <div>
+    <p class="eyebrow" id="workspace-eyebrow"></p>
+    <h2 id="workspace-title"></h2>
+    <p class="workspace-description" id="workspace-description"></p>
+  </div>
+  <span class="offline-badge" id="offline-label"></span>
+</section>
+
 <div class="layout">
   <div class="scope-backdrop" id="scope-backdrop"></div>
   <aside class="panel sidebar" id="sidebar"></aside>
 
-  <main>
+  <main id="assessment-main" tabindex="-1">
     <div class="print-header">
       <h1 id="ph-title"></h1>
       <p id="ph-project"></p>
@@ -52,14 +65,30 @@
 
     <section class="panel coverage" id="coverage" hidden></section>
 
-    <div class="panel toolbar">
-      <input type="search" id="q">
-      <select id="jurisdiction-filter"></select>
-      <select id="regulator-filter"></select>
-      <select id="domain-filter"></select>
-      <label class="inline"><input type="checkbox" id="merge"> <span id="merge-label"></span></label>
-      <label class="inline"><input type="checkbox" id="gaps"> <span id="gaps-label"></span></label>
-    </div>
+    <section class="requirements-heading" aria-labelledby="requirements-title">
+      <h2 id="requirements-title"></h2>
+      <span id="results-count" role="status" aria-live="polite" aria-atomic="true"></span>
+    </section>
+
+    <section class="panel toolbar" aria-labelledby="requirements-title">
+      <label class="search-field">
+        <span class="sr-only" id="search-label"></span>
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <input type="search" id="q">
+      </label>
+      <details id="filter-options" open>
+        <summary id="filter-toggle"></summary>
+        <div class="filter-fields">
+          <label class="filter-field"><span id="jurisdiction-label"></span><select id="jurisdiction-filter"></select></label>
+          <label class="filter-field"><span id="regulator-label"></span><select id="regulator-filter"></select></label>
+          <label class="filter-field"><span id="domain-label"></span><select id="domain-filter"></select></label>
+        </div>
+        <div class="view-options">
+          <label class="inline"><input type="checkbox" id="merge"> <span id="merge-label"></span></label>
+          <label class="inline"><input type="checkbox" id="gaps"> <span id="gaps-label"></span></label>
+        </div>
+      </details>
+    </section>
 
     <div id="results"></div>
   </main>

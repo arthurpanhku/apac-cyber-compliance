@@ -54,7 +54,9 @@ for (const language of ['en', 'zh-Hant', 'zh-Hans']) {
     await expect(page.locator('html')).toHaveAttribute('lang', language);
     await expect(page).toHaveTitle(/.+/);
 
-    await expect(page.locator('#jurisdiction-filter')).toBeVisible();
+    // Filters appear after selecting a scope; a fresh assessment shows onboarding first.
+    await expect(page.locator('#jurisdiction-filter')).toBeAttached();
+    await expect(page.locator('#results .empty button')).toBeVisible();
     await expect(page.locator('#jurisdiction-filter option')).not.toHaveCount(0);
     // The scope tabs are built from data/jurisdictions.js on load.
     await expect(page.locator('#scope-tab-au')).toBeAttached();

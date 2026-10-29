@@ -32,8 +32,8 @@ different program than the one users run.
 ## What is covered
 
 - `en`, `zh-Hant` and `zh-Hans` each load without a `pageerror`, apply their
-  language to `<html lang>`, and render the toolbar, the jurisdiction filter and
-  the scope tabs.
+  language to `<html lang>`, and render onboarding and scope tabs. Search and
+  filters appear once an entity is selected.
 - Every jurisdiction (Hong Kong, Singapore, Australia, Malaysia): switching to
   its tab and ticking the first entity type shows at least one control card.
 - Australia: an ADI alone shows 20 control cards; adding the third-party
@@ -44,5 +44,13 @@ different program than the one users run.
 - Marking a control and exporting CSV produces a file that contains the
   control's ID and its status.
 
-Everything else in the UI — import/export of projects, printing, themes, search
-and filters — is **not** covered yet.
+- Responsive checks at 320, 768 and 1024 pixels in all three languages cover
+  horizontal overflow, visible jurisdiction tabs, keyboard tab navigation,
+  mobile filter disclosure, search, record editing and persistence after reload.
+- The mobile scope drawer contains keyboard focus and returns it on Escape.
+- Responsive checks assert that no HTTP requests occur during the offline workflow.
+- Switching to dark mode still produces a white, readable print layout with
+  assessment content and without workspace navigation.
+
+Project import/export, the native print dialog, system-theme transitions and
+the individual filter combinations are **not** covered yet.

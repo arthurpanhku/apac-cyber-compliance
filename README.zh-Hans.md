@@ -3,7 +3,7 @@
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo.zh-Hans-dark.svg">
     <img src="assets/logo.zh-Hans.svg" alt="亚太网络安全合规助手" width="374">
   </picture>
-  <p><strong>面向亚太金融机构的开源、离线网络安全与科技风险监管要求映射及差距评估工具</strong></p>
+  <p><strong>面向跨国企业常见亚太经营地域的离线网络安全监管映射与差距评估工具，重点发展香港与新加坡</strong></p>
   <p>
     <!-- lang-nav -->
     <a href="README.zh-Hant.md">繁體</a> · <strong>简体</strong> · <a href="README.md">English</a>
@@ -28,7 +28,9 @@
 
 ## 简介
 
-亚太地区的金融机构往往同时受多个司法管辖区、多个监管机构的网络安全要求约束。以香港为例，
+跨国企业的区域总部、当地子公司与共享服务中心往往同时受多个司法管辖区的网络安全要求约束。
+本项目以**香港与新加坡**为发展重点，先建立一般企业的跨行业基线，再叠加金融牌照、关键基础设施等专项要求。
+现有数据以金融业条文为主，尚未完成两地一般企业基线；逐项现状与缺口见[覆盖矩阵](docs/COVERAGE_MATRIX.md)。以香港为例，
 证监会（SFC）、金管局（HKMA）、私隐专员公署（PCPD），2026 年起还有《保护关键基础设施
 （电脑系统）条例》；新加坡有金融管理局（MAS）；澳大利亚有审慎监管局（APRA）；马来西亚则有国家银行（BNM）；中国内地则有《网络安全法》《数据安全法》《个人信息保护法》、国务院关于关键信息基础设施及网络数据安全的行政法规，以及国家网信办（CAC）、国家金融监督管理总局（NFRA）与中国证监会（CSRC）的规定。条文散落在指引、通函、法定通知、监管政策
 手册和实务守则中，同一项控制往往被多个机构以不同措辞重复要求。
@@ -54,15 +56,19 @@
 
 ## 范围
 
-> **面向亚太金融机构的开源、离线网络安全与科技风险监管要求映射及差距评估工具。**
+> **面向跨国企业常见亚太经营地域的开源、离线网络安全监管要求映射与差距评估工具，以香港和新加坡为发展重点。**
 >
-> *Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC
-> financial institutions.*
+> *Open-source, offline cybersecurity regulatory mapping and gap assessment for multinational enterprises
+> operating across selected APAC jurisdictions, with Hong Kong and Singapore as the priority markets.*
+
+地域按跨国企业实际经营及资料流选择。香港、新加坡优先补深；已有澳大利亚、马来西亚、中国内地内容继续维护，
+其他地域按需求排期。当前“已登记地域”不等于“完整覆盖地域”；[覆盖矩阵](docs/COVERAGE_MATRIX.md)维护范围与缺口，
+[自动覆盖明细](docs/coverage-inventory.md)逐条列出当前代码中的文件、条款、适用实体及业务特征。
 
 **在范围内**
 
-- 亚太金融监管机构发出的网络安全与科技风险条文；以及跨行业规则（个人资料保护、关键基础设施保护）
-  中适用于金融机构的部分
+- 所选亚太地域的跨行业网络与资料保安、事件报告、跨境及委托处理要求；个人资料规则只纳入与网络及资料保安直接相关的部分
+- 按实际业务适用的金融科技风险、关键基础设施及其他行业专项要求，并区分法定义务、监管要求与官方指引
 - 按牌照／实体类型与业务特征判断哪些条文适用
 - 映射不同监管机构条文之间的关系——实质等价、部分重叠或相关——以及各自多出的要求
 - 自评工作底稿：状态、实施说明、证据引用、负责人、目标日期、整改清单与导出

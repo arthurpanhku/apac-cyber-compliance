@@ -4,8 +4,10 @@
 
 本项目的价值取决于条文的准确性。以下规则围绕这一点。
 
-**范围：** *面向亚太金融机构的开源、离线网络安全与科技风险监管要求映射及差距评估工具。*
+**范围：** *面向跨国企业常见亚太经营地域的开源、离线网络安全监管要求映射与差距评估工具，以香港和新加坡为发展重点。*
 贡献须符合这句话——在范围内与不在范围内的事项见 README 的[范围](README.zh-Hans.md#范围)一节。
+先补两地一般企业的跨行业基线，再按实际业务叠加金融与关键基础设施要求。地域顺序及未覆盖文件见
+[覆盖矩阵](docs/COVERAGE_MATRIX.md)，新增国家数量不是覆盖完整性的指标。
 
 ## 基本原则
 
@@ -28,6 +30,7 @@
 ```bash
 node tools/validate.mjs
 node tools/check-equivalence.mjs
+node tools/coverage-matrix.mjs --check
 node --test tests/*.test.mjs
 ```
 
@@ -181,7 +184,9 @@ python3 tools/gen-hant.py
 5. 运行 `python3 tools/gen-hant.py` 生成繁体层
 6. 更新 `README.md` 与 `README.zh-Hans.md` 的覆盖范围表格与徽章中的控制点数量
    （`README.zh-Hant.md` 由脚本生成，不必手改）
-7. 运行校验并在浏览器实测
+7. 运行 `node tools/coverage-matrix.mjs` 更新逐条明细；在 `docs/COVERAGE_MATRIX.md` 更新范围、状态与尚存缺口。
+   未有全部范围内条款的映射或排除记录时，不得标为完整；引用摘要或仅登记官方链接不代表完整覆盖
+8. 运行校验并在浏览器实测
 
 ## 新增一个司法管辖区
 

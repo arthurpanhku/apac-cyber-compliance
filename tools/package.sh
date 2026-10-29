@@ -11,7 +11,7 @@ NAME="apac-cyber-compliance-v${VERSION}"
 
 rm -rf "dist/${NAME}" "dist/${NAME}.zip" "dist/${NAME}.zip.sha256"
 mkdir -p "dist/${NAME}"
-cp -R index.html css js data assets LICENSE CHANGELOG.md \
+cp -R index.html css js data assets docs LICENSE CHANGELOG.md \
       README.md README.zh-Hans.md README.zh-Hant.md "dist/${NAME}/"
 
 # 固定文件时间，使同一版本重复打包得到相同的压缩档与校验值

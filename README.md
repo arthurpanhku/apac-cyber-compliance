@@ -3,7 +3,7 @@
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
     <img src="assets/logo.svg" alt="APAC Cyber Compliance Assistant" width="482">
   </picture>
-  <p><strong>Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC financial institutions</strong></p>
+  <p><strong>Offline cybersecurity regulatory mapping and gap assessment for multinational enterprises across selected APAC jurisdictions, prioritising Hong Kong and Singapore</strong></p>
   <p>
     <!-- lang-nav -->
     <a href="README.zh-Hant.md">繁體</a> · <a href="README.zh-Hans.md">简体</a> · <strong>English</strong>
@@ -30,8 +30,12 @@
 
 ## What this is
 
-Financial institutions across APAC often answer to several regulators, in several jurisdictions, on
-cybersecurity at once. In Hong Kong: the Securities and Futures Commission (SFC), the Hong Kong Monetary
+Multinational enterprises' regional headquarters, local subsidiaries and shared service centres often face
+cybersecurity requirements in several jurisdictions. **Hong Kong and Singapore are the development priorities**:
+build a cross-sector baseline for general businesses, then add requirements triggered by financial licences,
+critical-infrastructure designation and other regulated activities. The existing data is primarily financial-sector
+material; the general-business baseline is still incomplete. See the [coverage matrix](docs/COVERAGE_MATRIX.md).
+In Hong Kong: the Securities and Futures Commission (SFC), the Hong Kong Monetary
 Authority (HKMA), the Privacy Commissioner for Personal Data (PCPD), and — from 2026 — the Protection of
 Critical Infrastructures (Computer Systems) Ordinance. In Singapore: the Monetary Authority of Singapore
 (MAS). In Australia: the Australian Prudential Regulation Authority (APRA). In Malaysia: Bank Negara Malaysia (BNM). In mainland China: the national Cybersecurity, Data Security and
@@ -71,13 +75,21 @@ Information Protection Laws, the CII and Network Data Security Regulations, CAC 
 
 ## Scope
 
-> **Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC
-> financial institutions.**
+> **Open-source, offline cybersecurity regulatory mapping and gap assessment for multinational enterprises
+> operating across selected APAC jurisdictions, with Hong Kong and Singapore as the priority markets.**
+
+Select jurisdictions by the enterprises' actual operations and data flows. Deepen Hong Kong and Singapore first;
+maintain the existing Australia, Malaysia and mainland China material, and schedule other jurisdictions when demand
+is established. Registration does not imply complete coverage. The [coverage matrix](docs/COVERAGE_MATRIX.md)
+records scope and gaps; the [generated inventory](docs/coverage-inventory.md) lists every current source, clause,
+entity type and business characteristic. Both documents are currently maintained in Simplified Chinese.
 
 **In scope**
 
-- Cybersecurity and technology-risk provisions issued by APAC financial regulators — plus cross-sector rules
-  (personal data protection, critical-infrastructure protection) to the extent they apply to financial institutions
+- Cross-sector cybersecurity and data-security, incident reporting, cross-border and outsourced-processing
+  requirements in selected APAC jurisdictions; personal-data provisions only where directly relevant to security
+- Financial technology-risk, critical-infrastructure and other sector requirements triggered by actual activities,
+  distinguishing legal obligations, supervisory requirements and official guidance
 - Working out which provisions apply, by licence or entity type and business characteristics
 - Mapping how provisions relate across regulators — equivalent, overlapping or related — and what each adds
 - Self-assessment workpapers: status, implementation notes, evidence references, owners, target dates,

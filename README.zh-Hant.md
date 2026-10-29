@@ -3,7 +3,7 @@
     <source media="(prefers-color-scheme: dark)" srcset="assets/logo.zh-Hant-dark.svg">
     <img src="assets/logo.zh-Hant.svg" alt="亞太網絡安全合規助手" width="374">
   </picture>
-  <p><strong>面向亞太金融機構的開源、離線網絡安全與科技風險監管要求映射及差距評估工具</strong></p>
+  <p><strong>面向跨國企業常見亞太經營地域的離線網絡安全監管映射與差距評估工具，重點發展香港與新加坡</strong></p>
   <p>
     <!-- lang-nav -->
     <strong>繁體</strong> · <a href="README.zh-Hans.md">简体</a> · <a href="README.md">English</a>
@@ -28,7 +28,9 @@
 
 ## 簡介
 
-亞太地區的金融機構往往同時受多個司法管轄區、多個監管機構的網絡安全要求約束。以香港為例，
+跨國企業的區域總部、當地子公司與共享服務中心往往同時受多個司法管轄區的網絡安全要求約束。
+本項目以**香港與新加坡**為發展重點，先建立一般企業的跨行業基線，再疊加金融牌照、關鍵基礎設施等專項要求。
+現有資料以金融業條文為主，尚未完成兩地一般企業基線；逐項現狀與缺口見[覆蓋矩陣](docs/COVERAGE_MATRIX.md)。以香港為例，
 證監會（SFC）、金管局（HKMA）、私隱專員公署（PCPD），2026 年起還有《保護關鍵基礎設施
 （電腦系統）條例》；新加坡有金融管理局（MAS）；澳洲有審慎監管局（APRA）；馬來西亞則有國家銀行（BNM）；中國內地則有《網絡安全法》《資料安全法》《個人信息保護法》、國務院關於關鍵信息基礎設施及網絡資料安全的行政法規，以及國家網信辦（CAC）、國家金融監督管理總局（NFRA）與中國證監會（CSRC）的規定。條文散落在指引、通函、法定通知、監管政策
 手冊和實務守則中，同一項控制往往被多個機構以不同措辭重複要求。
@@ -54,15 +56,19 @@
 
 ## 範圍
 
-> **面向亞太金融機構的開源、離線網絡安全與科技風險監管要求映射及差距評估工具。**
+> **面向跨國企業常見亞太經營地域的開源、離線網絡安全監管要求映射與差距評估工具，以香港和新加坡為發展重點。**
 >
-> *Open-source, offline cybersecurity and technology-risk regulatory mapping and gap assessment for APAC
-> financial institutions.*
+> *Open-source, offline cybersecurity regulatory mapping and gap assessment for multinational enterprises
+> operating across selected APAC jurisdictions, with Hong Kong and Singapore as the priority markets.*
+
+地域按跨國企業實際經營及資料流選擇。香港、新加坡優先補深；已有澳洲、馬來西亞、中國內地內容繼續維護，
+其他地域按需求排期。當前“已登記地域”不等於“完整覆蓋地域”；[覆蓋矩陣](docs/COVERAGE_MATRIX.md)維護範圍與缺口，
+[自動覆蓋明細](docs/coverage-inventory.md)逐條列出當前代碼中的文件、條款、適用實體及業務特徵。
 
 **在範圍內**
 
-- 亞太金融監管機構發出的網絡安全與科技風險條文；以及跨行業規則（個人資料保護、關鍵基礎設施保護）
-  中適用於金融機構的部分
+- 所選亞太地域的跨行業網絡與資料保安、事件報告、跨境及委託處理要求；個人資料規則只納入與網絡及資料保安直接相關的部分
+- 按實際業務適用的金融科技風險、關鍵基礎設施及其他行業專項要求，並區分法定義務、監管要求與官方指引
 - 按牌照／實體類型與業務特徵判斷哪些條文適用
 - 映射不同監管機構條文之間的關係——實質等價、部分重疊或相關——以及各自多出的要求
 - 自評工作底稿：狀態、實施說明、證據引用、負責人、目標日期、整改清單與匯出
